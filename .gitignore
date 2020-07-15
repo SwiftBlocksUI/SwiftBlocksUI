@@ -1,0 +1,9 @@
+.swiftpm
+*.xcuserdatad
+Package.resolved
+.build
+
+.docker.build
+**/.env
+
+
