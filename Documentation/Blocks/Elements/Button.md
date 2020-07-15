@@ -4,10 +4,10 @@
 </h2>
 
 Encode a "button" element.
- *
+
 Buttons come in many forms and styles. They can have an `Action` attached
 if the Blocks are used as an Endpoint.
- *
+
 There are also special-purpose buttons: `Submit` and `Cancel` which are
 used in combination w/ View Submissions.
 
