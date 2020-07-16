@@ -17,7 +17,7 @@ public extension SlackClient {
   
   struct Chat {
     
-    let client : SlackClient
+    public let client : SlackClient
     
     /// https://api.slack.com/methods/chat.delete
     public func delete(_ id: MessageID, in conversation: ConversationID,

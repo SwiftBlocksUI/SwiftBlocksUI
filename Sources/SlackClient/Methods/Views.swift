@@ -17,7 +17,7 @@ public extension SlackClient {
 
   struct Views {
     
-    let client : SlackClient
+    public let client : SlackClient
     
     /**
      * https://api.slack.com/methods/views.open
