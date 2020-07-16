@@ -7,6 +7,24 @@
 //
 
 extension Option: BlocksPrimitive {
+  
+  private func value(with tag: AnyHashable, in context: BlocksContext) -> String
+  {
+    switch optionID {
+      case .auto:
+        if let id = context.consumePendingID()?.webID { return id }
+        if let tagID = tag.base as? WebRepresentableIdentifier {
+          return tagID.webID
+        }
+        return context.currentElementID.webID
+        
+      case .elementID:
+        return context.currentElementID.webID
+        
+      case .value(let id):
+        return id
+    }
+  }
 
   public func render(in context: BlocksContext) throws {
     guard let block = context.currentBlock else {
@@ -19,20 +37,8 @@ extension Option: BlocksPrimitive {
            ?? AnyHashable(title)
         
     let infoText = self.infoText ?? context.environment[keyPath: \.infoText]
-    let apiValue : String = { // this is the API key value we match on
-      switch optionID {
-        case .auto:
-          if let id = context.consumePendingID()?.webID { return id }
-          if let tagID = tag.base as? WebRepresentableIdentifier {
-            return tagID.webID
-          }
-          return context.currentElementID.webID
-        case .elementID:
-          return context.currentElementID.webID
-        case .value(let id):
-          return id
-      }
-    }()
+    // this is the API key value we match on
+    let apiValue = value(with: tag, in: context)
     
     if let state = context.selectionState {
       switch context.mode {
