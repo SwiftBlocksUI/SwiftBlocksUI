@@ -22,6 +22,7 @@
 
 @_exported import SlackClient
 @_exported import Blocks
+@_exported import struct   Blocks.Group
 
 @_exported import struct   Logging.Logger
 @_exported import enum     Macro.console
