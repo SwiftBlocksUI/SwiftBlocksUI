@@ -83,6 +83,11 @@ extension Checkbox: BlocksPrimitive {
         context.currentBlock = .actions(actions)
 
       case .input(var input):
+        if input.containsDummyElement {
+          return try CheckboxGroup("", content: { self }) // TBD: title
+                       .render(in: context)
+        }
+        
         guard case .checkboxes(var checkboxes) = input.element else {
           return context.log
             .error("Attempt to use Checkbox in a unsupported input: \(block)")
