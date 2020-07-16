@@ -40,7 +40,7 @@ public struct Input<Content: Blocks>: Blocks, TopLevelPrimitiveBlock {
   
   @inlinable
   public init(id       : BlockIDStyle = .auto,
-              label    : String       = "",
+              _ label  : String       = "",
               hint     : String?      = nil,
               optional : Bool         = false,
               @BlocksBuilder content: () -> Content)

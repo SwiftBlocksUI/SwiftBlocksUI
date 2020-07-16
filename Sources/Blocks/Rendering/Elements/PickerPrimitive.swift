@@ -24,7 +24,7 @@ extension Picker: BlocksPrimitive where Content: Blocks {
   public func render(in context: BlocksContext) throws {
     guard let block = context.currentBlock else {
       if context.surface == .modal {
-        return try Input(label: title, content: { self })
+        return try Input(title, content: { self })
                      .render(in: context)
       }
       else {
