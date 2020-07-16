@@ -14,10 +14,22 @@ extension ForEach: BlocksPrimitive where Content: Blocks {
     context.enterForEach(count: data.count)
     defer { context.leaveForEach() }
     
-    for element in data {
+    for (idx, element) in data.enumerated() {
       let id = elementToID(element)
-      context.enterForEachElement(with: id)
-      defer { context.leaveForEachElement(with: id) }
+      if let id = id {
+        context.enterForEachElement(with: id)
+      }
+      else {
+        context.enterForEachElement(with: idx)
+      }
+      defer {
+        if let id = id {
+          context.leaveForEachElement(with: id)
+        }
+        else {
+          context.leaveForEachElement(with: idx)
+        }
+      }
       
       try context.render(content(element))
     }

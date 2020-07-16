@@ -41,6 +41,17 @@ public struct ElementID: Hashable {
     components.append(contentElementIDComponent)
   }
   
+  
+  // MARK: - actual IDs
+
+  @inlinable
+  mutating func appendElementIDComponent
+                  <T: Hashable & WebRepresentableIdentifier>(_ id: T)
+  {
+    components.append(AnyHashable(id))
+  }
+
+  #if false
   @inlinable
   mutating func appendElementIDComponent<T: Hashable>(_ id: T) {
     components.append(AnyHashable(id))
@@ -49,6 +60,10 @@ public struct ElementID: Hashable {
   mutating func appendElementIDComponent(_ id: AnyHashable) {
     components.append(id)
   }
+  #endif
+  
+  
+  // MARK: - number based IDs
 
   @inlinable
   mutating func appendZeroElementIDComponent() {
@@ -71,6 +86,8 @@ public struct ElementID: Hashable {
     components[lastIndex] = lastValue + 1
   }
 
+  
+  #if false // unused
   @inlinable
   func appendingElementIDComponent<T: Hashable>(_ id: T) -> ElementID {
     var eid = self
@@ -83,6 +100,7 @@ public struct ElementID: Hashable {
     eid.appendElementIDComponent(id)
     return eid
   }
+  #endif
 
   
   // MARK: - Matching
