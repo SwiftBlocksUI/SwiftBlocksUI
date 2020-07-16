@@ -52,6 +52,22 @@ extension InteractiveRequest {
       let type =
         try container.decode(Block.InteractiveElementType.self, forKey: .type)
       
+      func decodeOptions() -> FormValue? {
+        if let opt = try? container.decode(Option.self,
+                                           forKey: .selectedOption)
+        {
+          return .option(value: opt.value)
+        }
+        else if let opts = try? container.decode([ Option ].self,
+                                                 forKey: .selectedOptions)
+        {
+          return .options(values: opts.map { $0.value })
+        }
+        else {
+          return nil
+        }
+      }
+      
       switch type {
         case .plainTextInput:
           self = .plainTextInput(
@@ -65,17 +81,15 @@ extension InteractiveRequest {
           // "selected_date": "2020-07-08"
           self = .date(
             try container.decode(YearMonthDay.self, forKey: .selectedDate))
+          
+        case .checkboxes, .staticMultiSelect:
+          self = decodeOptions() ?? .options(values: [])
 
+        // TODO: probably needs more keys for user/conversation selects
+          
         default: // just be dynamic here
-          if let opt = try? container.decode(Option.self,
-                                             forKey: .selectedOption)
-          {
-            self = .option(value: opt.value)
-          }
-          else if let opts = try? container.decode([ Option ].self,
-                                                   forKey: .selectedOptions)
-          {
-            self = .options(values: opts.map { $0.value })
+          if let value = decodeOptions() {
+            self = value
           }
           else {
             assertionFailure("unsupported form value: \(type)")
