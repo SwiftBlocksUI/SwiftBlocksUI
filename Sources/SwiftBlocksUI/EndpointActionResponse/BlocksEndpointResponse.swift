@@ -401,7 +401,8 @@ extension BlocksEndpointResponse { // API operations
       
       case .userOnly:
         return client.chat.postEphemeral(in: conversationID, to: userID,
-                                         blocks: blocks) {
+                                         blocks: blocks)
+        {
           error, payload in
           self.endWithErrorOrACK(error,
                                  "could not push message \(self)")
