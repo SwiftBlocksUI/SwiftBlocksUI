@@ -89,15 +89,16 @@ extension Picker: Blocks where Content: Blocks {
   }
 }
 
-extension Picker where Content: Blocks {
+public extension Picker where Content: Blocks {
+  
   @inlinable
-  public init<S>(actionID          : ActionIDStyle = .auto,
-                 _     title       : S,
-                 selection         : Binding<Selection>?,
-                 placeholder       : String?       = nil,
-                 maxSelectionCount : Int?          = nil,
-                 @BlocksBuilder content: () -> Content)
-           where S: StringProtocol
+  init<S>(actionID          : ActionIDStyle = .auto,
+          _     title       : S,
+          selection         : Binding<Selection>,
+          placeholder       : String?       = nil,
+          maxSelectionCount : Int?          = nil,
+          @BlocksBuilder content: () -> Content)
+    where S: StringProtocol
   {
     self.init(actionID: actionID, title, selection: selection,
               placeholder: placeholder, maxSelectionCount: maxSelectionCount,
@@ -105,14 +106,14 @@ extension Picker where Content: Blocks {
   }
 
   @inlinable
-  public init<S>(actionID          : ActionIDStyle = .auto,
-                 _     title       : S,
-                 selection         : Binding<Selection>?,
-                 placeholder       : String?       = nil,
-                 maxSelectionCount : Int?          = nil,
-                 action            : Action?       = nil,
-                 @BlocksBuilder content: () -> Content)
-           where S: StringProtocol
+  init<S>(actionID          : ActionIDStyle = .auto,
+          _     title       : S,
+          selection         : Binding<Selection>,
+          placeholder       : String?       = nil,
+          maxSelectionCount : Int?          = nil,
+          action            : Action?       = nil,
+          @BlocksBuilder content: () -> Content)
+    where S: StringProtocol
   {
     self.init(actionID: actionID, title, selection: selection,
               placeholder: placeholder, maxSelectionCount: maxSelectionCount,
@@ -129,7 +130,8 @@ public extension Picker where Selection == Never, Content: Blocks {
                           @BlocksBuilder content: () -> Content)
   {
     self.init(actionID: .auto, title, selection: nil,
-              placeholder: placeholder, action: action, content: content)
+              placeholder: placeholder, maxSelectionCount: nil,
+              minQueryLength: nil, action: action, content: content())
   }
 }
 
@@ -173,6 +175,29 @@ public extension Picker where Selection == Int?, Content: Blocks {
   }
 }
 
+public extension Picker where Content: Blocks {
+
+  /**
+   * Initialize a Picker w/ an arbitrary selection value
+   */
+  @inlinable
+  init<S: StringProtocol, H: Hashable>(_     title : S,
+                                       selection   : Binding<H>,
+                                       placeholder : String? = nil,
+                                       action      : Action? = nil,
+                                       @BlocksBuilder content: () -> Content)
+    where Selection == Optional<H> // halp
+  {
+    // This is abusing the Optional as a SelectionManager, which is not great
+    let binding = Binding<Optional<H>>(
+      getValue: { selection.getter() },
+      setValue: { selection.setter($0!) }
+    )
+    self.init(actionID: .auto, title,
+              selection: binding,
+              placeholder: placeholder, action: action, content: content)
+  }
+}
 
 
 // MARK: - Modifiers
