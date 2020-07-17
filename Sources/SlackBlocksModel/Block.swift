@@ -214,32 +214,17 @@ public extension Sequence where Element == Block {
 
 public extension Block {
   
-  func asBlockSuitableForSurface(_ surface: BlockSurface) -> Block {
-    switch surface {
-      case .message:
-        switch self {
-          case .input:
-            // TODO: log error
-            return self
-          default:
-            return self
-        }
-            
-      case .homeTab, .modal:
-        switch self {
-          case .richText(let richText):
-            return .section(richText.asSection())
-          default:
-            return self
-        }
+  func replacingRichText() -> Block {
+    switch self {
+      case .richText(let richText) : return .section(richText.asSection())
+      default                      : return self
     }
   }
-  
 }
 
 public extension Sequence where Element == Block {
 
-  func asBlockSuitableForSurface(_ surface: Block.BlockSurface) -> [ Block ] {
-    return map { $0.asBlockSuitableForSurface(surface) }
+  func replacingRichText() -> [ Block ] {
+    return map { $0.replacingRichText() }
   }
 }

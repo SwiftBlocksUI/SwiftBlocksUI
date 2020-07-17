@@ -69,20 +69,26 @@ public extension SlackClient.Chat {
   {
     let apiBlocks : [ Block ]
     
+    // TODO: Provide a proper environment?! Maybe even copy stuff from the
+    //       BlocksEndpointResponse?
     let context = BlocksContext()
     do {
       context.surface = .message
 
-      // TODO: provide a proper environment?!
       try context.render(message)
+
+      let hasRichText = client.token.supportsRichText // TBD
       
+      let blocks : [ Block ]
       if let view = context.view {
         context.log.warning("a view was passed chat.sendMessage \(view)")
-        apiBlocks = view.blocks + context.blocks
+        blocks = view.blocks + context.blocks
       }
       else {
-        apiBlocks = context.blocks
+        blocks = context.blocks
       }
+      
+      apiBlocks = hasRichText ? blocks : blocks.replacingRichText()
     }
     catch {
       return yield(error)

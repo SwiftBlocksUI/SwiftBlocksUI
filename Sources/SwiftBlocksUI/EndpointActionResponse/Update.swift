@@ -183,10 +183,10 @@ extension BlocksEndpointResponse {
     if let view = context.view { // TBD: might be OK, could be used in both?
       // not finishing View
       apiBlocks = view.blocks
-                + context.blocks.asBlockSuitableForSurface(context.surface)
+                + context.blocks.replacingRichText() // TBD: only XOXB?
     }
     else {
-      apiBlocks = context.blocks
+      apiBlocks = context.blocks.replacingRichText() // TBD: only XOXB?
     }
     
     /**

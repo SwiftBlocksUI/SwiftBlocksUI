@@ -294,10 +294,11 @@ extension BlocksEndpointResponse { // API operations
                    to   url : URL, in context: BlocksContext)
   {
     response.log.notice("update using response URL ...")
+    let hasRichText = client.token.supportsRichText // TBD
     let messageResponse = MessageResponse(
       responseType    : context.messageResponseScope,
       replaceOriginal : mode   .usesReplaceInMessage,
-      blocks          : blocks
+      blocks          : hasRichText ? blocks : blocks.replacingRichText()
     )
     return client.post(messageResponse, to: url) { error, payload in
       self.endWithErrorOrACK(error,
@@ -389,10 +390,13 @@ extension BlocksEndpointResponse { // API operations
                    to conversationID : ConversationID,
                    in        context : BlocksContext)
   {
+    let hasRichText = client.token.supportsRichText // TBD
+    let sendBlocks  = hasRichText ? blocks : blocks.replacingRichText()
+    
     switch context.messageResponseScope {
       case .inConversation, .none:
         return client.chat.postMessage(in: conversationID,
-                                       blocks: blocks)
+                                       blocks: sendBlocks)
         {
           error, payload in
           self.endWithErrorOrACK(error,
@@ -401,7 +405,7 @@ extension BlocksEndpointResponse { // API operations
       
       case .userOnly:
         return client.chat.postEphemeral(in: conversationID, to: userID,
-                                         blocks: blocks)
+                                         blocks: sendBlocks)
         {
           error, payload in
           self.endWithErrorOrACK(error,
