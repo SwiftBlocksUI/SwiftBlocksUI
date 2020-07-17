@@ -24,9 +24,9 @@ public extension SlackClient {
                        yield : @escaping ResponseHandler)
     {
       struct Call: Encodable {
-        let users : [ UserID ]
+        let users : String
       }
-      let call = Call(users: users)
+      let call = Call(users: users.map { $0.id }.joined(separator: ","))
       client.post(call, to: "conversations.open", yield: yield)
     }
   }
