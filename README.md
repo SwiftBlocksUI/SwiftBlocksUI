@@ -8,7 +8,7 @@ SwiftBlocksUI is a way to write interactive Slack messages and modal dialogs
 using a SwiftUI like declarative style.
 
 A blog article containing SwiftBlocksUI tutorials: 
-[Instant “SwiftUI” Flavoured Slack Apps](http://www.alwaysrightinstitute.com/swiftblocksui/).
+[Instant “SwiftUI” Flavoured Slack Apps](https://www.alwaysrightinstitute.com/swiftblocksui/).
 
 This is what a full application looks like:
 ```swift
@@ -101,7 +101,7 @@ though 5.3 has some additional conveniences.
 
 **SwiftBlocksUI** is brought to you by
 the
-[Always Right Institute](http://www.alwaysrightinstitute.com)
+[Always Right Institute](https://www.alwaysrightinstitute.com)
 and
 [ZeeZide](http://zeezide.de).
 We like 
