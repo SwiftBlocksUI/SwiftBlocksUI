@@ -96,7 +96,15 @@ public extension SlackClient {
       
       if logOutgoingJSON {
         let s = String(data: jsonData, encoding: .utf8)!
-        print("JSON POST to \(url.absoluteString):\n", s)
+        print("JSON POST to \(url.absoluteString):\n")
+        print(s)
+        #if false
+        print("curl -v -X POST \\\n",
+              " -H 'Authorization: Bearer \(token.value)'\\\n",
+              " -H 'Content-Type: application/json; charset=UTF-8'\\\n",
+              " -d '\(s)'\\n",
+              url.absoluteString)
+        #endif
       }
     }
     catch {
