@@ -4,7 +4,7 @@
 </h2>
 
 Work in Progress. Extract from 
-[Instant “SwiftUI” Flavoured Slack Apps](http://www.alwaysrightinstitute.com/swiftblocksui/),
+[Instant “SwiftUI” Flavoured Slack Apps](https://www.alwaysrightinstitute.com/swiftblocksui/),
 needs adjustments
 
 TODO:
