@@ -21,5 +21,12 @@ public struct Token: Hashable, Codable, ExpressibleByStringLiteral {
   public var isValid : Bool {
     // TODO: check for xox prefix?
     return !value.isEmpty
+
+  /**
+   * TBD: Is this right? If I chat.postMessage w/ an xoxb token, `rich_text`
+   *      blocks seem to be unsupported. It does seem to work w/ other tokens.
+   */
+  public var supportsRichText: Bool {
+    return !value.hasPrefix("xoxb-")
   }
 }
