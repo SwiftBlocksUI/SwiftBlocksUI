@@ -60,7 +60,6 @@ public struct SlackClient {
     if !self.token.isValid {
       #if DEBUG
         print("Token passed to SlackClient is not valid: '\(self.token.value)'")
-        print(ProcessInfo.processInfo.environment)
       #else
         print("Token passed to SlackClient is not valid!")
       #endif

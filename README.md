@@ -7,6 +7,9 @@ SwiftBlocksUI is a way to write interactive Slack messages and modal dialogs
 (also known as Slack "applications")
 using a SwiftUI like declarative style.
 
+A blog article containing SwiftBlocksUI tutorials: 
+[Instant “SwiftUI” Flavoured Slack Apps](https://www.alwaysrightinstitute.com/swiftblocksui/).
+
 This is what a full application looks like:
 ```swift
 #!/usr/bin/swift sh
@@ -60,6 +63,11 @@ There is a related blog entry going over SwiftBlocksUI:
 Additional documentation is going to arrive within this repository:
 [Documentation](Documentation/README.md).
 
+Examples:
+- [SlashCows](https://github.com/SwiftBlocksUI/SlashCows) - Slack slash command that produces ASCII Cows. Moo!
+- [AvocadoToast](https://github.com/SwiftBlocksUI/AvocadoToast) - An Avocado Toast ordering solution.
+- [ClipIt!](https://github.com/SwiftBlocksUI/ClipIt) - Working on Messages.
+
 
 ## Environment Variables
 
@@ -93,7 +101,7 @@ though 5.3 has some additional conveniences.
 
 **SwiftBlocksUI** is brought to you by
 the
-[Always Right Institute](http://www.alwaysrightinstitute.com)
+[Always Right Institute](https://www.alwaysrightinstitute.com)
 and
 [ZeeZide](http://zeezide.de).
 We like 
