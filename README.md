@@ -7,6 +7,9 @@ SwiftBlocksUI is a way to write interactive Slack messages and modal dialogs
 (also known as Slack "applications")
 using a SwiftUI like declarative style.
 
+A blog article containing SwiftBlocksUI tutorials: 
+[Instant “SwiftUI” Flavoured Slack Apps](http://www.alwaysrightinstitute.com/swiftblocksui/).
+
 This is what a full application looks like:
 ```swift
 #!/usr/bin/swift sh
