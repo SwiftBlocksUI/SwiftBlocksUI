@@ -6,6 +6,12 @@
 //  Copyright © 2020 ZeeZide GmbH. All rights reserved.
 //
 
+/**
+ * A Slack authentication token
+ *
+ * Those come in various versions, the one appropriate for most apps are
+ * bot tokens ("xoxb-...").
+ */
 public struct Token: Hashable, Codable, ExpressibleByStringLiteral {
 
   public let value : String
@@ -19,7 +25,14 @@ public struct Token: Hashable, Codable, ExpressibleByStringLiteral {
   }
   
   public var isValid : Bool {
-    // TODO: check for xox prefix?
-    return !value.isEmpty
+    return value.hasPrefix("xox")
+  }
+
+  /**
+   * TBD: Is this right? If I chat.postMessage w/ an xoxb token, `rich_text`
+   *      blocks seem to be unsupported. It does seem to work w/ other tokens.
+   */
+  public var supportsRichText: Bool {
+    return !value.hasPrefix("xoxb-")
   }
 }

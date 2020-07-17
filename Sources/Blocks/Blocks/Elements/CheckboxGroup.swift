@@ -38,15 +38,19 @@ public struct CheckboxGroup<Content: Blocks>: Blocks {
 
   @usableFromInline let actionID : ActionIDStyle
   @usableFromInline let title    : String // the (Input) label
+  @usableFromInline let required : Bool
   @usableFromInline let action   : Action?
   @usableFromInline let content  : Content
-  
-  public init(actionID: ActionIDStyle = .auto,
-              _ title: String = "", action: Action? = nil,
+
+  public init(actionID : ActionIDStyle = .auto,
+              _  title : String        = "",
+              required : Bool          = false,
+              action   : Action?       = nil,
               @BlocksBuilder content: () -> Content)
   {
     self.actionID = actionID
     self.title    = title
+    self.required = required
     self.action   = action
     self.content  = content()
   }

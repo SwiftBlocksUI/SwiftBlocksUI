@@ -81,7 +81,7 @@ extension TextField: BlocksPrimitive {
       try takeValues(for: actionID, in: context)
     }
     else { // auto-embed in Input
-      try Input(label: title, hint: nil, optional: false, content: { self })
+      try Input(title, hint: nil, optional: false, content: { self })
           .render(in: context)
     }
   }

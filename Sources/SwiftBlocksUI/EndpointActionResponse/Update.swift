@@ -181,13 +181,12 @@ extension BlocksEndpointResponse {
     // we did render already above!
     let apiBlocks : [ Block ]
     if let view = context.view { // TBD: might be OK, could be used in both?
-      response.log.notice("sending a View as a message \(view)")
       // not finishing View
       apiBlocks = view.blocks
-                + context.blocks.asBlockSuitableForSurface(context.surface)
+                + context.blocks.replacingRichText() // TBD: only XOXB?
     }
     else {
-      apiBlocks = context.blocks
+      apiBlocks = context.blocks.replacingRichText() // TBD: only XOXB?
     }
     
     /**

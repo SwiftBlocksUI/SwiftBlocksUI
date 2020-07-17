@@ -17,5 +17,5 @@ public struct ForEach<Data, ID, Content>
   let content : ( Data.Element ) -> Content
   
   @usableFromInline
-  let elementToID : ( Data.Element ) -> ID
+  let elementToID : ( Data.Element ) -> String?
 }

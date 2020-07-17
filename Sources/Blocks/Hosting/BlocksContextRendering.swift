@@ -180,7 +180,7 @@ extension BlocksContext {
     
     if var view = self.view {
       self.view = nil
-      view.blocks += blocks.asBlockSuitableForSurface(surface)
+      view.blocks += blocks.replacingRichText() // TBD: only for xoxb?
       blocks = []
       if view.callbackID == nil { view.callbackID = rootCallbackID }
       assert(view.callbackID != nil)
@@ -207,7 +207,7 @@ extension BlocksContext {
         title           : defaultTitle,
         closeTitle      : nil,    submitTitle     : nil,
         clearOnClose    : false,  notifyOnClose   : false,
-        blocks          : blocks.asBlockSuitableForSurface(surface),
+        blocks          : blocks.replacingRichText(), // TBD: only for xoxb
         privateMetaData : privateMetaData
       )
       blocks = []

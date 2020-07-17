@@ -21,6 +21,34 @@ extension Section: BlocksPrimitive {
   }
 }
 
+extension Accessory: BlocksPrimitive {
+  
+  public func render(in context: BlocksContext) throws {
+    if let block = context.currentBlock {
+      if case .section(let section) = block, section.accessory == nil {
+        context.startLevelTwo(.accessory); defer { context.endLevelTwo() }
+        try context.render(content)
+      }
+      else { // auto-open Section
+        try context.render(Section(content: { return self }))
+      }
+    }
+    else if case .section(let section) = context.blocks.last,
+            section.accessory == nil
+    {
+      // was the last a section, if so, add to it
+      context.log.warning(
+        "Adding Accessory to last Section block, please fix the nesting!")
+      assert(context.currentBlock == nil)
+      _ = context.reopenLastBlock()
+      try render(in: context)
+    }
+    else { // auto-open new Section
+      try context.render(Section(content: { return self }))
+    }
+  }
+}
+
 extension Field: BlocksPrimitive {
   
   public func render(in context: BlocksContext) throws {

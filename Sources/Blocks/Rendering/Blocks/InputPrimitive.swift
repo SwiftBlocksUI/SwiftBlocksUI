@@ -47,11 +47,23 @@ extension Input: BlocksPrimitive {
         context.dropCurrentBlock()
       }
       else {
+        if let block = context.currentBlock, case .input(var input) = block,
+           input.label.isEmpty
+        {
+          assignDefaultLabel(to: &input)
+          context.currentBlock = .input(input)
+        }
         context.closeBlock()
       }
     }
     
     try context.render(content)
+  }
+  
+  private func assignDefaultLabel(to input: inout Block.Input) {
+    // FIXME: Do something sensible, e.g. check whether there is just one option
+    //        inside and use the label of those, etc.
+    input.label = "Input"
   }
 }
 

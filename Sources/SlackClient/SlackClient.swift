@@ -47,7 +47,10 @@ public struct SlackClient {
        token    : Token?     = nil)
   {
     var envToken : Token {
-      Token(ProcessInfo.processInfo.environment["SLACK_ACCESS_TOKEN"] ?? "")
+      let pi = ProcessInfo.processInfo
+      let s = pi.environment["SLACK_ACCESS_TOKEN"]?
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+      return Token(s ?? "")
     }
     
     self.session = session
@@ -56,7 +59,7 @@ public struct SlackClient {
     
     if !self.token.isValid {
       #if DEBUG
-        print("Token passed to SlackClient is not valid:", self.token.value)
+        print("Token passed to SlackClient is not valid: '\(self.token.value)'")
         print(ProcessInfo.processInfo.environment)
       #else
         print("Token passed to SlackClient is not valid!")

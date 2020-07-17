@@ -18,13 +18,13 @@ extension CheckboxGroup: BlocksPrimitive {
     guard let block = context.currentBlock else {
       switch context.surface {
         case .modal:
-          return try Input(label: title, content: { self })
+          return try Input(title, optional: !required, content: { self })
                       .render(in: context)
         case .homeTab:
           return try Actions(content: { self }).render(in: context)
           
         case .message: // FIXME: need to make this an optional
-          return try Input(label: title, content: { self })
+          return try Input(title, optional: !required, content: { self })
                       .render(in: context)
 
       }

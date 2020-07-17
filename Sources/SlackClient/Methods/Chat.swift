@@ -17,7 +17,7 @@ public extension SlackClient {
   
   struct Chat {
     
-    let client : SlackClient
+    public let client : SlackClient
     
     /// https://api.slack.com/methods/chat.delete
     public func delete(_ id: MessageID, in conversation: ConversationID,
@@ -41,10 +41,11 @@ public extension SlackClient {
         let channel : ConversationID
         let ts      : MessageID
         let blocks  : [ Block ]
-        //as_user,attachments,link_names,parse,text
+        let text    : String
+        //as_user,attachments,link_names,parse
       }
-      // TODO: Also render blocks as markdown. Quite possible!
-      let call = Call(channel: conversation, ts: id, blocks: blocks)
+      let call = Call(channel: conversation, ts: id, blocks: blocks,
+                      text: blocks.blocksMarkdownString)
       client.post(call, to: "chat.update", yield: yield)
     }
     
@@ -59,7 +60,6 @@ public extension SlackClient {
         let text    : String
         // lots more
       }
-      // TODO: Also render blocks as markdown. Quite possible!
       let call = Call(channel: conversation, blocks: blocks,
                       text: blocks.blocksMarkdownString)
       client.post(call, to: "chat.postMessage", yield: yield)

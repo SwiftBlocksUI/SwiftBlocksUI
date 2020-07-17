@@ -28,7 +28,9 @@ extension BlocksContext {
   
   func enterForEach(count: Int) {}
   func leaveForEach()           {}
-  func enterForEachElement<ID: Hashable>(with id: ID) {
+  func enterForEachElement<ID: Hashable & WebRepresentableIdentifier>
+         (with id: ID)
+  {
     currentElementID.appendElementIDComponent(id)
   }
   func leaveForEachElement<ID: Hashable>(with id: ID) {

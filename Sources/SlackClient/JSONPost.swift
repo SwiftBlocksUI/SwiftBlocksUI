@@ -10,6 +10,7 @@ import struct Foundation.Data
 import struct Foundation.URL
 import class  Foundation.JSONEncoder
 import class  Foundation.JSONSerialization
+import class  Foundation.ProcessInfo
 
 #if canImport(FoundationNetworking)
   import struct FoundationNetworking.URLRequest
@@ -19,11 +20,12 @@ import class  Foundation.JSONSerialization
   import class  Foundation.HTTPURLResponse
 #endif
 
-#if DEBUG && false
-  fileprivate let logOutgoingJSON = true
-#else
-  fileprivate let logOutgoingJSON = false
-#endif
+fileprivate let logOutgoingJSON : Bool = {
+  let pi = ProcessInfo.processInfo
+  guard let s = pi.environment["LOG_SLACK_CLIENT_POSTS"] else { return false }
+  let f = s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+  return f == "1" || f == "yes" || f == "true" || f == "да"
+}()
 
 
 // HTTP Boilerplate
@@ -94,7 +96,15 @@ public extension SlackClient {
       
       if logOutgoingJSON {
         let s = String(data: jsonData, encoding: .utf8)!
-        print("JSON POST to \(url.absoluteString):\n", s)
+        print("JSON POST to \(url.absoluteString):\n")
+        print(s)
+        #if false
+        print("curl -v -X POST \\\n",
+              " -H 'Authorization: Bearer \(token.value)'\\\n",
+              " -H 'Content-Type: application/json; charset=UTF-8'\\\n",
+              " -d '\(s)'\\n",
+              url.absoluteString)
+        #endif
       }
     }
     catch {
