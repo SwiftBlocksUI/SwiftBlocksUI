@@ -63,7 +63,10 @@ Additional documentation is going to arrive within this repository:
 
 ## Environment Variables
 
+- `SLACK_ACCESS_TOKEN` (the token required to send requests to Slack)
+- `SLACK_VERIFICATION_TOKEN` (shared secret with Slack to verify requests)
 - `PORT` (the port the app is going to start on, defaults to 1337)
+- `LOG_SLACK_CLIENT_POSTS` (set to `1` to log the JSON sent to Slack using SlackClient)
 - `macro.core.numthreads`
 - `macro.core.iothreads`
 - `macro.core.retain.debug`

@@ -47,7 +47,10 @@ public struct SlackClient {
        token    : Token?     = nil)
   {
     var envToken : Token {
-      Token(ProcessInfo.processInfo.environment["SLACK_ACCESS_TOKEN"] ?? "")
+      let pi = ProcessInfo.processInfo
+      let s = pi.environment["SLACK_ACCESS_TOKEN"]?
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+      return Token(s ?? "")
     }
     
     self.session = session

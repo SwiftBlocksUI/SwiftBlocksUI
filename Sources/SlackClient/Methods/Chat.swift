@@ -59,7 +59,6 @@ public extension SlackClient {
         let text    : String
         // lots more
       }
-      // TODO: Also render blocks as markdown. Quite possible!
       let call = Call(channel: conversation, blocks: blocks,
                       text: blocks.blocksMarkdownString)
       client.post(call, to: "chat.postMessage", yield: yield)

@@ -10,6 +10,7 @@ import struct Foundation.Data
 import struct Foundation.URL
 import class  Foundation.JSONEncoder
 import class  Foundation.JSONSerialization
+import class  Foundation.ProcessInfo
 
 #if canImport(FoundationNetworking)
   import struct FoundationNetworking.URLRequest
@@ -19,11 +20,12 @@ import class  Foundation.JSONSerialization
   import class  Foundation.HTTPURLResponse
 #endif
 
-#if DEBUG && false
-  fileprivate let logOutgoingJSON = true
-#else
-  fileprivate let logOutgoingJSON = false
-#endif
+fileprivate let logOutgoingJSON : Bool = {
+  let pi = ProcessInfo.processInfo
+  guard let s = pi.environment["LOG_SLACK_CLIENT_POSTS"] else { return false }
+  let f = s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+  return f == "1" || f == "yes" || f == "true" || f == "да"
+}()
 
 
 // HTTP Boilerplate
