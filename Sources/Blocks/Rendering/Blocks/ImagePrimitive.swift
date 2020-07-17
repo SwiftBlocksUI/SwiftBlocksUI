@@ -11,6 +11,8 @@ import enum SlackBlocksModel.Block
 extension Image: BlocksPrimitive {
   // Note: Slack Markdown (or RichText) cannot contain images. We render images
   //       as Links in those contexts.
+  //       Update: Well, contained images seem to be rendered as image
+  //               attachments now, with the `alt` text inline.
   
   typealias APIBlock = Block.ImageBlock
 
@@ -68,7 +70,13 @@ extension Image: BlocksPrimitive {
     context.currentBlock = nil
     switch context.level2Nesting {
       case .none:
-        section.text.appendMarkdown(slackMarkdownString)
+        if section.accessory == nil { // put into accessory if available
+          section.accessory = .image(.init(url: url, alt: title))
+        }
+        else {
+          section.text.appendMarkdown(" " + slackMarkdownString + " ")
+        }
+        
       case .level2, .button, .picker:
         assertionFailure("unexpected section nesting: \(context)")
         section.text.appendMarkdown(slackMarkdownString)
