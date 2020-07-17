@@ -32,6 +32,16 @@
  *       }
  *     }
  *
+ * With Accessory:
+ *
+ *     Section {
+ *       "Hello World!"
+ *       Accessory {
+ *         Image("A cute kitten",
+ *               url: URL("http://placekitten.com/128/128")!)
+ *       }
+ *     }
+ *
  * Docs: https://api.slack.com/reference/block-kit/blocks#section
  */
 public struct Section<Content: Blocks>: Blocks, TopLevelPrimitiveBlock {
@@ -62,6 +72,8 @@ public struct Section<Content: Blocks>: Blocks, TopLevelPrimitiveBlock {
  *         Text("Bold)
  *       }
  *     }
+ *     
+ * Docs: https://api.slack.com/reference/block-kit/blocks#section
  */
 public struct Field<Content: Blocks>: Blocks {
   
@@ -75,4 +87,34 @@ public struct Field<Content: Blocks>: Blocks {
   }
 }
 
-// TODO: The Accessories, like DatePicker
+/**
+ * An `Accessory` is shown in the upper right of a `Section` block.
+ *
+ * There can only be one `Accessory` and the available types are limited to:
+ * - Images
+ * - Buttons, DatePickers, Pickers, CheckboxGroups
+ * - overflow menus (not yet available as Blocks)
+ *
+ * Example:
+ *
+ *     Section {
+ *       "Hello World!"
+ *       Accessory {
+ *         Image("A cute kitten",
+ *               url: URL("http://placekitten.com/128/128")!)
+ *       }
+ *     }
+ *
+ * Docs: https://api.slack.com/reference/block-kit/blocks#section
+ */
+public struct Accessory<Content: Blocks>: Blocks {
+
+  public typealias Body = Never
+
+  @usableFromInline let content : Content
+
+  @inlinable
+  public init(@BlocksBuilder content: () -> Content) {
+    self.content = content()
+  }
+}
