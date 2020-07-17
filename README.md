@@ -63,6 +63,11 @@ There is a related blog entry going over SwiftBlocksUI:
 Additional documentation is going to arrive within this repository:
 [Documentation](Documentation/README.md).
 
+Examples:
+- [SlashCows](https://github.com/SwiftBlocksUI/SlashCows) - Slack slash command that produces ASCII Cows. Moo!
+- [AvocadoToast](https://github.com/SwiftBlocksUI/AvocadoToast) - An Avocado Toast ordering solution.
+- [ClipIt!](https://github.com/SwiftBlocksUI/ClipIt) - Working on Messages.
+
 
 ## Environment Variables
 
