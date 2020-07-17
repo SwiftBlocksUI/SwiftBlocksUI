@@ -98,14 +98,32 @@ extension ComponentTypeInfo {
   
   fileprivate init?<T>(reflecting viewType: T.Type) {
     guard let structInfo = try? Runtime.typeInfo(of: viewType) else {
-      print("failed to reflect on View:", viewType)
+      globalBlocksLog.error("failed to reflect on View: \(viewType)")
       assertionFailure("failed to reflect on View \(viewType)")
       return nil
     }
-    guard structInfo.kind == .struct else {
-      print("Only structs allowed as View:", viewType)
-      assertionFailure("currently only supporting structs for Views")
-      return nil
+
+    switch structInfo.kind {
+      case .struct:
+        break
+ 
+      case .class:
+        globalBlocksLog.error("Cannot use a `class` as a View: \(viewType)")
+        return nil
+        
+      case .optional:
+        self = .static
+        return
+        
+      default:
+        globalBlocksLog.error(
+          "Only structs allowed:\n  Type: \(viewType)\n  info: \(structInfo)"
+        )
+        assertionFailure(
+          "currently only supporting structs for Views, got type: \(viewType)" +
+          " info: \(structInfo)"
+        )
+        return nil
     }
     
     let dynamicProperties : [ ComponentTypeInfo.DynamicPropertyInfo ]
