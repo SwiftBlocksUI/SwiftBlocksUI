@@ -3,5 +3,17 @@
        align="right" width="100" height="100" />
 </h2>
 
-Work in Progress.
+Conditionals are directly supported by the function builder syntax:
+
+```
+  if order.spread != .none {
+    TitledField("Spread") { 
+      order.spread.name 
+    }
+  }
+  else {
+    Text("It ain't got no spread!")
+  }
+}
+```
 

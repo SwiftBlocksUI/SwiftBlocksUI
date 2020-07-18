@@ -5,3 +5,6 @@
 
 Work in Progress.
 
+TODO:
+- always use explicit callback IDs
+- how to wrap in a Docker container (see miniircd Dockerfile)
