@@ -17,6 +17,16 @@ import enum   SlackBlocksModel.Block
  *
  * Checkout `Picker` for more information.
  *
+ * Example:
+ *
+ *     Picker("Importance", selection: $importance,
+ *            placeholder: "Select importance")
+ *     {
+ *         Option("High 💎💎✨").tag("high")
+ *         Option("Medium 💎")  .tag("medium")
+ *         Option("Low ⚪️")     .tag("low")
+ *     }
+ *
  * Docs: https://api.slack.com/reference/block-kit/block-elements#multi_select
  */
 public struct Option: Blocks {
