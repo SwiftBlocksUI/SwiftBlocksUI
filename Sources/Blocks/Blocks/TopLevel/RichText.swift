@@ -11,6 +11,9 @@
  *
  * Depending on your needs, you might rather want to use a `Section`.
  *
+ * Note: `RichText` blocks do not seem to be supported with bot tokens,
+ *       they get converted to `Section`s automagically.
+ *
  * Those are vertically stacked paragraphs containing formatted Text elements.
  *
  * Example:
