@@ -8,9 +8,8 @@ Work in Progress.
 Blog entry/tutorial:
 [Instant “SwiftUI” Flavoured Slack Apps](https://www.alwaysrightinstitute.com/swiftblocksui/).
 
-### Tutorials
+### [Tutorials](Tutorials/README.md)
 
-[Tutorials](Tutorials/README.md)
 - [SlashCows](Tutorials/SlashCows.md) - Slack slash command that produces ASCII Cows. Moo!
   Demos Slash commands and interactive messages.
 - [AvocadoToast](Tutorials/AvocadoToast.md) - An Avocado Toast ordering solution.
@@ -18,9 +17,8 @@ Blog entry/tutorial:
 - [ClipIt!](Tutorials/ClipIt.md) - Working on Messages.
   Demos Message Actions.
 
-### Blocks
+### [Blocks](Blocks/README.md)
 
-Included [Blocks](Blocks/README.md):
 - Top-Level Blocks
   - [Section](Blocks/TopLevel/Section.md)
     - [Accessory](Blocks/Elements/Accessory.md)
