@@ -45,10 +45,9 @@ import enum   SlackBlocksModel.Block
  *     Actions {
  *       Button(.primary, value: "123") {
  *         Link("Apple.com", destination: URL("https://apple.com")!)
- *         Confirmation(style: .danger) {
- *           Text("Do you really want to go to Apple.com?!")
- *         }
  *       }
+ *       .confirm(message: "Do you really want to go to Apple.com?!",
+ *                style: .danger)
  *     }
  *
  * Docs: https://api.slack.com/reference/block-kit/block-elements#button

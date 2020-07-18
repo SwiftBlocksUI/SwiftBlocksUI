@@ -15,6 +15,11 @@ import enum   SlackBlocksModel.Block
 /**
  * A picker to pick a date. That is year, month, day - NOT time.
  *
+ * The `selection` can be either of those:
+ * - `DatePicker.YearMonthDay` (a BlocksUI struct w/ year/month/day properties)
+ * - a Foundation `Date` (use w/ care)
+ * - a Foundation `DateComponents`
+ *
  * Example:
  *
  *     DatePicker("Pick a date!", selection: $date)
@@ -23,7 +28,7 @@ import enum   SlackBlocksModel.Block
  */
 public struct DatePicker: Blocks {
   
-  public typealias YearMonthDay = Block.DatePicker.YearMonthDay
+  public typealias YearMonthDay = Block.YearMonthDay
   
   @usableFromInline let actionID    : ActionIDStyle
   @usableFromInline let title       : String
