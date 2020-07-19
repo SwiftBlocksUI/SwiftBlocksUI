@@ -4,6 +4,7 @@
 SWIFT_BUILD=swift build
 SWIFT_CLEAN=swift package clean
 SWIFT_BUILD_DIR=.build
+SWIFT_TEST=swift test
 CONFIGURATION=debug
 DOCKER=/usr/local/bin/docker
 #DOCKER=docker
@@ -28,6 +29,10 @@ all: all-native
 
 all-native:
 	$(SWIFT_BUILD) -c $(CONFIGURATION)
+
+# Cannot test in `release` configuration?!
+test:
+	$(SWIFT_TEST) 
 	
 clean :
 	$(SWIFT_CLEAN)

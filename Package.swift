@@ -20,17 +20,17 @@ let package = Package(
   
   dependencies: [
     .package(url: "https://github.com/Macro-swift/Macro.git",
-             from: "0.1.2"),
+             from: "0.5.0"),
     .package(url: "https://github.com/Macro-swift/MacroExpress.git",
-             from: "0.1.1"),
+             from: "0.5.0"),
     .package(url: "https://github.com/Macro-swift/MacroApp.git",
-             from: "0.1.0"),
+             from: "0.5.0"),
     .package(url: "https://github.com/apple/swift-nio.git",
              from: "2.19.0"),
     .package(url: "https://github.com/wickwirew/Runtime.git",
              from: "2.1.1"),
     .package(url: "https://github.com/apple/swift-log.git",
-             from: "1.2.0")
+             from: "1.4.0")
   ],
   
   targets: [
@@ -51,6 +51,6 @@ let package = Package(
                             "MacroExpress", "MacroApp" ] ),
 
     .testTarget(name: "SwiftBlocksUITests",
-                dependencies: [ "SwiftBlocksUI" ]),
+                dependencies: [ "SwiftBlocksUI", "MacroTestUtilities" ])
   ]
 )
