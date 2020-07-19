@@ -362,5 +362,3 @@ The whole order flow would live inside Slack:
 
 Would be nice to complete the sample application on GitHub to implement the
 whole flow.
-
-

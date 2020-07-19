@@ -8,6 +8,19 @@
 
 /**
  * A vertical divider block (draws a separator line)
+ *
+ * Example:
+ *
+ *     Section {
+ *       "Hello World"
+ *     }
+ *
+ *     Divider
+ *
+ *     Section {
+ *       "Does it work?"
+ *     }
+ *
  */
 public struct Divider: Blocks, TopLevelPrimitiveBlock {
   
@@ -15,8 +28,7 @@ public struct Divider: Blocks, TopLevelPrimitiveBlock {
   
   public var blockID : BlockIDStyle {
     set {
-      globalBlocksLog.warning(
-        "attempt to set id \(newValue) on Divider block")
+      globalBlocksLog.warning("attempt to set id \(newValue) on Divider block")
     }
     get { .auto }
   }

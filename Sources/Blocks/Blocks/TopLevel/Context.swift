@@ -7,7 +7,7 @@
 //
 
 /**
- * Displays images and text in a vertical stack in a smaller font.
+ * Displays images and text in a horizontal stack in a smaller font.
  *
  * Show some contextual information, visually distinct to the main message
  * content.
