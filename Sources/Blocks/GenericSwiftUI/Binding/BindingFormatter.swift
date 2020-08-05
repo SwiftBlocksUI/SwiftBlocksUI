@@ -72,7 +72,7 @@ extension Formatter {
         case is ByteCountFormatter,
              is DateIntervalFormatter, is EnergyFormatter,
              is LengthFormatter,       is MassFormatter:
-          throw FormatterError.formatterCannotConvertFromString(formatter)
+          throw FormatterError.formatterCannotConvertFromString(self)
         
         // unavailable on Linux 5.2
         #if false
@@ -85,7 +85,7 @@ extension Formatter {
 
         default:
           throw FormatterError
-            .unsupportedFormatterBlameSwift52Foundation(formatter)
+            .unsupportedFormatterBlameSwift52Foundation(self)
       }
     #elseif os(Linux) // getObjectValue is internal on Linux
       var obj : AnyObject?
@@ -113,8 +113,8 @@ extension Formatter {
     // still a String
     if V.self is String.Type,
        let v = (self.editingString(for: obj as Any)
-             ?? self.string(for: obj)
-             ?? String(describing: obj)) as? V
+             ?? self.string       (for: obj as Any)
+             ?? String(describing: obj as Any)) as? V
     {
       return v
     }
