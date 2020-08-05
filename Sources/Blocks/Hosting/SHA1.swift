@@ -19,6 +19,11 @@ extension String {
 #if canImport(CNIOSHA1)
   // NIO does not export this as a product, but we can still use it :->
   import CNIOSHA1
+  #if canImport(Glibc)
+    import func Glibc.strlen
+  #elseif canImport(Darwin)
+    import func Darwin.strlen
+  #endif
 
   extension String {
     @usableFromInline

@@ -20,13 +20,13 @@ let package = Package(
   
   dependencies: [
     .package(url: "https://github.com/Macro-swift/Macro.git",
-             from: "0.5.0"),
+             from: "0.5.5"),
     .package(url: "https://github.com/Macro-swift/MacroExpress.git",
-             from: "0.5.0"),
+             from: "0.5.4"),
     .package(url: "https://github.com/Macro-swift/MacroApp.git",
              from: "0.5.0"),
     .package(url: "https://github.com/apple/swift-nio.git",
-             from: "2.19.0"),
+             from: "2.20.2"),
     .package(url: "https://github.com/wickwirew/Runtime.git",
              from: "2.1.1"),
     .package(url: "https://github.com/apple/swift-log.git",
