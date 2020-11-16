@@ -30,10 +30,9 @@ public extension RouteKeeper {
    * A middleware which can process Slack "view submissions", i.e. when the
    * submit action of a Slack view (aka modal) is performed.
    *
-   * Note that view submissions do NOT have an associated "Callback ID".
-   * Handlers need to determine their operation based on other data,
-   * e.g. based on block-ids, the "state" values or private metadata that can
-   * be associated with a View.
+   * Note that view submissions do have an associated "Callback ID", but it
+   * isn't statically registered in the app configuration. It's just an
+   * arbitrary ID the app itself can choose and set for later dispatch.
    *
    * Calls `next` if the request does not contain a Slack view submission.
    *
@@ -152,8 +151,7 @@ public extension RouteKeeper {
    *   - id         : An ID to assign to the route, for debugging purposes (nil)
    *   - callbackID : If available, only call the handler if the the IDs match
    *                  (Note that not all interactive requests have explicit
-   *                   callback IDs! E.g. block actions and view ones don't,
-   *                   shortcuts do)
+   *                   callback IDs! E.g. block actions don't, shortcuts do)
    *   - execute    : The request handler
    */
   @inlinable

@@ -8,6 +8,14 @@
 
 public extension InteractiveRequest {
   
+  /**
+   * The information an interactive request transmits about an associated View,
+   * i.e. as part of a view submission or close.
+   *
+   * There is also the `View` struct, which is currently used just for
+   * rendering. Both are very similar, but this one carries extra
+   * information.
+   */
   struct ViewInfo: Decodable, CustomStringConvertible {
     // Note: callback_id is empty when part of a view_submission, bug or
     //       feature? Would be useful.
