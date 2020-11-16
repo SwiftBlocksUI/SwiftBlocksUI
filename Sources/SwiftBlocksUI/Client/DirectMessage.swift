@@ -21,28 +21,12 @@ public extension SlackClient.Chat {
   func sendMessage<B: Blocks>(_ message: B, to userID: UserID,
                               yield: @escaping ( Swift.Error? ) -> Void)
   {
+    let scope     : MessageResponse.ResponseType?
     let apiBlocks : [ Block ]
-    
-    // TODO: Provide a proper environment?! Maybe even copy stuff from the
-    //       BlocksEndpointResponse?
-    let context = BlocksContext()
     do {
-      context.surface = .message
-
-      try context.render(message)
-
-      let hasRichText = client.token.supportsRichText // TBD
-      
-      let blocks : [ Block ]
-      if let view = context.view {
-        context.log.warning("a view was passed chat.sendMessage \(view)")
-        blocks = view.blocks + context.blocks
-      }
-      else {
-        blocks = context.blocks
-      }
-      
-      apiBlocks = hasRichText ? blocks : blocks.replacingRichText()
+      ( scope, apiBlocks ) =
+        try renderMessage(message,
+                          supportsRichText: client.token.supportsRichText)
     }
     catch {
       return yield(error)
@@ -58,7 +42,7 @@ public extension SlackClient.Chat {
         return yield(CouldNotFindConversationID())
       }
       
-      switch context.messageResponseScope {
+      switch scope {
         case .inConversation, .none:
           return client.chat.postMessage(in: conversationID,
                                          blocks: apiBlocks)
