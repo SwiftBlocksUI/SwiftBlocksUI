@@ -41,9 +41,6 @@ public func interactiveBlocks<B: Blocks>(@BlocksBuilder blocks: () -> B)
     guard request.isValidForCallbackID(callbackID) else { return next() }
     
     let client = SlackClient(token: req.slackAccessToken)
-    
-    // Setting the client only to make it explicit. Maybe we should rather
-    // collect the client from the context somehow.
     let blocks = CallbackIDTransparentEnvironmentWritingModifier(rootBlocks) {
                    env in
                    env[keyPath: \.log]    = req.log

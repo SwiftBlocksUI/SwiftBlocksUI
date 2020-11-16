@@ -99,3 +99,17 @@ extension InteractiveRequest {
     }
   }
 }
+
+extension InteractiveRequest.FormValue: CustomStringConvertible {
+  
+  public var description: String {
+    switch self {
+      case .button (let value) : return "<ButtonValue: '\(value)'>"
+      case .date   (let value) : return "<DateValue: \(value)>"
+      case .option (let value) : return "<OptionValue: \(value)>"
+      case .options(let values):
+        return "<OptionValues: " + values.joined(separator: ",") + ">"
+      case .plainTextInput(let value): return "<InputValue: '\(value)'>"
+    }
+  }
+}

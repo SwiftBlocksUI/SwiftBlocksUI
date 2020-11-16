@@ -8,6 +8,9 @@ The required token (`xoxp-xyz...`) can either be provided using the
 `token` parameter, or the `SLACK_ACCESS_TOKEN` variable can be set
 in the environment.
 
+Logging out outgoing requests can be enabled by setting the
+`LOG_SLACK_CLIENT_POSTS` environment variables to `yes` (or `да`).
+
 
 ### SwiftBlocksUI
 

@@ -30,7 +30,7 @@ public extension InteractiveRequest {
 
     public var description: String {
       var ms = "<ViewSubmission:"
-      ms += " @\(user.id.id)(\(user.username)"
+      ms += " @\(user.id.id)(\(user.username))"
       ms += " \(view)"
       if !responseURLs    .isEmpty { ms += " urls=\(responseURLs)" }
       if verificationToken.isEmpty { ms += " no-token"      }
