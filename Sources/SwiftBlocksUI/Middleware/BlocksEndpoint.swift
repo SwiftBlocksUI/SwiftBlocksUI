@@ -40,12 +40,11 @@ public func interactiveBlocks<B: Blocks>(@BlocksBuilder blocks: () -> B)
     guard let request = req.interactiveRequest     else { return next() }
     guard request.isValidForCallbackID(callbackID) else { return next() }
     
-    // Setting the client only to make it explicit. Maybe we should rather
-    // collect the client from the context somehow.
+    let client = SlackClient(token: req.slackAccessToken)
     let blocks = CallbackIDTransparentEnvironmentWritingModifier(rootBlocks) {
                    env in
                    env[keyPath: \.log]    = req.log
-                   env[keyPath: \.client] = ClientEnvironmentKey.defaultValue
+                   env[keyPath: \.client] = client
                  }
                  .interactiveEnvironment(request)
     #if DEBUG
@@ -57,6 +56,7 @@ public func interactiveBlocks<B: Blocks>(@BlocksBuilder blocks: () -> B)
       responseURL      : request.responseURL,
       triggerID        : request.triggerID,
       userID           : request.userID,
+      accessToken      : req.slackAccessToken,
       response         : res,
       blocks           : blocks
     )
@@ -74,6 +74,14 @@ public func interactiveBlocks<B: Blocks>(@BlocksBuilder blocks: () -> B)
         assert(blockActions.actions.count == 1)
           // If there is more than one, the `end` needs to be a counter!
         
+        if let state = blockActions.state {
+          req.log.trace("process block action state \(blockActions)")
+          try response.takeValues(from: state.values)
+        }
+        else {
+          req.log.trace("no block state to track \(blockActions)")
+        }
+        
         try response.invoke(.actions(blockActions.actions, response))
         req.log.trace("done with request handling phase for actions")
 
@@ -84,8 +92,13 @@ public func interactiveBlocks<B: Blocks>(@BlocksBuilder blocks: () -> B)
 
       case .viewSubmission(let submit):
         response.enableResponseAction()
-        req.log.trace("process block view submission \(submit)")
-        try response.takeValues(from: submit.view.state.values)
+        if let state = submit.view.state {
+          req.log.trace("process block view submission \(submit)")
+          try response.takeValues(from: state.values)
+        }
+        else {
+          req.log.trace("no view submission to track \(submit)")
+        }
         req.log.trace("process block view invocation \(submit)")
         try response.invoke(.submit(response))
         req.log.trace("done with request handling phase for: \(submit)")

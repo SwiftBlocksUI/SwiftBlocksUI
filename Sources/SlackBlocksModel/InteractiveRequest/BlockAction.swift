@@ -10,7 +10,7 @@ public extension InteractiveRequest {
 
   struct BlockAction: Decodable {
     
-    public typealias Value = InteractiveRequest.View.State.Value
+    public typealias Value = InteractiveRequest.ViewInfo.State.Value
       // should be OK, this has some extra but should otherwise match
     
     public let actionID        : Block.ActionID

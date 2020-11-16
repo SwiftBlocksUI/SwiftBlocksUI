@@ -8,6 +8,8 @@
 
 /**
  * A Slack API View (either a modal or a home tab)
+ *
+ * There is also `InteractiveRequest.ViewInfo`.
  */
 public struct View: Encodable {
   // TBD: is this correct?

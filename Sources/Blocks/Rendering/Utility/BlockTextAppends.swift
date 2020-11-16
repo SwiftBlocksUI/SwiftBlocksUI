@@ -52,7 +52,7 @@ extension Block.Text {
   mutating func appendQuoted(_ text: String) {
     guard !text.isEmpty else { return }
     for line in text.lazy.split(separator: "\n") {
-      appendMarkdown("> \(line)\n")
+      appendMarkdown("> \(String(line))\n")
     }
   }
 }

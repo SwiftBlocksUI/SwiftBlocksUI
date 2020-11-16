@@ -55,13 +55,39 @@ public extension SlackClient {
                             yield  : @escaping ResponseHandler)
     {
       struct Call: Encodable {
-        let channel : ConversationID
-        let blocks  : [ Block ]
-        let text    : String
+        let channel      : ConversationID
+        let blocks       : [ Block ]
+        let text         : String
+        let unfurl_links = false
+        let unfurl_media = false
         // lots more
       }
       let call = Call(channel: conversation, blocks: blocks,
                       text: blocks.blocksMarkdownString)
+      client.post(call, to: "chat.postMessage", yield: yield)
+    }
+    
+    /// https://api.slack.com/methods/chat.postMessage
+    public func replyToMessage(_      threadID : MessageID,
+                               in conversation : ConversationID,
+                               broadcast       : Bool = false,
+                               blocks          : [ Block ],
+                               yield           : @escaping ResponseHandler)
+    {
+      struct Call: Encodable {
+        let channel         : ConversationID
+        let blocks          : [ Block ]
+        let text            : String
+        let thread_ts       : MessageID
+        let reply_broadcast : Bool
+        let unfurl_links    = false
+        let unfurl_media    = false
+        // lots more
+      }
+      let call = Call(channel: conversation, blocks: blocks,
+                      text: blocks.blocksMarkdownString,
+                      thread_ts: threadID,
+                      reply_broadcast: broadcast)
       client.post(call, to: "chat.postMessage", yield: yield)
     }
     

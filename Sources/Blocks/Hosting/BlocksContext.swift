@@ -30,7 +30,7 @@ public final class BlocksContext {
   /// Just a nested map of form values.
   public typealias FormState = [ Block.BlockID
                                : [ Block.ActionID
-                                 : InteractiveRequest.View.State.Value ] ]
+                                 : InteractiveRequest.ViewInfo.State.Value ] ]
   
   public enum Mode {
     public enum Invocation {
