@@ -25,6 +25,7 @@ extension InteractiveRequest.ViewInfo {
    */
   @usableFromInline
   func matchesCallbackID(_ id: CallbackID) -> Bool {
+    guard let state = state else { return false }
     for ( blockID, state ) in state.values {
       if blockID.matchesCallbackID(id) { return true }
       for actionID in state.keys {

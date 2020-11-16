@@ -48,7 +48,7 @@ public extension InteractiveRequest {
     public let actions           : [ BlockAction ]
     public let container         : Container
     public let responseURL       : URL? // for message containers
-    public let state             : ViewInfo.State
+    public let state             : ViewInfo.State?
 
     // MARK: - Decoding
     
@@ -98,9 +98,9 @@ public extension InteractiveRequest {
       user        = try container.decode(User           .self, forKey: .user)
       actions     = try container.decode([ BlockAction ].self, forKey: .actions)
       
-      // New starting 2020-09-29:
-      state       = (try? container.decode(ViewInfo.State.self, forKey: .state))
-                 ?? ViewInfo.State()
+      // New starting 2020-09-29. Key can still be missing if there are no
+      // form elements (e.g. just buttons) in the message.
+      state = try? container.decode(ViewInfo.State?.self, forKey: .state)
 
       
       // decode the action container (not the Decodable container :-)
@@ -140,6 +140,8 @@ extension InteractiveRequest.BlockActions: CustomStringConvertible {
     ms += " \(actions)"
     if verificationToken.isEmpty { ms += " no-token"      }
     if triggerID.id     .isEmpty { ms += " no-trigger-id" }
+    
+    if let state = state { ms += " state=\(state.values)" }
     ms += ">"
     return ms
   }

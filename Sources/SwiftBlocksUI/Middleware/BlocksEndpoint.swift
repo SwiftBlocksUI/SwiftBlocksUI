@@ -74,6 +74,14 @@ public func interactiveBlocks<B: Blocks>(@BlocksBuilder blocks: () -> B)
         assert(blockActions.actions.count == 1)
           // If there is more than one, the `end` needs to be a counter!
         
+        if let state = blockActions.state {
+          req.log.trace("process block action state \(blockActions)")
+          try response.takeValues(from: state.values)
+        }
+        else {
+          req.log.trace("no block state to track \(blockActions)")
+        }
+        
         try response.invoke(.actions(blockActions.actions, response))
         req.log.trace("done with request handling phase for actions")
 
@@ -84,8 +92,13 @@ public func interactiveBlocks<B: Blocks>(@BlocksBuilder blocks: () -> B)
 
       case .viewSubmission(let submit):
         response.enableResponseAction()
-        req.log.trace("process block view submission \(submit)")
-        try response.takeValues(from: submit.view.state.values)
+        if let state = submit.view.state {
+          req.log.trace("process block view submission \(submit)")
+          try response.takeValues(from: state.values)
+        }
+        else {
+          req.log.trace("no view submission to track \(submit)")
+        }
         req.log.trace("process block view invocation \(submit)")
         try response.invoke(.submit(response))
         req.log.trace("done with request handling phase for: \(submit)")

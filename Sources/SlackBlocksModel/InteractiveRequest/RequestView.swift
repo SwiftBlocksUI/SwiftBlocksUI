@@ -30,7 +30,7 @@ public extension InteractiveRequest {
     public let externalID         : String
     public let privateMetaData    : String
     public let hash               : String // 1593521011.2f58e1f7
-    public let state              : State
+    public let state              : State?
     
     public let rootViewID         : ViewID
     public let previousViewID     : ViewID?
@@ -55,7 +55,9 @@ public extension InteractiveRequest {
       if id != rootViewID         { ms += " root=\(rootViewID.id)"  }
       if !privateMetaData.isEmpty { ms += " meta='\(privateMetaData)'" }
       
-      ms += " state=\(state)"
+      if let state = state {
+        ms += " state=\(state)"
+      }
       
       if hash.isEmpty { ms += " no-hash" }
       ms += ">"
@@ -82,10 +84,6 @@ public extension InteractiveRequest.ViewInfo {
       init?(stringValue : String) { self.stringValue = stringValue      }
       init?(intValue    : Int)    { self.stringValue = String(intValue) }
     }
-    
-    internal init() {
-      self.values = [:]
-    }
 
     public init(from decoder: Decoder) throws {
       // not sure why this is necessary, faults in an array error
@@ -93,6 +91,21 @@ public extension InteractiveRequest.ViewInfo {
       let map = try container.decode(BlockMap.self, forKey: .values)
       self.values = map.values
     }
+    
+    // MARK: - Some Collection Operations
+    
+    public var isEmpty : Bool {
+      guard !values.isEmpty else { return true }
+      // TODO: scan the arrays?
+      return false
+    }
+    
+    public subscript(_ blockID: BlockID) -> [ ActionID : Value ] {
+      return values[blockID] ?? [:]
+    }
+    
+    
+    // MARK: - Decoding Support
     
     struct BlockMap: Decodable {
       let values : [ BlockID : [ ActionID : Value ] ]
