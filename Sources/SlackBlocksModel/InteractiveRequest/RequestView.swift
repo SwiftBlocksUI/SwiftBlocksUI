@@ -7,8 +7,6 @@
 //
 
 public extension InteractiveRequest {
-
-  typealias View = ViewInfo // deprecated
   
   struct ViewInfo: Decodable, CustomStringConvertible {
     // Note: callback_id is empty when part of a view_submission, bug or
@@ -58,7 +56,7 @@ public extension InteractiveRequest {
   }
 }
 
-public extension InteractiveRequest.View {
+public extension InteractiveRequest.ViewInfo {
 
   struct State: Decodable {
     public typealias BlockID  = Block.BlockID

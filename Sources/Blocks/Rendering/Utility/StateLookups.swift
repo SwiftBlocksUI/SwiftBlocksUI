@@ -11,7 +11,7 @@ import enum SlackBlocksModel.InteractiveRequest
 
 extension Dictionary where Key   == Block.BlockID,
                            Value == [ Block.ActionID
-                                    : InteractiveRequest.View.State.Value ]
+                                    : InteractiveRequest.ViewInfo.State.Value ]
 {
 
   @usableFromInline
