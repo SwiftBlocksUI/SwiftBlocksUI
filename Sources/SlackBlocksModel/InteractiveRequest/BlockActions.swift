@@ -121,12 +121,28 @@ extension InteractiveRequest.BlockActions: CustomStringConvertible {
 
   public var description: String {
     var ms = "<BlockActions:"
-    ms += " @\(user.id.id)(\(user.username)"
+    ms += " @\(user.id.id)(\(user.username))"
     ms += " \(container)"
     ms += " \(actions)"
     if verificationToken.isEmpty { ms += " no-token"      }
     if triggerID.id     .isEmpty { ms += " no-trigger-id" }
     ms += ">"
     return ms
+  }
+}
+
+extension InteractiveRequest.BlockActions.Container: CustomStringConvertible {
+
+  public var description: String {
+    switch self {
+      case .view(let id, _):
+        return "<View: \(id.id)>"
+    
+      case .message(let mid, let cid, let isEphemeral):
+        return "<Msg[#\(cid.id):\(mid.id)]\(isEphemeral ? " ephemeral" : "")>"
+        
+      case .contextMessage(let mid, let cid, let isEphemeral):
+        return "<OnMsg[#\(cid.id):\(mid.id)]\(isEphemeral ? " ephemeral" : "")>"
+    }
   }
 }

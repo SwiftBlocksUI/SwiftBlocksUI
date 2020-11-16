@@ -78,3 +78,22 @@ public struct ExternalViewID : StringID {
   public let id : String
   public init(_ id: String) { self.id = id }
 }
+
+
+// MARK: - Descriptions
+
+extension ChannelID: CustomStringConvertible {
+  public var description: String { return "<ChID:\(id)>" }
+}
+extension ConversationID: CustomStringConvertible {
+  public var description: String { return "<ConvID:\(id)>" }
+}
+extension MessageID: CustomStringConvertible {
+  public var description: String { return "<MID:\(id)>" }
+}
+extension UserID: CustomStringConvertible {
+  public var description: String { return "<UID:\(id)>" }
+}
+extension ApplicationID: CustomStringConvertible {
+  public var description: String { return "<App:\(id)>" }
+}
