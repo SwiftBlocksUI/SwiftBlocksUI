@@ -82,6 +82,10 @@ public extension InteractiveRequest.ViewInfo {
       init?(stringValue : String) { self.stringValue = stringValue      }
       init?(intValue    : Int)    { self.stringValue = String(intValue) }
     }
+    
+    internal init() {
+      self.values = [:]
+    }
 
     public init(from decoder: Decoder) throws {
       // not sure why this is necessary, faults in an array error

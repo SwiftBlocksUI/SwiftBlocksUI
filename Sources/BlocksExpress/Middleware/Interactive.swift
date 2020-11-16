@@ -171,7 +171,6 @@ public extension RouteKeeper {
         guard let request = req.interactiveRequest else { return next() }
         
         // Note: Not all interactive requests have explicit callback IDs!
-        //       (e.g.
         if let callbackID = callbackID, callbackID != request.callbackID {
           return next()
         }

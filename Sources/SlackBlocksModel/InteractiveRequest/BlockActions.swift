@@ -10,6 +10,15 @@ import struct Foundation.URL
 
 public extension InteractiveRequest {
   
+  /**
+   * Block actions are sent when form elements change their values, e.g. if
+   * a button is pressed or a date is selected in a date picker.
+   *
+   * Note that components contained in `input` blocks do NOT trigger block
+   * actions.
+   *
+   * Docs: https://api.slack.com/reference/interaction-payloads/block-actions
+   */
   struct BlockActions: Decodable {
     
     /**
@@ -39,11 +48,12 @@ public extension InteractiveRequest {
     public let actions           : [ BlockAction ]
     public let container         : Container
     public let responseURL       : URL? // for message containers
-    
+    public let state             : ViewInfo.State
+
     // MARK: - Decoding
     
     enum CodingKeys: String, CodingKey {
-      case team, user, view, actions, container
+      case team, user, view, actions, container, state
       case verificationToken = "token"
       case applicationID     = "api_app_id"
       case triggerID         = "trigger_id"
@@ -87,6 +97,10 @@ public extension InteractiveRequest {
       team        = try container.decode(Team           .self, forKey: .team)
       user        = try container.decode(User           .self, forKey: .user)
       actions     = try container.decode([ BlockAction ].self, forKey: .actions)
+      
+      // New starting 2020-09-29:
+      state       = (try? container.decode(ViewInfo.State.self, forKey: .state))
+                 ?? ViewInfo.State()
 
       
       // decode the action container (not the Decodable container :-)
