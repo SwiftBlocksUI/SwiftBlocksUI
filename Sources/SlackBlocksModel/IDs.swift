@@ -82,8 +82,11 @@ public struct ExternalViewID : StringID {
 
 // MARK: - Descriptions
 
+extension TeamID: CustomStringConvertible {
+  public var description: String { return "<TeamID:\(id)>" }
+}
 extension ChannelID: CustomStringConvertible {
-  public var description: String { return "<ChID:\(id)>" }
+  public var description: String { return "<#\(id)>" }
 }
 extension ConversationID: CustomStringConvertible {
   public var description: String { return "<ConvID:\(id)>" }
@@ -92,7 +95,7 @@ extension MessageID: CustomStringConvertible {
   public var description: String { return "<MID:\(id)>" }
 }
 extension UserID: CustomStringConvertible {
-  public var description: String { return "<UID:\(id)>" }
+  public var description: String { return "<@\(id)>" }
 }
 extension ApplicationID: CustomStringConvertible {
   public var description: String { return "<App:\(id)>" }

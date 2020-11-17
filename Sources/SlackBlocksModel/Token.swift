@@ -36,3 +36,10 @@ public struct Token: Hashable, Codable, ExpressibleByStringLiteral {
     return !value.hasPrefix("xoxb-")
   }
 }
+
+extension Token: CustomStringConvertible {
+  
+  public var description: String {
+    return "<Token: \(value)\(isValid ? "" : " INVALID")>"
+  }
+}
