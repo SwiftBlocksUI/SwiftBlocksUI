@@ -25,7 +25,7 @@
 @_exported import Blocks
 
 @_exported import struct   Logging.Logger
-@_exported import enum     Macro.console
+@_exported import let      Macro.console
 @_exported import func     connect.logger
 @_exported import enum     express.bodyParser
 @_exported import enum     dotenv.dotenv

@@ -79,6 +79,17 @@ public extension InteractiveRequest { // emulating OO 🙄
   }
   
   @inlinable
+  var teamID : TeamID {
+    switch self {
+      case .shortcut      (let v) : return v.team.id
+      case .messageAction (let v) : return v.team.id
+      case .viewSubmission(let v) : return v.team.id
+      case .viewClosed    (let v) : return v.team.id
+      case .blockActions  (let v) : return v.team.id
+    }
+  }
+  
+  @inlinable
   var callbackID : CallbackID? {
     switch self {
       case .shortcut      (let v)       : return v.callbackID

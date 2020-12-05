@@ -97,6 +97,7 @@ extension Shortcut {
       let response = BlocksEndpointResponse(
         requestContainer: nil, responseURL: nil,
         triggerID: req.triggerID, userID: req.user.id,
+        accessToken: res.request?.slackAccessToken ?? "", // FIXME
         response: res, blocks: blocks
       )
       

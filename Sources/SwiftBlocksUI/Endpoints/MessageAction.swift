@@ -104,12 +104,11 @@ public extension MessageAction {
    * Otherwise a message will be sent.
    */
   @inlinable
-  init(id           : String? = nil,
-       _ callbackID : CallbackID? = nil,
-       scope              : MessageResponse.ResponseType = .userOnly,
-       handleBlockActions : Bool                         = true,
-       client       : SlackClient = SlackClient(), // FIXME: not great
-       @BlocksBuilder content: @escaping () -> Content)
+  init(id                     : String? = nil,
+       _           callbackID : CallbackID? = nil,
+       scope                  : MessageResponse.ResponseType = .userOnly,
+       handleBlockActions     : Bool                         = true,
+       @BlocksBuilder content : @escaping () -> Content)
   {
     self.id         = id
     self.callbackID = callbackID
@@ -122,6 +121,7 @@ public extension MessageAction {
       let response = BlocksEndpointResponse(
         requestContainer: action.container, responseURL: action.responseURL,
         triggerID: action.triggerID, userID: action.user.id,
+        accessToken: res.request?.slackAccessToken ?? "", // FIXME
         response: res, blocks: blocks
       )
       response.push(blocks)

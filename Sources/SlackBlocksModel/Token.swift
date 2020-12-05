@@ -19,6 +19,10 @@ public struct Token: Hashable, Codable, ExpressibleByStringLiteral {
 
   public init(stringLiteral value: String) { self.init(value) }
 
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    self.value = try container.decode(String.self)
+  }
   public func encode(to encoder: Encoder) throws {
     var container = encoder.singleValueContainer()
     try container.encode(value)
@@ -34,5 +38,12 @@ public struct Token: Hashable, Codable, ExpressibleByStringLiteral {
    */
   public var supportsRichText: Bool {
     return !value.hasPrefix("xoxb-")
+  }
+}
+
+extension Token: CustomStringConvertible {
+  
+  public var description: String {
+    return "<Token: \(value)\(isValid ? "" : " INVALID")>"
   }
 }

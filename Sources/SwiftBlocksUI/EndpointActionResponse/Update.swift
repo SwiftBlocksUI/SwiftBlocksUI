@@ -50,7 +50,7 @@ extension BlocksEndpointResponse {
     let blocks = CallbackIDTransparentEnvironmentWritingModifier(blocks()) {
                    env in
                    env[keyPath: \.log]    = log
-                   env[keyPath: \.client] = ClientEnvironmentKey.defaultValue
+                   env[keyPath: \.client] = self.client
                  }
     let newContext = context.makeResponseContext(preserveState: false)
     
@@ -75,7 +75,7 @@ extension BlocksEndpointResponse {
     let blocks = CallbackIDTransparentEnvironmentWritingModifier(blocks) {
                    env in
                    env[keyPath: \.log]    = log
-                   env[keyPath: \.client] = ClientEnvironmentKey.defaultValue
+                   env[keyPath: \.client] = self.client
                  }
     let newContext = context.makeResponseContext(preserveState: false)
     

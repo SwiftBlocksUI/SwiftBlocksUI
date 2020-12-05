@@ -7,9 +7,15 @@
 //
 
 public extension InteractiveRequest {
-
-  typealias View = ViewInfo // deprecated
   
+  /**
+   * The information an interactive request transmits about an associated View,
+   * i.e. as part of a view submission or close.
+   *
+   * There is also the `View` struct, which is currently used just for
+   * rendering. Both are very similar, but this one carries extra
+   * information.
+   */
   struct ViewInfo: Decodable, CustomStringConvertible {
     // Note: callback_id is empty when part of a view_submission, bug or
     //       feature? Would be useful.
@@ -24,7 +30,7 @@ public extension InteractiveRequest {
     public let externalID         : String
     public let privateMetaData    : String
     public let hash               : String // 1593521011.2f58e1f7
-    public let state              : State
+    public let state              : State?
     
     public let rootViewID         : ViewID
     public let previousViewID     : ViewID?
@@ -49,7 +55,9 @@ public extension InteractiveRequest {
       if id != rootViewID         { ms += " root=\(rootViewID.id)"  }
       if !privateMetaData.isEmpty { ms += " meta='\(privateMetaData)'" }
       
-      ms += " state=\(state)"
+      if let state = state {
+        ms += " state=\(state)"
+      }
       
       if hash.isEmpty { ms += " no-hash" }
       ms += ">"
@@ -58,7 +66,7 @@ public extension InteractiveRequest {
   }
 }
 
-public extension InteractiveRequest.View {
+public extension InteractiveRequest.ViewInfo {
 
   struct State: Decodable {
     public typealias BlockID  = Block.BlockID
@@ -83,6 +91,21 @@ public extension InteractiveRequest.View {
       let map = try container.decode(BlockMap.self, forKey: .values)
       self.values = map.values
     }
+    
+    // MARK: - Some Collection Operations
+    
+    public var isEmpty : Bool {
+      guard !values.isEmpty else { return true }
+      // TODO: scan the arrays?
+      return false
+    }
+    
+    public subscript(_ blockID: BlockID) -> [ ActionID : Value ] {
+      return values[blockID] ?? [:]
+    }
+    
+    
+    // MARK: - Decoding Support
     
     struct BlockMap: Decodable {
       let values : [ BlockID : [ ActionID : Value ] ]

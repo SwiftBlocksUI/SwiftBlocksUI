@@ -53,7 +53,8 @@ public struct Text: Equatable {
     #endif
   }
   
-  private init(runs: [ Run ]) {
+  @usableFromInline
+  internal init(runs: [ Run ]) {
     self.runs = runs
   }
   
@@ -70,12 +71,14 @@ public struct Text: Equatable {
       else                 { self = .styled(content, modifiers) }
     }
 
+    @usableFromInline
     var contentString : String {
       switch self {
         case .verbatim(let s):  return s
         case .styled(let s, _): return s
       }
     }
+    @usableFromInline
     var isStyled : Bool {
       switch self {
         case .verbatim:  return false
@@ -93,10 +96,12 @@ public struct Text: Equatable {
     }
   }
   
+  @inlinable
   var contentString : String {
     return runs.map({ $0.contentString }).joined()
   }
   
+  @inlinable
   var isStyled : Bool {
     return runs.firstIndex(where: { $0.isStyled }) != nil
   }
@@ -106,10 +111,12 @@ public struct Text: Equatable {
   
   // TODO: +(lhs,rhs): smart addition of Text w/ runs
   
+  @inlinable
   static func +(lhs: Text, rhs: Text) -> Text {
     // FIXME: Make smarter, combine runs
     return Text(runs: lhs.runs + rhs.runs)
   }
+  @inlinable
   static func +(lhs: Text, rhs: String) -> Text {
     return Text(runs: lhs.runs + [ .verbatim(rhs) ])
   }
@@ -121,7 +128,8 @@ extension Text: Blocks {
 
 public extension Text {
   
-  private func adding(_ modifier: Modifier) -> Text {
+  @usableFromInline
+  internal func adding(_ modifier: Modifier) -> Text {
     return Text(runs: runs.map { run in
       switch run {
         case .verbatim(let s):
@@ -133,10 +141,10 @@ public extension Text {
       }
     })
   }
-  func bold()   -> Text { return adding(.bold)   }
-  func italic() -> Text { return adding(.italic) }
-  func code()   -> Text { return adding(.code)   }
-  func strike() -> Text { return adding(.strike) }
+  @inlinable func bold()   -> Text { return adding(.bold)   }
+  @inlinable func italic() -> Text { return adding(.italic) }
+  @inlinable func code()   -> Text { return adding(.code)   }
+  @inlinable func strike() -> Text { return adding(.strike) }
 }
 
 

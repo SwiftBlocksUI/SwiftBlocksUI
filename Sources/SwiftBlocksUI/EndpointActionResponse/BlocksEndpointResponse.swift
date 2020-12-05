@@ -45,7 +45,7 @@ final class BlocksEndpointResponse<B: Blocks>: ActionResponse {
   
   let context               = BlocksContext()
   let response              : ServerResponse
-  let client                = ClientEnvironmentKey.defaultValue
+  let client                : SlackClient
   let blocks                : B
   
   // request data
@@ -70,6 +70,7 @@ final class BlocksEndpointResponse<B: Blocks>: ActionResponse {
        responseURL      : URL?,
        triggerID        : TriggerID?,
        userID           : UserID,
+       accessToken      : Token,
        response         : ServerResponse,
        blocks           : B)
   {
@@ -79,6 +80,7 @@ final class BlocksEndpointResponse<B: Blocks>: ActionResponse {
     self.responseURL      = responseURL
     self.triggerID        = triggerID
     self.userID           = userID
+    self.client           = SlackClient(token: accessToken)
     
     // TBD: if there is a viewID, should we switch the surface to modal,
     //      if the message is set?

@@ -9,7 +9,17 @@
 import struct Foundation.URL
 
 public extension InteractiveRequest {
-
+  
+  /**
+   * A ViewSubmission is triggered when the user submits a View in Slack.
+   *
+   * A lot of information is provided as part of the `ViewInfo` property,
+   * including the state of all interactive view (form) elements!
+   *
+   * There are also `BlockActions`, but those are only triggered for interactive
+   * components which are outside of `input` blocks (e.g. in section accessories
+   * or an actions block).
+   */
   struct ViewSubmission: Decodable, CustomStringConvertible {
     
     public let verificationToken : String        // Du123456789123456789123o
@@ -30,7 +40,7 @@ public extension InteractiveRequest {
 
     public var description: String {
       var ms = "<ViewSubmission:"
-      ms += " @\(user.id.id)(\(user.username)"
+      ms += " @\(user.id.id)(\(user.username))"
       ms += " \(view)"
       if !responseURLs    .isEmpty { ms += " urls=\(responseURLs)" }
       if verificationToken.isEmpty { ms += " no-token"      }
