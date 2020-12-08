@@ -148,6 +148,14 @@ public extension InteractiveRequest { // emulating OO 🙄
     }
   }
   
+  /**
+   * Returns the callback ID of an Interactive Message, if the type supports
+   * one.
+   *
+   * Only shortcuts (global shortcuts or message actions) get assigned
+   * callback IDs in the Slack admin interface.
+   * Do not confuse those with action IDs (e.g. button action IDs) or block IDs.
+   */
   @inlinable
   var callbackID : CallbackID? {
     switch self {
@@ -169,6 +177,12 @@ public extension InteractiveRequest { // emulating OO 🙄
     }
   }
   
+  /**
+   * Response URLs can be used to reply to certain interactive requests
+   * w/o having a related access token.
+   *
+   * TODO: more details :-) I think it is only used for messages.
+   */
   @inlinable
   var responseURL : URL? {
     switch self {
