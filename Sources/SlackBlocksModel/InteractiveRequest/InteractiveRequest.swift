@@ -17,10 +17,69 @@ import class  Foundation.JSONDecoder
  */
 public enum InteractiveRequest: Decodable, CustomStringConvertible {
   
+  /**
+   * A _global_ shortcut endpoint, those are configured (the name etc) in the
+   * Slack admin panel and appear in the global shortcuts menu in the client
+   * (the "lightning" button left of the message field).
+   *
+   * It is similar to a slash command, but can't have arguments,
+   * and DOES NOT have access to the active conversation.
+   *
+   * There is also `.messageAction`, which is a shortcut being used in a message
+   * context (i.e. appears in the context menu for a message).
+   *
+   * Global shortcuts have little context and need to resort to API calls to
+   * create messages or modals (the latter is recommended).
+   *
+   * Docs: https://api.slack.com/interactivity/shortcuts/using
+   */
   case shortcut      (Shortcut)
+  
+  /**
+   * A message shortcut endpoint, those are configured (the name etc) in the
+   * Slack admin panel and appear in the message context menu in the client
+   * (within the "More Actions" button).
+   *
+   * This does get the message content and associated meta data upon action.
+   *
+   * There is also `.shortcut`, which is a global shortcut accessible using the
+   * "Lightning" button left of the message input field.
+   *
+   * Docs: https://api.slack.com/interactivity/shortcuts/using
+   */
   case messageAction (MessageAction)
+
+  /**
+   * Block actions are sent when form elements change their values, e.g. if
+   * a button is pressed or a date is selected in a date picker.
+   *
+   * Note that components contained in `input` blocks of a View do NOT trigger
+   * block actions.
+   *
+   * Block actions can happen in Views (modal forms) or directly within
+   * messages.
+   * Note that there can be multiple actions (all with their own ID) within
+   * a single `blockActions` interactive request.
+   *
+   * Docs: https://api.slack.com/reference/interaction-payloads/block-actions
+   */
   case blockActions  (BlockActions)
+  
+  /**
+   * A ViewSubmission is triggered when the user submits a View in Slack.
+   *
+   * A lot of information is provided as part of the `ViewInfo` property,
+   * including the state of all interactive view (form) elements!
+   *
+   * There are also `BlockActions`, but those are only triggered for interactive
+   * components which are outside of `input` blocks (e.g. in section accessories
+   * or an actions block).
+   */
   case viewSubmission(ViewSubmission)
+  
+  /**
+   * An event which gets sent when a view (a modal panel) gets closed.
+   */
   case viewClosed    (ViewClosed)
 
   enum DecodingError : Swift.Error {
