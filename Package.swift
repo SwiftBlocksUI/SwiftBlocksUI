@@ -35,7 +35,8 @@ let package = Package(
   
   targets: [
     .target(name: "SlackBlocksModel", dependencies: [] ),
-    .target(name: "SlackClient",      dependencies: [ "SlackBlocksModel" ] ),
+    .target(name: "SlackClient",
+            dependencies: [ "SlackBlocksModel", "Macro" ] ),
     .target(name: "Blocks",
             dependencies: [ "SlackBlocksModel", "Runtime", 
                             "NIO", // a hack to get access to CNIOSHA1

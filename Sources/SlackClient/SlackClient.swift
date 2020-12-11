@@ -10,14 +10,8 @@ import struct Foundation.URL
 import class  Foundation.ProcessInfo
 import struct SlackBlocksModel.Token
 
-#if canImport(FoundationNetworking)
-  import class FoundationNetworking.URLSession
-#else
-  import class Foundation.URLSession
-#endif
-
 /**
- * A tinsy Slack Client object based on URLSession.
+ * A tinsy Slack Client object based on `http.Agent`.
  *
  * There should usually be only one instance of the client object.
  * 
@@ -37,14 +31,12 @@ public struct SlackClient {
   // TBD: maybe build a HTTP client into MacroCore? Ideally AsyncHTTPClient.
   // This is to get going.
   
-  public let session : URLSession
-  public let url     : URL
-  public let token   : Token
+  public let url   : URL
+  public let token : Token
   
   public
-  init(session  : URLSession = .shared,
-       endpoint : URL        = URL(string: "https://api.slack.com/api")!,
-       token    : Token?     = nil)
+  init(endpoint : URL    = URL(string: "https://api.slack.com/api")!,
+       token    : Token? = nil)
   {
     var envToken : Token {
       let pi = ProcessInfo.processInfo
@@ -53,7 +45,6 @@ public struct SlackClient {
       return Token(s ?? "")
     }
     
-    self.session = session
     self.url     = endpoint
     self.token   = token ?? envToken
     
