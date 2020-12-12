@@ -8,6 +8,8 @@ Work in Progress.
 Blog entry/tutorial:
 [Instant “SwiftUI” Flavoured Slack Apps](https://www.alwaysrightinstitute.com/swiftblocksui/).
 
+- [FAQ](FAQ.md)
+
 ### [Tutorials](Tutorials/README.md)
 
 - [SlashCows](Tutorials/SlashCows.md) - Slack slash command that produces ASCII Cows. Moo!

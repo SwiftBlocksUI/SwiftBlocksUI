@@ -41,7 +41,7 @@ clean :
 	rm -rf $(SWIFT_BUILD_DIR) 
 
 $(DOCKER_BUILD_PRODUCT): $(SWIFT_SOURCES)
-	$(DOCKER) run --rm \
+	$(DOCKER) run --rm -it \
           -v "$(PWD):/src" \
           -v "$(PWD)/$(DOCKER_BUILD_DIR):/src/.build" \
           "$(SWIFT_BUILD_IMAGE)" \
