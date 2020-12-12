@@ -39,10 +39,29 @@ public extension Block {
   }
 }
 
+
+// MARK: - Markdown
+
 public extension Block.Actions {
   
   @inlinable
   var blocksMarkdownString : String {
     return "[actions cannot be shown by this client]"
+  }
+}
+
+
+// MARK: - Description
+
+extension Block.Actions: CustomStringConvertible {
+
+  @inlinable
+  public var description: String {
+    var ms = "<Actions[\(id.id)]:"
+    if elements.isEmpty         { ms += " EMPTY"          }
+    else if elements.count == 1 { ms += " \(elements[0])" }
+    else                        { ms += " \(elements)"    }
+    ms += ">"
+    return ms
   }
 }

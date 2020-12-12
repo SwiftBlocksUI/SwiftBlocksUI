@@ -23,6 +23,7 @@ public extension Block {
     public var id       : BlockID
     public var elements : [ RichTextElement ]
 
+    @inlinable
     public init(id: BlockID, elements: [ RichTextElement ]) {
       self.id       = id
       self.elements = elements
@@ -226,25 +227,13 @@ public extension Sequence where Element == Block.RichTextElement.Run {
   }
 }
 
-extension Block.RichTextElement.Run.FontStyle: CustomStringConvertible {
-  
-  public var description: String {
-    var ms = ""
-    ms.reserveCapacity(4)
-    if contains(.bold)   { ms += "*" }
-    if contains(.italic) { ms += "_" }
-    if contains(.strike) { ms += "~" }
-    if contains(.code)   { ms += "`" }
-    return ms
-  }
-}
-
 extension Block.RichTextElement.Run.FontStyle {
   /**
    * Returns the given string wrapped in Markdown instructions represented
    * by the font style.
    * Does NOT escape the string.
    */
+  @inlinable
   public func markdownStyle(_ s: String) -> String {
     guard !s.isEmpty else { return "" }
     if isEmpty { return s }
@@ -270,6 +259,9 @@ public extension Block.RichText {
                                              type: .markdown(verbatim: true)))
   }
 }
+
+
+// MARK: - Markdown generation
 
 public extension Block.RichText {
 
@@ -340,5 +332,97 @@ public extension Block.RichTextElement {
         ms += "```"
         return ms
     }
+  }
+}
+
+
+// MARK: - Description
+
+extension Block.RichText: CustomStringConvertible {
+  @inlinable
+  public var description: String {
+    var ms = "<RichText[\(id.id)]:"
+    if elements.isEmpty         { ms += " EMPTY"          }
+    else if elements.count == 1 { ms += " \(elements[0])" }
+    else                        { ms += " \(elements)"    }
+    ms += ">"
+    return ms
+  }
+}
+
+extension Block.RichTextElement.Run.FontStyle: CustomStringConvertible {
+  
+  @inlinable
+  public var description: String {
+    var ms = ""
+    ms.reserveCapacity(4)
+    if contains(.bold)   { ms += "*" }
+    if contains(.italic) { ms += "_" }
+    if contains(.strike) { ms += "~" }
+    if contains(.code)   { ms += "`" }
+    return ms
+  }
+}
+
+extension Block.RichTextElement: CustomStringConvertible {
+  
+  @inlinable
+  public var description: String {
+    var ms : String
+    
+    func addRuns(_ runs: [ Run ]) {
+      if runs.isEmpty         { ms += " no-runs" }
+      else if runs.count == 1 { ms += " \(runs[0])" }
+      else { ms += " \(runs)" }
+    }
+    
+    switch self {
+      case .section(let runs):
+        ms = "<RTE[section]:"
+        addRuns(runs)
+        ms += ">"
+      case .quote(let runs):
+        ms = "<RTE[quote]:"
+        addRuns(runs)
+        ms += ">"
+      case .preformatted(let s):
+        return "<RTE[pre]: `\(s)`>"
+    }
+
+    return ms
+  }
+}
+
+extension Block.RichTextElement.Run: CustomStringConvertible {
+  
+  @inlinable
+  public var description: String {
+    var ms = ""
+    
+    switch self {
+      case .text(let s, let style):
+        ms = "<Run: \"\(s)\""
+        if !style.isEmpty { ms += "[\(style)]" }
+        ms += ">"
+      case .emoji(let name):
+        ms = "<Run: :\(name):>"
+      case .link(let url, let text):
+        ms = "<Run: \(url.absoluteString)"
+        if !text.isEmpty { ms += " \(text)" }
+        ms += ">"
+      case .color(let value):        ms = "<Run: color\(value)>"
+      case .conversation(let id):    ms = "<Run: #\(id.id)>"
+      case .user        (let id):    ms = "<Run: @\(id.id)>"
+      case .team        (let id):    ms = "<Run: team=\(id.id)>"
+      case .userGroup   (let id):    ms = "<Run: ugroup=\(id.id)>"
+        
+      case .broadcast   (let range):
+        switch range {
+          case .channel  : ms = "<Run: @channel>"
+          case .here     : ms = "<Run: @here>"
+          case .everyone : ms = "<Run: @everyone>"
+        }
+    }
+    return ms
   }
 }

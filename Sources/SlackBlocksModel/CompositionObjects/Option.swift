@@ -76,3 +76,18 @@ public extension Block {
     }
   }
 }
+
+
+// MARK: - Description
+
+extension Block.Option: CustomStringConvertible {
+
+  @inlinable
+  public var description: String {
+    var ms = "<Option[\(value)]: \"\(text)\""
+    if let v = infoText { ms += " info=\"\(v)\"" }
+    if let v = url?.absoluteURL { ms += " \(v)"  }
+    ms += ">"
+    return ms
+  }
+}

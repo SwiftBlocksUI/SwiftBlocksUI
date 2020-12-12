@@ -94,6 +94,9 @@ public extension Block {
   }
 }
 
+
+// MARK: - Markdown
+
 public extension Block.Section {
 
   /// Render Section as Markdown (as well as possible)
@@ -108,6 +111,22 @@ public extension Block.Section {
         ms += field.blocksMarkdownString
       }
     }
+    return ms
+  }
+}
+
+
+// MARK: - Description
+
+extension Block.Section: CustomStringConvertible {
+
+  @inlinable
+  public var description: String {
+    var ms = "<Section[\(id.id)]:"
+    if !text.isEmpty     { ms += " " + text.description }
+    if !fields.isEmpty   { ms += " fields=\(fields)"    }
+    if let v = accessory { ms += " accessory=\(v)"      }
+    ms += ">"
     return ms
   }
 }

@@ -42,3 +42,26 @@ public extension Block {
     }
   }
 }
+
+
+// MARK: - Description
+
+extension Block.InteractiveElement: CustomStringConvertible {
+  
+  @inlinable
+  public var description: String {
+    switch self {
+      case .button            (let o): return o.description
+      case .datePicker        (let o): return o.description
+      case .overflowMenu      (let o): return o.description
+  
+      case .channelSelect     (let o): return o.description
+      case .conversationSelect(let o): return o.description
+      case .externalSelect    (let o): return o.description
+      case .staticSelect      (let o): return o.description
+      case .userSelect        (let o): return o.description
+  
+      case .checkboxes        (let o): return o.description
+    }
+  }
+}

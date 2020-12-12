@@ -39,3 +39,26 @@ public extension Block {
     }
   }  
 }
+
+
+// MARK: - Markdown
+
+public extension Block.ImageElement {
+  
+  @inlinable
+  var blocksMarkdownString : String {
+    return "![\(alt)](url.absoluteString)"
+  }
+}
+
+public extension Block.ImageElement {
+  
+  @inlinable
+  var description : String {
+    var ms = "<ImageElement: "
+    ms += url.absoluteString
+    if !alt.isEmpty { ms += " \"\(alt)\"" }
+    ms += ">"
+    return ms
+  }
+}

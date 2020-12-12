@@ -103,3 +103,19 @@ public extension Block.DatePicker.YearMonthDay {
     return calendar.date(from: components)
   }
 }
+
+
+// MARK: - Description
+
+extension Block.DatePicker: CustomStringConvertible {
+
+  @inlinable
+  public var description: String {
+    var ms = "<DatePicker[\(actionID.id)]:"
+    if let v = placeholder { ms += " placeholder='\(v)'" }
+    if let v = initialDate { ms += " initial=\(v)"       }
+    if let v = confirm     { ms += " \(v)"               }
+    ms += ">"
+    return ms
+  }
+}

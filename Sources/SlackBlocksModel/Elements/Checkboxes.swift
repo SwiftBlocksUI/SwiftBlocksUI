@@ -93,3 +93,27 @@ public extension Block.Checkboxes {
     #endif
   }
 }
+
+
+// MARK: - Description
+
+extension Block.Checkboxes: CustomStringConvertible {
+
+  @inlinable
+  public var description: String {
+    var ms = "<Checkboxes[\(actionID.id)]:"
+    
+    if      options.isEmpty    { ms += " EMPTY"      }
+    else if options.count == 1 { ms += " single=\(options[0])" }
+    else                       { ms += " \(options)" }
+    
+    if let options = initialOptions {
+      if      options.count == 1 { ms += " initial=\(options[0])" }
+      else if options.count >  1 { ms += " initial=\(options)"    }
+    }
+    
+    if let v = confirm { ms += " \(v)" }
+    ms += ">"
+    return ms
+  }
+}

@@ -77,3 +77,28 @@ public extension Block {
     }
   }
 }
+
+
+// MARK: - Description
+
+extension Block.MultiExternalSelect: CustomStringConvertible {
+
+  @inlinable
+  public var description: String {
+    var ms = "<MultiExternalSelect[\(actionID.id)]:"
+    
+    if !placeholder.isEmpty     { ms += " placeholder='\(placeholder)'" }
+    if let v = minQueryLength   { ms += " min-q-len=\(v)" }
+    if let v = maxSelectedItems { ms += " #max=\(v)" }
+
+    if let options = initialOptions {
+      if      options.isEmpty    { ms += " EMPTY"         }
+      else if options.count == 1 { ms += " \(options[0])" }
+      else                       { ms += " \(options)"    }
+    }
+    
+    if let v = confirm { ms += " \(v)" }
+    ms += ">"
+    return ms
+  }
+}

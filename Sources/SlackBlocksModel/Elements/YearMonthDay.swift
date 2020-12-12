@@ -8,9 +8,15 @@
 
 public extension Block {
 
+  /**
+   * Represents a Date, like in just the date as a combination of
+   * year/month/day. Since that is used in the Slack API.
+   */
   struct YearMonthDay: Codable {
+    
     public var year: Int16, month: UInt8, day: UInt8
     
+    @inlinable
     public init(year: Int16, month: UInt8, day: UInt8) {
       self.year  = year
       self.month = month
@@ -49,6 +55,11 @@ public extension Block {
     
     public func encode(to encoder: Encoder) throws {
       var container = encoder.singleValueContainer()
+      try container.encode(stringValue)
+    }
+    
+    @inlinable
+    public var stringValue: String {
       func leftpad(_ s: String, _ width: Int) -> String {
         let left = width - s.count
         return left <= 0 ? s : String(repeating: "0", count: left) + s
@@ -56,8 +67,18 @@ public extension Block {
       let y = leftpad(String(year),  4)
       let m = leftpad(String(month), 2)
       let d = leftpad(String(day),   2)
-      let s = "\(y)-\(m)-\(d)"
-      try container.encode(s)
+      return "\(y)-\(m)-\(d)"
     }
+  }
+}
+
+
+// MARK: - Description
+
+extension Block.YearMonthDay: CustomStringConvertible {
+  
+  @inlinable
+  public var description: String {
+    return stringValue
   }
 }
