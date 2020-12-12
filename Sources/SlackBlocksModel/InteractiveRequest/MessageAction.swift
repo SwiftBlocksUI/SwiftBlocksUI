@@ -10,6 +10,18 @@ import struct Foundation.URL
 
 public extension InteractiveRequest {
 
+  /**
+   * A message shortcut endpoint, those are configured (the name etc) in the
+   * Slack admin panel and appear in the message context menu in the client
+   * (within the "More Actions" button).
+   *
+   * This does get the message content and associated meta data upon action.
+   *
+   * There is also `Shortcut`, which is a global shortcut accessible using the
+   * "Lightning" button left of the message input field.
+   *
+   * Docs: https://api.slack.com/interactivity/shortcuts/using
+   */
   struct MessageAction: Codable, CustomStringConvertible {
     
     public let token        : String // Du123456789123456789123o

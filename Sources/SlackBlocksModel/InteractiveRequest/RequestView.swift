@@ -10,7 +10,7 @@ public extension InteractiveRequest {
   
   /**
    * The information an interactive request transmits about an associated View,
-   * i.e. as part of a view submission or close.
+   * i.e. as part of a view submission or close (interactive requests).
    *
    * There is also the `View` struct, which is currently used just for
    * rendering. Both are very similar, but this one carries extra

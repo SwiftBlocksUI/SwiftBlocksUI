@@ -19,7 +19,8 @@ import struct   SlackBlocksModel.MessageResponse
  * Slack admin panel and appear in the global shortcuts menu in the client
  * (the "lightning" button left of the message field).
  *
- * It is similar to a slash command, but can't have arguments.
+ * It is similar to a slash command, but can't have arguments,
+ * and DOES NOT have access to the active conversation.
  *
  * There is also `MessageAction`, which is a shortcut being used in a message
  * context (i.e. appears in the context menu for a message).
@@ -53,7 +54,7 @@ public struct Shortcut<Content: Blocks>: Endpoints {
 extension Shortcut {
 
   /**
-   * A Shortcut endpoint backed by blocks.
+   * A Shortcut endpoint backed by Blocks.
    *
    * This will send the blocks as a result to the Shortcut,
    * and it will process block actions coming back to interactive

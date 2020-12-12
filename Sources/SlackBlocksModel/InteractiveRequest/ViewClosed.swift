@@ -10,6 +10,9 @@ import struct Foundation.URL
 
 public extension InteractiveRequest {
 
+  /**
+   * An event which gets sent when a view (a modal panel) gets closed.
+   */
   struct ViewClosed: Decodable, CustomStringConvertible {
     
     public let verificationToken : String        // Du123456789123456789123o
