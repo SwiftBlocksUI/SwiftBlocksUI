@@ -10,6 +10,28 @@ import class Foundation.Formatter
 import class Foundation.Bundle
 import enum  SlackBlocksModel.Block
 
+/**
+ * This element emits raw
+ * [Slack Markdown](https://api.slack.com/reference/surfaces/formatting#basics).
+ *
+ * Markdown can be styled:
+ *
+ *     Markdown("Price")
+ *       .bold()
+ *
+ * Will result in
+ *
+ *     *Price*
+ *
+ * `Markdown` elements can be added together, Strings can be appended:
+ *
+ *     Markdown("Price:").bold + Markdown(" 100") + "€"
+ *
+ * Will result in
+ *
+ *     *Price:* 100 €
+ *
+ */
 public struct Markdown: Equatable {
   
   // TODO: Doesn't work in quote yet

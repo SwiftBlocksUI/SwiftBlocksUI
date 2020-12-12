@@ -21,6 +21,27 @@ extension String: Blocks {
   }
 }
 
+/**
+ * Regular, inline text, sometimes used to fill specific text fields of other
+ * elements.
+ *
+ * In SlackBlocksUI Swift `Strings` can be used directly as Blocks.
+ *
+ * Texts can be styled:
+ *
+ *     Text("Price")
+ *       .bold()
+ *
+ * Text can be added together:
+ *
+ *     Text("Price:").bold + Text("100")
+ *
+ * Foundation Localization can be used to generate localized Texts,
+ * and Foundation Formatters can be used to format content:
+ *
+ *     Text(123.22, formatter: NumberFormatter())
+ *
+ */
 public struct Text: Equatable {
   
   @inlinable

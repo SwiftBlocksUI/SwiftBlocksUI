@@ -75,6 +75,7 @@ Top-Level block.
   - [Paragraph](Elements/Paragraph.md), regular content
   - [Preformatted](Elements/Preformatted.md), triple-backtick markdown style code sections
   - [Quote](Elements/Quote.md), `>` indented quote content
+- [Markdown](Elements/Markdown.md)
 
 #### Flow Control Blocks / Misc
 
