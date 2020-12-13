@@ -147,7 +147,25 @@ public extension InteractiveRequest { // emulating OO 🙄
       case .blockActions  (let v) : return v.team.id
     }
   }
+
   
+  /**
+   * Attempt to extract the `applicationID` from the request.
+   *
+   * Note that shortcuts (global or message) do not seem to carry an
+   * applicationID!
+   */
+  @inlinable
+  var applicationID : ApplicationID? {
+    switch self {
+      case .shortcut      (_) : return nil // TBD
+      case .messageAction (_) : return nil // TBD
+      case .viewSubmission(let v) : return v.applicationID
+      case .viewClosed    (let v) : return v.applicationID
+      case .blockActions  (let v) : return v.applicationID
+    }
+  }
+
   /**
    * Returns the callback ID of an Interactive Message, if the type supports
    * one.
@@ -165,7 +183,10 @@ public extension InteractiveRequest { // emulating OO 🙄
         return nil // not submitted
     }
   }
-  
+
+  /**
+   * Trigger IDs are used (and required) to open modals.
+   */
   @inlinable
   var triggerID : TriggerID? {
     switch self {

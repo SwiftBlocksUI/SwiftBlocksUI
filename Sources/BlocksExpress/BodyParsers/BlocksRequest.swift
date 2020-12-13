@@ -16,6 +16,9 @@ public extension bodyParser {
    * Middleware which parses `BlocksEnvironment` objects into the
    * respective `IncomingRequest` field (`req.blocksEnvironment`).
    *
+   * The blocks environment contains: user, team, conversation.
+   * It is common for interactive request and slash commands.
+   *
    * Example:
    *
    *     app.post(bodyParser.parseBlocksEnvironment())
