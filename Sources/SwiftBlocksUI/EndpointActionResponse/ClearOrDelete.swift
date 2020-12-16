@@ -14,7 +14,7 @@ extension BlocksEndpointResponse {
    * Note that modals can only be closed in response to a view submit (there
    * is no views.close/clear API method).
    */
-  @usableFromInline func clear() {
+  public func clear() {
     if responseActionEnabled {
       response.log.notice("clear using response action ...")
       return response.json(ResponseAction.clear)

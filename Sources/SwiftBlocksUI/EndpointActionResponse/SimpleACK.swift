@@ -10,7 +10,7 @@ extension BlocksEndpointResponse {
   
   // MARK: - Simple ACK
   
-  @usableFromInline func end() {
+  public func end() {
     if sendValidationErrors() { return } // errors sent
     endWithSimpleACK()
   }
