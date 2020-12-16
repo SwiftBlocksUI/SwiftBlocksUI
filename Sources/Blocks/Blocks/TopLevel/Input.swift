@@ -11,7 +11,7 @@
  *
  * Input blocks are only valid in modals. Unlike you might expect, an
  * Input only holds a single element (e.g. a `TextField`, a `DatePicker`
- * or one of the menus!
+ * or one of the menus)!
  * It annotates that `TextField` with required extra information like a label
  * and a hint.
  *
