@@ -81,3 +81,30 @@ public extension Block {
     }
   }
 }
+
+
+// MARK: - Description
+
+extension Block.MultiConversationsSelect: CustomStringConvertible {
+
+  @inlinable
+  public var description: String {
+    var ms = "<MultiConversationsSelect[\(actionID.id)]:"
+    
+    if !placeholder.isEmpty     { ms += " placeholder='\(placeholder)'" }
+    if let v = maxSelectedItems { ms += " #max=\(v)" }
+    if let v = filter           { ms += " filter=\(v)" }
+
+    if let options = initialConversationIDs {
+      if      options.isEmpty    { ms += " EMPTY"      }
+      else if options.count == 1 { ms += " single-conv=\(options[0])" }
+      else                       { ms += " \(options)" }
+    }
+    
+    if defaultToCurrent { ms += " default-to-current" }
+    
+    if let v = confirm { ms += " \(v)" }
+    ms += ">"
+    return ms
+  }
+}

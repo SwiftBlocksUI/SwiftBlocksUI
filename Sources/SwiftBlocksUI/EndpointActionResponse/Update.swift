@@ -28,7 +28,7 @@ extension BlocksEndpointResponse {
   /**
    * Re-render the same root view / message again.
    */
-  @usableFromInline func update() {
+  public func update() {
     // We need a new context here, because the call can be reentrant!
     let newContext = context.makeResponseContext(preserveState: true)
     
@@ -38,8 +38,7 @@ extension BlocksEndpointResponse {
   /**
    * Replace the originating view or message with the given blocks.
    */
-  @usableFromInline
-  func replace<B: Blocks>(@BlocksBuilder with blocks: () -> B) {
+  public func replace<B: Blocks>(@BlocksBuilder with blocks: () -> B) {
     if sendErrorsInErrorView()      { return } // may still need ACK
     if !context.blockErrors.isEmpty { return endWithSimpleACK() }
     
@@ -63,11 +62,11 @@ extension BlocksEndpointResponse {
    * container.
    */
   @inlinable
-  func push<B: Blocks>(@BlocksBuilder _ blocks: () -> B) {
+  public func push<B: Blocks>(@BlocksBuilder _ blocks: () -> B) {
     push(blocks())
   }
-  @usableFromInline
-  func push<B: Blocks>(_ blocks: B) {
+  
+  public func push<B: Blocks>(_ blocks: B) {
     if sendErrorsInErrorView()      { return } // may still need ACK
     if !context.blockErrors.isEmpty { return endWithSimpleACK() }
     

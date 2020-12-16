@@ -28,13 +28,8 @@ import struct   SlackClient.SlackClient
  * how the action wants to finish the current interaction.
  *
  * See `Action` and `ActionResponse` for more details.
- * 
- * If this needs to do SlackClient actions, it'll resort to the SlackClient
- * environment key default, which is not quite perfect. (i.e. it requires the
- * token environment variable to be set up properly).
  */
-@usableFromInline
-final class BlocksEndpointResponse<B: Blocks>: ActionResponse {
+public final class BlocksEndpointResponse<B: Blocks>: ActionResponse {
   // TODO: This could have a timer to auto-end the action if it doesn't complete
   //       in 3 seconds (because the client will show an error).
   //       We could also send the ACK, then set `responseActionEnabled` to false
@@ -65,14 +60,13 @@ final class BlocksEndpointResponse<B: Blocks>: ActionResponse {
     responseActionEnabled = true
   }
 
-  @usableFromInline
-  init(requestContainer : InteractiveRequest.Container?,
-       responseURL      : URL?,
-       triggerID        : TriggerID?,
-       userID           : UserID,
-       accessToken      : Token,
-       response         : ServerResponse,
-       blocks           : B)
+  public init(requestContainer : InteractiveRequest.Container?,
+              responseURL      : URL?,
+              triggerID        : TriggerID?,
+              userID           : UserID,
+              accessToken      : Token,
+              response         : ServerResponse,
+              blocks           : B)
   {
     self.response         = response
     self.blocks           = blocks

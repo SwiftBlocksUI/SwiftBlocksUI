@@ -16,6 +16,9 @@ public extension bodyParser {
    * Middleware which parses `BlocksEnvironment` objects into the
    * respective `IncomingRequest` field (`req.blocksEnvironment`).
    *
+   * The blocks environment contains: user, team, conversation.
+   * It is common for interactive request and slash commands.
+   *
    * Example:
    *
    *     app.post(bodyParser.parseBlocksEnvironment())
@@ -33,6 +36,7 @@ public extension bodyParser {
     
     return Route(id: nil, pattern: nil, method: .POST, middleware: [
       interactiveRequest(), // make sure this has run
+      slackEvent(),
       
       { req, res, next in
         if req.extra[didParseBlocksEnvironmentKey] != nil { return }
@@ -78,6 +82,23 @@ public extension bodyParser {
               )
           }
         }
+        else if let event = req.slackEvent {
+          // Events have a little less info, i.e. we do not have the names
+          let teamID = event.teamID
+          if let userID = event.userID {
+            req.blocksEnvironment = .init(
+              user         : .init(id: userID, username: "", teamID: teamID),
+              team         : .init(id: teamID, domain: ""),
+              conversation : event.conversationID.flatMap {
+                .init(id: $0, name: "")
+              }
+            )
+          }
+          else {
+            req.log.warn("could not setup blocks environment for event:", event)
+          }
+        }
+        // Detect Slash request
         else if !req.body[string: "command"].isEmpty,
                 typeIs(req, [ "application/x-www-form-urlencoded" ]) != nil,
                 let request = SlashRequest(req.body)

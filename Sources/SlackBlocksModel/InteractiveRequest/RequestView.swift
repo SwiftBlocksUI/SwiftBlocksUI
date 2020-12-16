@@ -10,7 +10,7 @@ public extension InteractiveRequest {
   
   /**
    * The information an interactive request transmits about an associated View,
-   * i.e. as part of a view submission or close.
+   * i.e. as part of a view submission or close (interactive requests).
    *
    * There is also the `View` struct, which is currently used just for
    * rendering. Both are very similar, but this one carries extra
@@ -68,11 +68,26 @@ public extension InteractiveRequest {
 
 public extension InteractiveRequest.ViewInfo {
 
+  /**
+   * State is transferred in e.g. view submissions.
+   *
+   * The structure looks like:
+   *
+   *     "state":{
+   *       "values":{
+   *         "block-id-1":{
+   *           "action-id-1":{"type":"plain_text_input","value":null}},
+   *         "block-id-2":{
+   *           "action-id-2":{"type":"plain_text_input","value":null}},
+   *         "block-id-3":{
+   *           "action-id-3":{"type":"plain_text_input","value":null}}
+   *       }
+   */
   struct State: Decodable {
     public typealias BlockID  = Block.BlockID
     public typealias ActionID = Block.ActionID
     
-    public let values : [ BlockID : [ ActionID : Value ] ]
+    public let values : [ Block.BlockID : [ Block.ActionID : Value ] ]
     
     enum CodingKeys: String, CodingKey {
       case values
@@ -94,13 +109,17 @@ public extension InteractiveRequest.ViewInfo {
     
     // MARK: - Some Collection Operations
     
+    @inlinable
     public var isEmpty : Bool {
       guard !values.isEmpty else { return true }
       // TODO: scan the arrays?
       return false
     }
     
-    public subscript(_ blockID: BlockID) -> [ ActionID : Value ] {
+    @inlinable
+    public subscript(_ blockID: Block.BlockID)
+           -> [ Block.ActionID : InteractiveRequest.FormValue ]
+    {
       return values[blockID] ?? [:]
     }
     
@@ -108,7 +127,8 @@ public extension InteractiveRequest.ViewInfo {
     // MARK: - Decoding Support
     
     struct BlockMap: Decodable {
-      let values : [ BlockID : [ ActionID : Value ] ]
+      
+      let values : [ Block.BlockID : [ Block.ActionID : Value ] ]
 
       public init(from decoder: Decoder) throws {
         // not sure why this is necessary, faults in an array error
@@ -126,7 +146,7 @@ public extension InteractiveRequest.ViewInfo {
       }
     }
     struct ActionMap: Decodable {
-      let values : [ ActionID : Value ]
+      let values : [ ActionID : InteractiveRequest.FormValue ]
 
       public init(from decoder: Decoder) throws {
         // not sure why this is necessary, faults in an array error
@@ -134,10 +154,14 @@ public extension InteractiveRequest.ViewInfo {
 
         var values = [ ActionID : Value ]()
         for key in container.allKeys {
-          let id    = ActionID(key.stringValue)
-          let value = try container.decode(Value.self, forKey: key)
-          assert(values[id] == nil)
-          values[id] = value
+          let id = ActionID(key.stringValue)
+          
+          // The value can be nil.
+          // Decoding `Value?.self` doesn't catch the `null` case?!
+          if let value = try? container.decode(Value.self, forKey: key) {
+            assert(values[id] == nil)
+            values[id] = value
+          }
         }
         
         self.values = values

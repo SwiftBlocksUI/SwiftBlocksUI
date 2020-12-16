@@ -32,7 +32,7 @@ public extension ServerResponse {
       apiBlocks = ctx.blocks
     }
     catch {
-      log.error("Failed to render blocks: \(blocks)\n  error: \(error)")
+      errorLog.error("Failed to render blocks: \(blocks)\n  error: \(error)")
       return sendStatus(500)
     }
     

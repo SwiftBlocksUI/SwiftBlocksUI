@@ -97,8 +97,8 @@ extension TextField: BlocksPrimitive {
     // Also: Error handling for formatters! This requires us to have a more
     //       specialized binding which has access to the context? Maybe not.
     guard let value = values.valueForActionID(id) else {
-      // FIXME: only display for view submissions!
-      context.log.notice("missing form value for \(id.id) (can be OK!)")
+      // This even happens in view submissions if a textfield is empty.
+      context.log.trace("missing form value for \(id.id) (can be OK!)")
       #if false // only for view submissions!
         self.value.setter("") // hm
       #endif

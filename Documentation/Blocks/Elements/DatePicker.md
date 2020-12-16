@@ -20,4 +20,4 @@ and as an [`Accessory`](Accessory.md) in a
 [`Section`](../TopLevel/Section.md) block:
 ![block types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
 
-Docs: https://api.slack.com/reference/block-kit/block-elements#multi_select
+Docs: https://api.slack.com/reference/block-kit/block-elements#datepicker

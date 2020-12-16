@@ -17,6 +17,7 @@ public extension Block {
     
     case button
     case datePicker              = "datepicker"
+    case timePicker              = "timepicker"
     case overflowMenu            = "overflow"
     
     case staticSelect            = "static_select"

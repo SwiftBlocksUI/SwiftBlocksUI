@@ -8,6 +8,22 @@
 
 public extension InteractiveRequest {
 
+  /**
+   * A _global_ shortcut endpoint, those are configured (the name etc) in the
+   * Slack admin panel and appear in the global shortcuts menu in the client
+   * (the "lightning" button left of the message field).
+   *
+   * It is similar to a slash command, but can't have arguments,
+   * and DOES NOT have access to the active conversation.
+   *
+   * There is also `MessageAction`, which is a shortcut being used in a message
+   * context (i.e. appears in the context menu for a message).
+   *
+   * Global shortcuts have little context and need to resort to API calls to
+   * create messages or modals (the latter is recommended).
+   *
+   * Docs: https://api.slack.com/interactivity/shortcuts/using
+   */
   struct Shortcut: Codable, CustomStringConvertible {
     
     public let token      : String     // Du123456789123456789123o

@@ -1,17 +1,16 @@
 //
-//  DatePickerPrimitive.swift
+//  TimePickerPrimitive.swift
 //  Blocks
 //
 //  Created by Helge Heß.
 //  Copyright © 2020 ZeeZide GmbH. All rights reserved.
 //
 
-import struct Foundation.Date
 import struct Foundation.DateComponents
 import struct Foundation.TimeInterval
 import enum   SlackBlocksModel.Block
 
-extension DatePicker: BlocksPrimitive {
+extension TimePicker: BlocksPrimitive {
 
   enum PickerRenderingError: Swift.Error {
     case internalInconsistency
@@ -31,7 +30,7 @@ extension DatePicker: BlocksPrimitive {
     switch block {
       case .richText, .image, .context:
         context.log
-          .warning("Attempt to use DatePicker in a unsupported block: \(block)")
+          .warning("Attempt to use TimePicker in a unsupported block: \(block)")
         context.closeBlock()
         return try render(in: context) // recurse
       case .divider:
@@ -53,12 +52,12 @@ extension DatePicker: BlocksPrimitive {
   
   private func buildAPIPicker(with actionID : Block.ActionID,
                               in    context : BlocksContext)
-               -> Block.DatePicker
+               -> Block.TimePicker
   {
     return .init(
       actionID    : actionID,
       placeholder : placeholder ?? title,
-      initialDate : selection?.getter(),
+      initialTime : selection?.getter(),
       confirm     : context.confirmationDialog
     )
   }
@@ -94,7 +93,7 @@ extension DatePicker: BlocksPrimitive {
     
     if action != nil {
       context.log.info(
-        "DatePicker in Input/View w/ action, won't run (submit)")
+        "TimePicker in Input/View w/ action, won't run (submit)")
     }
     
     // Our non-empty element in API hack
@@ -106,7 +105,7 @@ extension DatePicker: BlocksPrimitive {
     }
     
     let actionID  = context.currentActionID(for: self.actionID)
-    input.element = .datePicker(buildAPIPicker(with: actionID, in: context))
+    input.element = .timePicker(buildAPIPicker(with: actionID, in: context))
     
     if !title.isEmpty && input.label.isEmpty {
       input.label = title
@@ -135,7 +134,7 @@ extension DatePicker: BlocksPrimitive {
     
     context.currentBlock = nil
     actions.elements.append(
-      .datePicker(buildAPIPicker(with: actionID, in: context)))
+      .timePicker(buildAPIPicker(with: actionID, in: context)))
     context.currentBlock = .actions(actions)
 
     try afterBlockSetup(for: actionID, in: context)
@@ -156,7 +155,7 @@ extension DatePicker: BlocksPrimitive {
     context.currentBlock = nil
     
     let actionID = context.currentActionID(for: self.actionID)
-    section.accessory = .datePicker(buildAPIPicker(with: actionID, in: context))
+    section.accessory = .timePicker(buildAPIPicker(with: actionID, in: context))
     context.currentBlock = .section(section)
     
     try afterBlockSetup(for: actionID, in: context)
@@ -181,27 +180,23 @@ extension DatePicker: BlocksPrimitive {
     }
     
     switch value {
-      case let ymd as YearMonthDay:
-        selection.setter(ymd)
-      case let date as Date:
-        selection.setter(.init(date))
+      case let hm as HourMinute:
+        selection.setter(hm)
       case let dateComponents as DateComponents:
         selection.setter(.init(dateComponents))
-      case let v as Int:
-        selection.setter(.init(Date(timeIntervalSince1970: TimeInterval(v))))
       case let v as String:
-        guard let ymd = YearMonthDay(string: v) else {
-          context.log.error("could not parse DatePicker string value: \(v)")
+        guard let ymd = HourMinute(string: v) else {
+          context.log.error("could not parse TimePicker string value: \(v)")
           return // TBD: throw?
         }
         selection.setter(ymd)
       default:
-        guard let ymd = YearMonthDay(string: String(describing: value)) else {
+        guard let ymd = HourMinute(string: String(describing: value)) else {
           context.log.error(
-            "could not parse unexpected DatePicker value: \(value)")
+            "could not parse unexpected TimePicker value: \(value)")
           return
         }
-        context.log.warning("unexpected DatePicker value: \(value)")
+        context.log.warning("unexpected TimePicker value: \(value)")
         selection.setter(ymd)
     }
   }

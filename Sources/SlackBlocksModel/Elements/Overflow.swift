@@ -47,3 +47,22 @@ public extension Block {
     }
   }
 }
+
+
+// MARK: - Description
+
+extension Block.Overflow: CustomStringConvertible {
+
+  @inlinable
+  public var description: String {
+    var ms = "<Overflow[\(actionID.id)]:"
+    
+    if      options.isEmpty    { ms += " EMPTY"      }
+    else if options.count == 1 { ms += " single-option=\(options[0])" }
+    else                       { ms += " \(options)" }
+    
+    if let v = confirm     { ms += " \(v)"               }
+    ms += ">"
+    return ms
+  }
+}

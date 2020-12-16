@@ -17,37 +17,55 @@ public extension Block {
     
     public static let validInBlockTypes : [ BlockTypeSet ]
                                         = [ .section, .actions, .input ]
-                 
-    public let actionID         : ActionID
-    public let placeholder      : String? // max 150 chars
-    public let initialValue     : String?
-    public let multiline        : Bool
-    public let minLength        : Int? // max 3000
-    public let maxLength        : Int?
     
-    public init(actionID     : ActionID,
-                placeholder  : String? = nil,
-                initialValue : String? = nil,
-                multiline    : Bool    = false,
-                minLength    : Int?    = nil,
-                maxLength    : Int?    = nil)
+    public enum InputEvents: String, Codable {
+      case onEnterPressed     = "on_enter_pressed"
+      case onCharacterEntered = "on_character_entered"
+    }
+    public struct DispatchActionConfig: Codable {
+      enum CodingKeys: String, CodingKey {
+        case triggerActionsOn = "trigger_actions_on"
+      }
+      public let triggerActionsOn : [ InputEvents ]
+    }
+                 
+    public let actionID             : ActionID
+    public let placeholder          : String? // max 150 chars
+    public let initialValue         : String?
+    public let multiline            : Bool
+    public let minLength            : Int? // max 3000
+    public let maxLength            : Int?
+    public let dispatchActionConfig : DispatchActionConfig?
+
+    // TODO: support `dispatch_action_config` which has
+    //         trigger_actions_on: [on_enter_pressed,on_character_entered]
+
+    public init(actionID             : ActionID,
+                placeholder          : String? = nil,
+                initialValue         : String? = nil,
+                multiline            : Bool    = false,
+                minLength            : Int?    = nil,
+                maxLength            : Int?    = nil,
+                dispatchActionConfig : DispatchActionConfig? = nil)
     {
-      self.actionID     = actionID
-      self.placeholder  = placeholder
-      self.initialValue = initialValue
-      self.multiline    = multiline
-      self.minLength    = minLength
-      self.maxLength    = maxLength
+      self.actionID             = actionID
+      self.placeholder          = placeholder
+      self.initialValue         = initialValue
+      self.multiline            = multiline
+      self.minLength            = minLength
+      self.maxLength            = maxLength
+      self.dispatchActionConfig = dispatchActionConfig
     }
 
     // MARK: - Encoding
     
     enum CodingKeys: String, CodingKey {
       case type, placeholder, multiline
-      case actionID       = "action_id"
-      case initialValue   = "initial_value"
-      case minLength      = "min_length"
-      case maxLength      = "max_length"
+      case actionID             = "action_id"
+      case initialValue         = "initial_value"
+      case minLength            = "min_length"
+      case maxLength            = "max_length"
+      case dispatchActionConfig = "dispatch_action_config"
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -71,6 +89,10 @@ public extension Block {
       }
       if let v = maxLength, v >= 0 {
         try container.encode(v, forKey: .maxLength)
+      }
+      
+      if let v = dispatchActionConfig {
+        try container.encode(v, forKey: .dispatchActionConfig)
       }
     }
   }

@@ -60,3 +60,31 @@ public extension Block {
     }
   }
 }
+
+
+// MARK: - Description
+
+extension Block.Button: CustomStringConvertible {
+
+  @inlinable
+  public var description: String {
+    var ms = "<Button[\(actionID.id)]:"
+    ms += " '\(text)'"
+    
+    if let value = value { ms += " \(value)" }
+    
+    if let url = url { ms += " \(url.absoluteString)" }
+
+    switch style {
+      case .primary : ms += " primary"
+      case .danger  : ms += " danger"
+      case .none    : break
+    }
+    
+    if let confirm = confirm { ms += " \(confirm)" }
+
+    ms += ">"
+    return ms
+  }
+}
+

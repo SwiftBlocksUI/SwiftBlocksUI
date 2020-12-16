@@ -15,6 +15,7 @@ public extension Block {
       
       case plainText         (PlainTextInput)
       case datePicker        (DatePicker)
+      case timePicker        (TimePicker)
 
       case channelSelect     (MultiChannelsSelect)
       case conversationSelect(MultiConversationsSelect)
@@ -28,6 +29,7 @@ public extension Block {
         switch self {
           case .plainText         (let element): try element.encode(to: encoder)
           case .datePicker        (let element): try element.encode(to: encoder)
+          case .timePicker        (let element): try element.encode(to: encoder)
           case .channelSelect     (let element): try element.encode(to: encoder)
           case .conversationSelect(let element): try element.encode(to: encoder)
           case .externalSelect    (let element): try element.encode(to: encoder)
@@ -40,13 +42,14 @@ public extension Block {
       public var description : String {
         switch self {
           case .plainText         (let element): return "\(element)"
-          case .datePicker        (let element): return "\(element)"
-          case .channelSelect     (let element): return "\(element)"
-          case .conversationSelect(let element): return "\(element)"
-          case .externalSelect    (let element): return "\(element)"
-          case .staticSelect      (let element): return "\(element)"
-          case .userSelect        (let element): return "\(element)"
-          case .checkboxes        (let element): return "\(element)"
+          case .datePicker        (let element): return element.description
+          case .timePicker        (let element): return element.description
+          case .channelSelect     (let element): return element.description
+          case .conversationSelect(let element): return element.description
+          case .externalSelect    (let element): return element.description
+          case .staticSelect      (let element): return element.description
+          case .userSelect        (let element): return element.description
+          case .checkboxes        (let element): return element.description
         }
       }
     }

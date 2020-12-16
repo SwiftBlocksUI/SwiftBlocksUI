@@ -11,14 +11,7 @@ import struct Foundation.URL
 import class  Foundation.JSONEncoder
 import class  Foundation.JSONSerialization
 import class  Foundation.ProcessInfo
-
-#if canImport(FoundationNetworking)
-  import struct FoundationNetworking.URLRequest
-  import class  FoundationNetworking.HTTPURLResponse
-#else
-  import struct Foundation.URLRequest
-  import class  Foundation.HTTPURLResponse
-#endif
+import Macro
 
 fileprivate let logOutgoingJSON : Bool = {
   let pi = ProcessInfo.processInfo
@@ -79,20 +72,22 @@ public extension SlackClient {
                                  ( APIError?, [ String : Any ] ) -> Void)
   {
     // TODO: All the rate limiting etc :-)
-    var req = URLRequest(url: url)
-    req.httpMethod = "POST"
-    req.setValue("Bearer " + token.value, forHTTPHeaderField: "Authorization")
-    req.setValue("application/json; charset=utf-8",
-                 forHTTPHeaderField: "Content-Type")
-
+    var options = http.ClientRequestOptions()
+    options.url    = url
+    options.method = "POST"
+    options.headers = [
+      "Authorization" : "Bearer " + token.value,
+      "Content-Type"  :"application/json; charset=utf-8"
+    ]
+    
+    let jsonData : Data
     do {
       let encoder = JSONEncoder()
       if logOutgoingJSON {
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
       }
       
-      let jsonData = try encoder.encode(jsonRequest)
-      req.httpBody = jsonData
+      jsonData = try encoder.encode(jsonRequest)
       
       if logOutgoingJSON {
         let s = String(data: jsonData, encoding: .utf8)!
@@ -110,49 +105,61 @@ public extension SlackClient {
     catch {
       return yield(.couldNotEncodeJSON(error), [:])
     }
+
+    var didFinish = false
     
-    let task = session.dataTask(with: req) { data, response, error in
-      if let error = error { return yield(.transport(error), [:]) }
+    let req = http.request(options) { res in
       
-      if let http = response as? HTTPURLResponse {
-        guard http.statusCode >= 200 && http.statusCode < 300 else {
-          return yield(.httpError(status: http.statusCode), [:])
+      guard res.statusCode >= 200 && res.statusCode < 300 else {
+        return yield(.httpError(status: res.statusCode), [:])
+      }
+      
+      res | concat { buffer in
+        guard !buffer.isEmpty else {
+          return yield(.noValidJSONResponseContent(nil), [:])
         }
-      }
-      
-      guard let data = data, !data.isEmpty else {
-        return yield(.noValidJSONResponseContent(nil), [:])
-      }
-      
-      do {
-        let json = try JSONSerialization.jsonObject(with: data)
         
-        if let jsonDict = json as? [ String : Any] {
-          if let ok = jsonDict["ok"] as? Bool, ok {
-            return yield(nil, jsonDict)
+        let data = buffer.data
+        do {
+          let json = try JSONSerialization.jsonObject(with: data)
+          
+          if let jsonDict = json as? [ String : Any] {
+            if let ok = jsonDict["ok"] as? Bool, ok {
+              return yield(nil, jsonDict)
+            }
+            else {
+              let code = (jsonDict["error"] as? String) ?? "error"
+              print("Slack error:", code)
+              #if DEBUG
+                if let s = String(data: data, encoding: .utf8) {
+                  print(s)
+                  print("---")
+                }
+              #endif
+              return yield(.slackError(code), [:])
+            }
           }
           else {
-            let code = (jsonDict["error"] as? String) ?? "error"
-            print("Slack error:", code)
-            #if DEBUG
-              if let s = String(data: data, encoding: .utf8) {
-                print(s)
-                print("---")
-              }
-            #endif
-            return yield(.slackError(code), [:])
+            return yield(.noValidJSONResponseContent(data), [:])
           }
         }
-        else {
+        catch {
+          print("failed to parse response content JSON:",
+                String(data: data, encoding: .utf8) ?? "-")
           return yield(.noValidJSONResponseContent(data), [:])
         }
+
       }
-      catch {
-        print("failed to parse response content JSON:",
-              String(data: data, encoding: .utf8) ?? "-")
-        return yield(.noValidJSONResponseContent(data), [:])
+      res.onEnd {
+        didFinish = true
       }
     }
-    task.resume()
+    
+    req.onError { error in
+      if !didFinish { yield(.transport(error), [:]) }
+    }
+    
+    req.write(jsonData)
+    req.end()
   }
 }

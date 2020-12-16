@@ -71,3 +71,27 @@ public extension Block {
     }
   }
 }
+
+
+// MARK: - Description
+
+extension Block.MultiChannelsSelect: CustomStringConvertible {
+
+  @inlinable
+  public var description: String {
+    var ms = "<MultiChannelsSelect[\(actionID.id)]:"
+    
+    if !placeholder.isEmpty      { ms += " placeholder='\(placeholder)'" }
+    if let v = maxSelectedItems  { ms += " #max=\(v)"  }
+    
+    if let options = initialChannelIDs {
+      if      options.isEmpty    { ms += " EMPTY"      }
+      else if options.count == 1 { ms += " single-channel=\(options[0])" }
+      else                       { ms += " \(options)" }
+    }
+    
+    if let v = confirm { ms += " \(v)" }
+    ms += ">"
+    return ms
+  }
+}

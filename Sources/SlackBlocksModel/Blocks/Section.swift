@@ -66,6 +66,7 @@ public extension Block {
     
     case button            (Button)
     case datePicker        (DatePicker)
+    case timePicker        (TimePicker)
     case overflowMenu      (Overflow)
     case image             (ImageElement)
     
@@ -81,6 +82,7 @@ public extension Block {
       switch self {
         case .button            (let element): try element.encode(to: encoder)
         case .datePicker        (let element): try element.encode(to: encoder)
+        case .timePicker        (let element): try element.encode(to: encoder)
         case .overflowMenu      (let element): try element.encode(to: encoder)
         case .image             (let element): try element.encode(to: encoder)
         case .channelSelect     (let element): try element.encode(to: encoder)
@@ -93,6 +95,9 @@ public extension Block {
     }
   }
 }
+
+
+// MARK: - Markdown
 
 public extension Block.Section {
 
@@ -108,6 +113,22 @@ public extension Block.Section {
         ms += field.blocksMarkdownString
       }
     }
+    return ms
+  }
+}
+
+
+// MARK: - Description
+
+extension Block.Section: CustomStringConvertible {
+
+  @inlinable
+  public var description: String {
+    var ms = "<Section[\(id.id)]:"
+    if !text.isEmpty     { ms += " " + text.description }
+    if !fields.isEmpty   { ms += " fields=\(fields)"    }
+    if let v = accessory { ms += " accessory=\(v)"      }
+    ms += ">"
     return ms
   }
 }

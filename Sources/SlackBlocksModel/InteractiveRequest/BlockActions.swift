@@ -14,8 +14,13 @@ public extension InteractiveRequest {
    * Block actions are sent when form elements change their values, e.g. if
    * a button is pressed or a date is selected in a date picker.
    *
-   * Note that components contained in `input` blocks do NOT trigger block
-   * actions.
+   * Note that components contained in `input` blocks of a View do NOT trigger
+   * block actions.
+   *
+   * Block actions can happen in Views (modal forms) or directly within
+   * messages.
+   * Note that there can be multiple actions (all with their own ID) within
+   * a single `blockActions` interactive request.
    *
    * Docs: https://api.slack.com/reference/interaction-payloads/block-actions
    */
@@ -27,7 +32,7 @@ public extension InteractiveRequest {
      */
     public enum Container {
       
-      case view   (id: ViewID, view: ViewInfo?)
+      case view          (id: ViewID, view: ViewInfo?)
       
       case message       (messageID      : MessageID,
                           conversationID : ConversationID,
@@ -35,6 +40,8 @@ public extension InteractiveRequest {
       
       /// This is a context where something acts upon a different message
       /// (vs the source being the message itself) I.e. a messageAction.
+      /// TODO: Clarify, wouldn't a messageAction trigger a disticnt
+      ///       `.messageAction` interactive request?
       case contextMessage(messageID      : MessageID,
                           conversationID : ConversationID,
                           isEphemeral    : Bool)

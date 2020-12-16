@@ -20,7 +20,7 @@ let package = Package(
   
   dependencies: [
     .package(url: "https://github.com/Macro-swift/Macro.git",
-             from: "0.5.7"),
+             from: "0.5.8"),
     .package(url: "https://github.com/Macro-swift/MacroExpress.git",
              from: "0.5.7"),
     .package(url: "https://github.com/Macro-swift/MacroApp.git",
@@ -35,7 +35,8 @@ let package = Package(
   
   targets: [
     .target(name: "SlackBlocksModel", dependencies: [] ),
-    .target(name: "SlackClient",      dependencies: [ "SlackBlocksModel" ] ),
+    .target(name: "SlackClient",
+            dependencies: [ "SlackBlocksModel", "Macro" ] ),
     .target(name: "Blocks",
             dependencies: [ "SlackBlocksModel", "Runtime", 
                             "NIO", // a hack to get access to CNIOSHA1

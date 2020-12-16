@@ -21,6 +21,8 @@ public struct MessageResponse: Encodable {
   public let text            : String
   public let blocks          : [ Block ]
   
+  // TODO: support attachments
+  
   public init(responseType    : ResponseType? = nil,
               replaceOriginal : Bool          = false,
               text            : String        = "",

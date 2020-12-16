@@ -52,6 +52,9 @@ public extension Block {
   }
 }
 
+
+// MARK: - Markdown
+
 public extension Block.Context {
   
   @inlinable
@@ -67,5 +70,32 @@ public extension Block.Context {
       }
     }
     return ms
+  }
+}
+
+
+// MARK: - Markdown
+
+extension Block.Context: CustomStringConvertible {
+  
+  @inlinable
+  public var description : String {
+    var ms = "<Context[\(id.id)]:"
+    if elements.isEmpty { ms += " EMPTY" }
+    else if elements.count == 1 { ms += " \(elements[0])" }
+    else { ms += " \(elements)" }
+    ms += ">"
+    return ms
+  }
+}
+
+extension Block.Context.Element: CustomStringConvertible {
+  
+  @inlinable
+  public var description : String {
+    switch self {
+      case .text (let text)  : return text.description
+      case .image(let image) : return image.description
+    }
   }
 }

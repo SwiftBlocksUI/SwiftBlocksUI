@@ -59,6 +59,9 @@ public struct TextField<Value> {
   @usableFromInline let title         : String // the label
   @usableFromInline let value         : Binding<Value>
   @usableFromInline let formatter     : Formatter?
+  
+  // TODO: support `dispatch_action_config` which has
+  //         trigger_actions_on: [on_enter_pressed,on_character_entered]
 
   @inlinable
   public init<S>(actionID      : ActionIDStyle = .auto,
@@ -86,12 +89,16 @@ public struct TextField<Value> {
  * A multiline TextField.
  */
 @inlinable
-public func TextEditor(_ title: String, text: Binding<String>)
+public func TextEditor(_ title: String, text: Binding<String>,
+                       placeholder   : String? = nil,
+                       minimumLength : Int?    = nil,
+                       maximumLength : Int?    = nil)
             -> TextField<String>
 {
   return TextField(title, value: text, formatter: nil,
-                   placeholder: nil, multiline: true,
-                   minimumLength: nil, maximumLength: nil)
+                   placeholder   : placeholder, multiline: true,
+                   minimumLength : minimumLength,
+                   maximumLength : maximumLength)
 }
 
 public extension TextField where Value == String {
@@ -100,10 +107,10 @@ public extension TextField where Value == String {
   init<S>(actionID      : ActionIDStyle = .auto,
           _     title   : S,
           text          : Binding<String>, // aka value
-          placeholder   : String?,
-          multiline     : Bool,
-          minimumLength : Int?,
-          maximumLength : Int?)
+          placeholder   : String? = nil,
+          multiline     : Bool    = false,
+          minimumLength : Int?    = nil,
+          maximumLength : Int?    = nil)
     where S: StringProtocol
   {
     self.init(actionID: actionID, title, value: text, formatter: nil,
