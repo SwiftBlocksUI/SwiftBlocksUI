@@ -91,14 +91,14 @@ public struct Button<Content: Blocks>: Blocks {
 }
 
 
-extension Button {
+public extension Button {
   
   @inlinable
-  public init(_ title : String  = "",
-              _ style : Style   = .none,
-              value   : String? = nil,
-              action  : Action? = nil,
-              @BlocksBuilder content: () -> Content)
+  init(_ title : String  = "",
+       _ style : Style   = .none,
+       value   : String? = nil,
+       action  : Action? = nil,
+       @BlocksBuilder content: () -> Content)
   {
     // This also has a title, because the content might be a `Link` yielding
     // the URL.
@@ -108,11 +108,11 @@ extension Button {
   }
 
   @inlinable
-  public init(_ title : String  = "",
-              _ style : Style   = .none,
-              value   : String? = nil,
-              action  : @escaping SyncAction,
-              @BlocksBuilder content: () -> Content)
+  init(_ title : String  = "",
+       _ style : Style   = .none,
+       value   : String? = nil,
+       action  : @escaping SyncAction,
+       @BlocksBuilder content: () -> Content)
   {
     // This also has a title, because the content might be a `Link` yielding
     // the URL.
@@ -123,18 +123,18 @@ extension Button {
   }
 }
 
-extension Button where Content == Never {
+public extension Button where Content == Never {
   
   @inlinable
-  public init(_ title: String, _ style: Style = .none, value: String? = nil) {
+  init(_ title: String, _ style: Style = .none, value: String? = nil) {
     self.init(actionID : .auto,
               title    : title, style: style, value: value, content: nil,
               url      : nil, action: nil)
   }
 
   @inlinable
-  public init(_ title: String, _ style: Style = .none, value: String? = nil,
-              action: @escaping Action)
+  init(_ title: String, _ style: Style = .none, value: String? = nil,
+       action: @escaping Action)
   {
     self.init(actionID : .auto,
               title    : title, style: style, value: value, content: nil,
@@ -143,8 +143,8 @@ extension Button where Content == Never {
   }
 
   @inlinable
-  public init(_ title: String, _ style: Style = .none, value: String? = nil,
-              action: @escaping SyncAction)
+  init(_ title: String, _ style: Style = .none, value: String? = nil,
+       action: @escaping SyncAction)
   {
     self.init(actionID : .auto,
               title    : title, style: style, value: value, content: nil,
