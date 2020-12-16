@@ -59,6 +59,9 @@ public struct TextField<Value> {
   @usableFromInline let title         : String // the label
   @usableFromInline let value         : Binding<Value>
   @usableFromInline let formatter     : Formatter?
+  
+  // TODO: support `dispatch_action_config` which has
+  //         trigger_actions_on: [on_enter_pressed,on_character_entered]
 
   @inlinable
   public init<S>(actionID      : ActionIDStyle = .auto,
