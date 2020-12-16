@@ -10,16 +10,16 @@ extension InteractiveRequest {
 
   // Example: type": "plain_text_input", "value": "Blub"
   // TBD: what values are allowed?
+  
   public enum FormValue: Decodable {
     
-    public typealias YearMonthDay = Block.DatePicker.YearMonthDay
-
     case button        (String)
     case plainTextInput(String)
     case option        (value  : String)
     case options       (values : [ String ])
-    case date          (YearMonthDay)
-    
+    case date          (Block.YearMonthDay)
+    case time          (Block.HourMinute)
+
     public var value : Any { // rather fix the callers
       switch self {
         case .button        (let value)  : return value
@@ -27,6 +27,7 @@ extension InteractiveRequest {
         case .option        (let value)  : return value
         case .options       (let values) : return values
         case .date          (let value)  : return value
+        case .time          (let value)  : return value
       }
     }
     
@@ -43,6 +44,7 @@ extension InteractiveRequest {
       case selectedOption  = "selected_option"
       case selectedOptions = "selected_options"
       case selectedDate    = "selected_date"
+      case selectedTime    = "selected_time"
     }
     
     public init(from decoder: Decoder) throws {
@@ -80,7 +82,12 @@ extension InteractiveRequest {
         case .datePicker:
           // "selected_date": "2020-07-08"
           self = .date(
-            try container.decode(YearMonthDay.self, forKey: .selectedDate))
+            try container.decode(Block.YearMonthDay.self, forKey:.selectedDate))
+          
+        case .timePicker:
+          // "selected_time": "12:12"
+          self = .time(
+            try container.decode(Block.HourMinute.self, forKey:.selectedTime))
           
         case .checkboxes, .staticMultiSelect:
           self = decodeOptions() ?? .options(values: [])
@@ -106,6 +113,7 @@ extension InteractiveRequest.FormValue: CustomStringConvertible {
     switch self {
       case .button (let value) : return "<ButtonValue: '\(value)'>"
       case .date   (let value) : return "<DateValue: \(value)>"
+      case .time   (let value) : return "<TimeValue: \(value)>"
       case .option (let value) : return "<OptionValue: \(value)>"
       case .options(let values):
         return "<OptionValues: " + values.joined(separator: ",") + ">"
