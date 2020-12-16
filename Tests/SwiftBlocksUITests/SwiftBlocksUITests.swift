@@ -129,43 +129,42 @@ final class SwiftBlocksUITests: XCTestCase {
   }
 
   func testApprovalFormExample() throws {
+    
     struct ApprovalForm: Blocks {
       
-      var body: some Blocks {
-        Group { // or mark `body` as @BlocksBuilder
-          Section {
-            Text("You have a new request:\n")
-            Link("Fred Enriquez - New device request",
-                 destination:
-                   URL(string: "http://fakeLink.toEmployeeProfile.com")!)
-              .bold()
+      @BlocksBuilder var body: some Blocks {
+        Section {
+          Text("You have a new request:\n")
+          Link("Fred Enriquez - New device request",
+               destination:
+                 URL(string: "http://fakeLink.toEmployeeProfile.com")!)
+            .bold()
+        }
+        Section { // TODO: make it a foreach loop over an array
+          Field {
+            Text("Type").bold()
+            Text("\nComputer (laptop)")
           }
-          Section { // TODO: make it a foreach loop over an array
-            Field {
-              Text("Type").bold()
-              Text("\nComputer (laptop)")
-            }
-            Field {
-              Text("When").bold()
-              Text("\nSubmitted Aut 10")
-            }
-            Field {
-              Text("Last Update").bold()
-              Text("\nMar 10, 2015 (3 years, 5 months)")
-            }
-            Field {
-              Text("Reason").bold()
-              Text("\nAll vowel keys aren't working.")
-            }
-            Field {
-              Text("Specs").bold()
-              Text("\n\"Cheetah Pro 15\" - Fast, really fast\"")
-            }
+          Field {
+            Text("When").bold()
+            Text("\nSubmitted Aut 10")
           }
-          Actions {
-            Button("Approve", .primary, value: "click_me_123")
-            Button("Deny",    .danger,  value: "click_me_123")
+          Field {
+            Text("Last Update").bold()
+            Text("\nMar 10, 2015 (3 years, 5 months)")
           }
+          Field {
+            Text("Reason").bold()
+            Text("\nAll vowel keys aren't working.")
+          }
+          Field {
+            Text("Specs").bold()
+            Text("\n\"Cheetah Pro 15\" - Fast, really fast\"")
+          }
+        }
+        Actions {
+          Button("Approve", .primary, value: "click_me_123")
+          Button("Deny",    .danger,  value: "click_me_123")
         }
       }
     }
