@@ -173,7 +173,7 @@ extension Text: BlocksPrimitive {
             case .checkboxes:
               return try renderAsCheckbox(in: context)
 
-            case .datePicker, .overflowMenu,
+            case .datePicker, .timePicker, .overflowMenu,
                  .channelSelect, .conversationSelect, .externalSelect,
                  .userSelect:
               // Could be placeholder, but that should be done in a more

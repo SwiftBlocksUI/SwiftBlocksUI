@@ -17,6 +17,7 @@ public extension Block {
     
     case button            (Button)
     case datePicker        (DatePicker)
+    case timePicker        (TimePicker)
     case overflowMenu      (Overflow)
     
     case channelSelect     (MultiChannelsSelect)
@@ -31,6 +32,7 @@ public extension Block {
       switch self {
         case .button            (let element): try element.encode(to: encoder)
         case .datePicker        (let element): try element.encode(to: encoder)
+        case .timePicker        (let element): try element.encode(to: encoder)
         case .overflowMenu      (let element): try element.encode(to: encoder)
         case .channelSelect     (let element): try element.encode(to: encoder)
         case .conversationSelect(let element): try element.encode(to: encoder)
@@ -51,17 +53,18 @@ extension Block.InteractiveElement: CustomStringConvertible {
   @inlinable
   public var description: String {
     switch self {
-      case .button            (let o): return o.description
-      case .datePicker        (let o): return o.description
-      case .overflowMenu      (let o): return o.description
+      case .button            (let element): return element.description
+      case .datePicker        (let element): return element.description
+      case .timePicker        (let element): return element.description
+      case .overflowMenu      (let element): return element.description
   
-      case .channelSelect     (let o): return o.description
-      case .conversationSelect(let o): return o.description
-      case .externalSelect    (let o): return o.description
-      case .staticSelect      (let o): return o.description
-      case .userSelect        (let o): return o.description
+      case .channelSelect     (let element): return element.description
+      case .conversationSelect(let element): return element.description
+      case .externalSelect    (let element): return element.description
+      case .staticSelect      (let element): return element.description
+      case .userSelect        (let element): return element.description
   
-      case .checkboxes        (let o): return o.description
+      case .checkboxes        (let element): return element.description
     }
   }
 }

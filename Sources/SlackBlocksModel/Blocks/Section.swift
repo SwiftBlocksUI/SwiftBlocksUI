@@ -66,6 +66,7 @@ public extension Block {
     
     case button            (Button)
     case datePicker        (DatePicker)
+    case timePicker        (TimePicker)
     case overflowMenu      (Overflow)
     case image             (ImageElement)
     
@@ -81,6 +82,7 @@ public extension Block {
       switch self {
         case .button            (let element): try element.encode(to: encoder)
         case .datePicker        (let element): try element.encode(to: encoder)
+        case .timePicker        (let element): try element.encode(to: encoder)
         case .overflowMenu      (let element): try element.encode(to: encoder)
         case .image             (let element): try element.encode(to: encoder)
         case .channelSelect     (let element): try element.encode(to: encoder)

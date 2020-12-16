@@ -165,7 +165,7 @@ extension Link: BlocksPrimitive {
             case .checkboxes:
               return try renderAsCheckbox(in: context)
 
-            case .datePicker, .overflowMenu, .image,
+            case .datePicker, .timePicker, .overflowMenu, .image,
                  .channelSelect, .conversationSelect, .externalSelect,
                  .userSelect:
               context.log.error(

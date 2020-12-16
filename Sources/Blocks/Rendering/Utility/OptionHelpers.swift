@@ -22,7 +22,7 @@ extension Block.InteractiveElement {
         checkboxes.setInitialOptions(values)
         self = .checkboxes(checkboxes)
 
-      case .button, .datePicker, .overflowMenu,
+      case .button, .datePicker, .timePicker, .overflowMenu,
            .channelSelect, .conversationSelect, .userSelect, .externalSelect:
         assertionFailure("unexpected element for initial options")
         return globalBlocksLog.error("cannot set initial opts: \(self)")
@@ -42,7 +42,7 @@ extension Block.Accessory {
         checkboxes.setInitialOptions(values)
         self = .checkboxes(checkboxes)
 
-      case .button, .datePicker, .image, .overflowMenu,
+      case .button, .datePicker, .timePicker, .image, .overflowMenu,
            .channelSelect, .conversationSelect, .userSelect, .externalSelect:
         assertionFailure("unexpected element for initial options")
         return globalBlocksLog.error("cannot set initial opts: \(self)")

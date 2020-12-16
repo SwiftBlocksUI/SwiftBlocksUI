@@ -68,6 +68,7 @@ Top-Level block.
   - [Picker](Elements/Picker.md)
     - [Option](Elements/Option.md)
   - [DatePicker](Elements/DatePicker.md)
+  - [TimePicker](Elements/TimePicker.md)
 - Section Elements
   - [Accessory](Elements/Accessory.md)
   - [Field](Elements/Field.md)
