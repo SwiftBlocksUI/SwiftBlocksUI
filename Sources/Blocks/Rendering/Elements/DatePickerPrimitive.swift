@@ -190,13 +190,13 @@ extension DatePicker: BlocksPrimitive {
       case let v as Int:
         selection.setter(.init(Date(timeIntervalSince1970: TimeInterval(v))))
       case let v as String:
-        guard let ymd = parseYMDString(v) else {
+        guard let ymd = YearMonthDay(string: v) else {
           context.log.error("could not parse DatePicker string value: \(v)")
           return // TBD: throw?
         }
         selection.setter(ymd)
       default:
-        guard let ymd = parseYMDString(String(describing: value)) else {
+        guard let ymd = YearMonthDay(string: String(describing: value)) else {
           context.log.error(
             "could not parse unexpected DatePicker value: \(value)")
           return
@@ -205,22 +205,4 @@ extension DatePicker: BlocksPrimitive {
         selection.setter(ymd)
     }
   }
-}
-
-private func parseYMDString(_ s: String) -> DatePicker.YearMonthDay? {
-  // YYYY-mm-dd
-  guard !s.isEmpty else { return nil }
-  let parts = s.split(separator: "-", maxSplits: 3,
-                      omittingEmptySubsequences: true)
-  assert(parts.count == 3)
-  guard parts.count == 3 else { return nil }
-  guard let year  = Int(parts[0]),
-        let month = Int(parts[1]),
-        let day   = Int(parts[2]) else
-  {
-    assertionFailure("could not parse date: \(s)")
-    return nil
-  }
-  
-  return .init(year: Int16(year), month: UInt8(month), day: UInt8(day))
 }

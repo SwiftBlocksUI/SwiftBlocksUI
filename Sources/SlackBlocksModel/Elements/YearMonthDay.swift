@@ -23,29 +23,31 @@ public extension Block {
       self.minute = minute
     }
     
+    @inlinable
+    public init?(string: String) {
+      // HH:MM
+      guard !string.isEmpty else { return nil }
+      let parts = string.split(separator: ":", maxSplits: 2,
+                               omittingEmptySubsequences: true)
+      assert(parts.count == 2)
+      guard parts.count == 2 else { return nil }
+      guard let hour = Int(parts[0]), let minute = Int(parts[1]),
+            hour >= 0 && hour <= 24, minute >= 0 && minute <= 60 else
+      {
+        assertionFailure("could not parse time: \(string)")
+        return nil
+      }
+      
+      self.hour   = UInt8(hour)
+      self.minute = UInt8(minute)
+    }
+    
     public init(from decoder: Decoder) throws {
       typealias Error = InteractiveRequest.DecodingError
       
-      func parseHMString(_ s: String) -> HourMinute? {
-        // HH:MM
-        guard !s.isEmpty else { return nil }
-        let parts = s.split(separator: ":", maxSplits: 2,
-                            omittingEmptySubsequences: true)
-        assert(parts.count == 2)
-        guard parts.count == 2 else { return nil }
-        guard let hour = Int(parts[0]), let minute = Int(parts[1]),
-              hour >= 0 && hour <= 24, minute >= 0 && minute <= 60 else
-        {
-          assertionFailure("could not parse time: \(s)")
-          return nil
-        }
-        
-        return .init(hour: UInt8(hour), minute: UInt8(minute))
-      }
-
       let container = try decoder.singleValueContainer()
       let s = try container.decode(String.self)
-      guard let hm = parseHMString(s) else {
+      guard let hm = HourMinute(string: s) else {
         throw Error.unexpectedValue(s)
       }
       
@@ -81,32 +83,35 @@ public extension Block {
       self.day   = day
     }
     
+    @inlinable
+    public init?(string: String) {
+      // YYYY-mm-dd
+      guard !string.isEmpty else { return nil }
+      let parts = string.split(separator: "-", maxSplits: 3,
+                               omittingEmptySubsequences: true)
+      assert(parts.count == 3)
+      guard parts.count == 3 else { return nil }
+      guard let year  = Int(parts[0]),
+            let month = Int(parts[1]),
+            let day   = Int(parts[2]),
+            month >= 1 && month <= 12, day >= 1 && day <= 31
+       else
+      {
+        assertionFailure("could not parse date: \(string)")
+        return nil
+      }
+      
+      self.year  = Int16(year)
+      self.month = UInt8(month)
+      self.day   = UInt8(day)
+    }
+
     public init(from decoder: Decoder) throws {
       typealias Error = InteractiveRequest.DecodingError
       
-      func parseYMDString(_ s: String) -> YearMonthDay? {
-        // YYYY-mm-dd
-        guard !s.isEmpty else { return nil }
-        let parts = s.split(separator: "-", maxSplits: 3,
-                            omittingEmptySubsequences: true)
-        assert(parts.count == 3)
-        guard parts.count == 3 else { return nil }
-        guard let year  = Int(parts[0]),
-              let month = Int(parts[1]),
-              let day   = Int(parts[2]),
-              month >= 1 && month <= 12, day >= 1 && day <= 31
-         else
-        {
-          assertionFailure("could not parse date: \(s)")
-          return nil
-        }
-        
-        return .init(year: Int16(year), month: UInt8(month), day: UInt8(day))
-      }
-
       let container = try decoder.singleValueContainer()
       let s = try container.decode(String.self)
-      guard let ymd = parseYMDString(s) else {
+      guard let ymd = YearMonthDay(string: s) else {
         throw Error.unexpectedValue(s)
       }
       
