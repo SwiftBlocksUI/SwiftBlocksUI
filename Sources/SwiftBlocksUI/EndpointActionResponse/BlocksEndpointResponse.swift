@@ -44,7 +44,7 @@ public final class BlocksEndpointResponse<B: Blocks>: ActionResponse {
   let blocks                : B
   
   // request data
-  let requestContainer      : InteractiveRequest.Container?
+  let requestContainer      : SlackBlocksModel.InteractiveRequest.Container?
   let triggerID             : TriggerID?
   let responseURL           : URL?
   let userID                : UserID
@@ -60,7 +60,7 @@ public final class BlocksEndpointResponse<B: Blocks>: ActionResponse {
     responseActionEnabled = true
   }
 
-  public init(requestContainer : InteractiveRequest.Container?,
+  public init(requestContainer : SlackBlocksModel.InteractiveRequest.Container?,
               responseURL      : URL?,
               triggerID        : TriggerID?,
               userID           : UserID,
