@@ -24,7 +24,7 @@ import enum   SlackBlocksModel.Block
  *
  *     DatePicker("Pick a date!", selection: $date)
  *
- * Docs: https://api.slack.com/reference/block-kit/block-elements#multi_select
+ * Docs: https://api.slack.com/reference/block-kit/block-elements#datepicker
  */
 public struct DatePicker: Blocks {
   
