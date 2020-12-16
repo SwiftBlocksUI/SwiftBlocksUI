@@ -80,16 +80,16 @@ public extension bodyParser {
 }
 
 @usableFromInline
-let requestKey = "macro.slick.interactive-request"
+let irRequestKey = "macro.slick.interactive-request"
 @usableFromInline
-let errorKey   = "macro.slick.interactive-request-error"
+let irErrorKey   = "macro.slick.interactive-request-error"
 
 public extension IncomingMessage {
 
   @inlinable
   var interactiveRequestError: Swift.Error? {
-    set { extra[errorKey] = newValue }
-    get { return extra[errorKey] as? Swift.Error }
+    set { extra[irErrorKey] = newValue }
+    get { return extra[irErrorKey] as? Swift.Error }
   }
 }
 
@@ -97,9 +97,9 @@ public extension IncomingMessage {
   
   @inlinable
   var interactiveRequest: InteractiveRequest? {
-    set { extra[requestKey] = newValue }
+    set { extra[irRequestKey] = newValue }
     get {
-      guard let value   = extra[requestKey] else { return nil }
+      guard let value   = extra[irRequestKey] else { return nil }
       guard let request = value as? InteractiveRequest else {
         log.error("interactiveRequest extra contains a foreign value: \(value)")
         assertionFailure("incorrect value in interactiveRequest extra")

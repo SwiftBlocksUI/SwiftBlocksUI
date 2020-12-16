@@ -49,11 +49,16 @@ public struct SlackClient {
     self.token   = token ?? envToken
     
     if !self.token.isValid {
+      if self.token.value.isEmpty {
+        print("Empty Token passed to SlackClient.")
+      }
+      else {
       #if DEBUG
         print("Token passed to SlackClient is not valid: '\(self.token.value)'")
       #else
         print("Token passed to SlackClient is not valid!")
       #endif
+      }
     }
     #if false
       // this is especially OK during development, we may not have set this yet
