@@ -9,12 +9,13 @@
 public extension Block {
   
   /**
-   * A multi static select results in a modal to make the selection, while a regular static select is a single
-   * select combo box.
+   * A multi static select results in a modal to make the selection, while a
+   * regular static select is a single select combo box.
    *
-   * Note: One might think setting maxSelectedItems to 1 makes it a regular static select, but that isn't the
-   *     case for the API block. However, we fake this behaviour in here to avoid all the duping.
-   *
+   * Note: One might think setting maxSelectedItems to 1 makes it a regular
+   *       static select, but that isn't the case for the API block. However,
+   *       we fake this behaviour in here to avoid all the duping.
+   * 
    * Docs: https://api.slack.com/reference/block-kit/block-elements#static_multi_select
    */
   struct MultiStaticSelect: SelectElement {
