@@ -21,6 +21,9 @@ Using the [Link](Blocks/Elements/Link.md) element, for example:
 ```swift
 Section {
   Link("ZeeZide", destination: URL(string: "https://zeezide.de/")!)
+  
+  Text("ZeeZide")
+    .link(to: URL(string: "https://zeezide.de/"))
 }
 ```
 
@@ -31,7 +34,21 @@ syntax for user references is: `<@USERID>` or `<@USERID|TheName>`.
 
 ```swift
 Section {
+  Text("Text by ")
+  Markdown(userID)
+}
+```
+
+```swift
+Section {
   Markdown("Text by <@U7272626>!")
+}
+```
+
+```swift
+Section {
+  "Owner"
+    .link(to: ownerID)
 }
 ```
 
