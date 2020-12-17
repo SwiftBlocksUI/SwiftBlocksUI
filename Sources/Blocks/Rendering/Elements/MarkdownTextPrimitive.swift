@@ -18,9 +18,10 @@ import enum SlackBlocksModel.Block
  */
 protocol MarkdownTextPrimitive : Blocks, BlocksPrimitive {
     
-  var  slackMarkdownString : String { get }
-  var  blocksMarkdown      : String { get }
-  var  contentString       : String { get }
+  var  slackMarkdownString : String     { get }
+  var  blocksMarkdown      : String     { get }
+  var  contentString       : String     { get }
+  var  asBlockText         : Block.Text { get }
 
   func render(in context: BlocksContext) throws
   
