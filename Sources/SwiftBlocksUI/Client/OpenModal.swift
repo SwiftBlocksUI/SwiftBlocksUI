@@ -10,6 +10,7 @@ import struct SlackClient.SlackClient
 import enum   SlackBlocksModel.Block
 import struct SlackBlocksModel.View
 import enum   SlackBlocksModel.InteractiveRequest
+import struct SlackBlocksModel.TriggerID
 
 public extension SlackClient.Views {
 
