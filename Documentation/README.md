@@ -8,7 +8,8 @@ Work in Progress.
 Blog entry/tutorial:
 [Instant “SwiftUI” Flavoured Slack Apps](https://www.alwaysrightinstitute.com/swiftblocksui/).
 
-- [FAQ](FAQ.md)
+- [FAQ](FAQ.md) (frequently asked questions)
+- [IDs](IDs.md) (how SwiftBlocksUI / Block Kit identifiers work, advanced)
 
 ### [Tutorials](Tutorials/README.md)
 

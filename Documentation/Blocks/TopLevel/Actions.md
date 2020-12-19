@@ -20,6 +20,38 @@ Actions {
 }
 ```
 
+Note that `Actions` cannot contain [TextField](../Elements/TextField.md)s
+(i.e. it cannot be used to layout such horizontally).
+
 ![Block Types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
 
 Docs: https://api.slack.com/reference/block-kit/blocks#actions
+
+
+### Blocks API Representation
+
+```json
+{
+  "type"     : "actions",
+  "elements" : [
+    { "type"         : "datepicker",
+      "initial_date" : "1990-04-28",
+      "action_id"    : "actionId-0",
+      "placeholder": {
+        "type"  : "plain_text",
+        "text"  : "Select a date",
+        "emoji" : true
+      }
+    },
+    { "type"         : "datepicker",
+      "initial_date" : "1990-04-28",
+      "action_id"    : "actionId-1"
+      "placeholder": {
+        "type"  : "plain_text",
+        "text"  : "Select a date",
+        "emoji" : true
+      }
+    }
+  ]
+}
+```

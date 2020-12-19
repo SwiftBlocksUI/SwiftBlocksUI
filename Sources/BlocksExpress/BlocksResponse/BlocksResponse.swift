@@ -36,6 +36,10 @@ public extension ServerResponse {
       return sendStatus(500)
     }
     
+    #if DEBUG && true
+      print("BLOCKS:\n\(apiBlocks.map { "  " + $0.description }.joined(separator: "\n"))")
+    #endif
+    
     // TODO: Also render blocks as markdown. Quite possible!
     let message = MessageResponse(responseType : scope,
                                   blocks       : apiBlocks)
