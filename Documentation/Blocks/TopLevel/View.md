@@ -67,4 +67,26 @@ Note: Home tabs need to be enabled in the Admin UI for your application.
 
 Deep link to home tab: `slack://app?team=TEAMID&id=APPID&tab=home`
 
-Docs: https://api.slack.com/surfaces/tabs/using
+Docs: [Using Tabs](https://api.slack.com/surfaces/tabs/using)
+
+
+### Blocks API Representation
+
+```json
+{
+  "type"   : "modal",
+  "title"  : { "type": "plain_text", "text": "My App", "emoji": true },
+  "submit" : { "type": "plain_text", "text": "Submit", "emoji": true },
+  "close"  : { "type": "plain_text", "text": "Cancel", "emoji": true },
+  "blocks" : [
+    { "type": "divider" },
+    { "type": "header",
+      "text": {
+        "type"  : "plain_text",
+        "text"  : "This is a header block",
+        "emoji" : true
+      }
+    },
+  ]
+}
+```

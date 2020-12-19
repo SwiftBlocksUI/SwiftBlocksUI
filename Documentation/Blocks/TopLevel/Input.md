@@ -26,3 +26,18 @@ View {
 ```
 
 Docs: https://api.slack.com/reference/block-kit/blocks#input
+
+
+### Blocks API Representation
+
+```json
+{
+  "type"            : "input",
+  "dispatch_action" : true,
+  "element": {
+    "type"      : "plain_text_input",
+    "action_id" : "plain_text_input-action"
+  },
+  "label": { "type": "plain_text", "text": "Label", "emoji": true }
+}
+```

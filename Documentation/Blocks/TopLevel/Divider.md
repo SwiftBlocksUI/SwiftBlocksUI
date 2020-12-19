@@ -18,3 +18,12 @@ Section {
 ```
 
 ![Block Types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
+
+
+### Blocks API Representation
+
+```json
+{
+  "type": "divider"
+}
+```
