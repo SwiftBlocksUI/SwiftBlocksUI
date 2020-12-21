@@ -10,6 +10,13 @@ import enum SlackBlocksModel.Block
 
 internal extension Block.Text {
   
+  /**
+   * If the `Text` is still empty, this turns it into a plain text with
+   * the given content.
+   *
+   * If the `Text` already has content, the `newString` is added to the
+   * content (currently w/o escaping if it is Markdown already).
+   */
   mutating func append(_ newString: String, encodeEmoji: Bool = false) {
     guard !newString.isEmpty else { return }
     if isEmpty {
@@ -21,6 +28,14 @@ internal extension Block.Text {
     }
   }
 
+  /**
+   * If the `Text` is still empty, this turns it into a Markdown text with
+   * the given content.
+   *
+   * If the `Text` already has content, the result is still a markdown `Text`,
+   * but with the existing content prepended (currently w/o escaping if it was
+   * plain content).
+   */
   mutating func appendMarkdown(_ newString: String, verbatim: Bool = false) {
     guard !newString.isEmpty else { return }
     if isEmpty {
@@ -49,6 +64,10 @@ extension Block.Text {
     value += "\n"
   }
 
+  /**
+   * Prepends each line of the given `text` with a `>`.
+   * If the `text` didn't end in a newline, one will be added.
+   */
   mutating func appendQuoted(_ text: String) {
     guard !text.isEmpty else { return }
     for line in text.lazy.split(separator: "\n") {
