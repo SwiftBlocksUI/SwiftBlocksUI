@@ -22,6 +22,23 @@ extension Link: BlocksPrimitive {
     case internalInconsistency
   }
 
+  func renderIntoHeader(in context: BlocksContext) throws {
+    // This has special URL behaviour
+    guard case .header(var header) = context.currentBlock else {
+      assertionFailure("expected header block, got \(context)")
+      throw MarkdownTextPrimitiveRenderingError.internalInconsistency
+    }
+
+    context.currentBlock = nil
+    if title.isEmpty {
+      header.text += destination.absoluteString
+    }
+    else {
+      header.text += "[\(title)](\(destination.absoluteString))"
+    }
+    context.currentBlock = .header(header)
+  }
+  
   func renderIntoActions(in context: BlocksContext) throws {
     // This has special URL behaviour
     

@@ -40,12 +40,15 @@ extension CheckboxGroup: BlocksPrimitive {
         context.closeBlock()
         return try render(in: context) // recurse
     
-      case .section, .actions, .input: break
+      case .section, .actions, .input, .header:
+        break
     }
 
     switch block {
-      case .richText, .image, .context, .divider:
-        fatalError("unexpected state")
+      case .richText, .image, .context, .divider, .header:
+        print("unexpected block in CheckboxGroup render \(block)")
+        assertionFailure("unexpected state")
+        return
       
       case .section : try renderIntoSection(in: context)
       case .actions : try renderIntoActions(in: context)
@@ -167,10 +170,11 @@ extension CheckboxGroup: BlocksPrimitive {
     guard !values.isEmpty else { return }
     
     switch block {
-      case .richText, .image, .context, .divider:
-        assertionFailure("unexpected block")
+      case .richText, .image, .context, .divider, .header:
+        print("unexpected block in CheckBoxGroup render \(block)")
+        assertionFailure("unexpected state: block in CheckBoxGroup render")
         return
-        
+
       case .input(var input):
         switch input.element {
           case .staticSelect(var staticSelect):

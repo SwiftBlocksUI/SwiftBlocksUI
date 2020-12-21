@@ -51,7 +51,7 @@ extension Checkbox: BlocksPrimitive {
     
     switch block {
     
-      case .richText, .image, .context, .divider:
+      case .richText, .image, .context, .divider, .header:
         return context.log
           .error("Attempt to use Checkbox in a unsupported block: \(block)")
 

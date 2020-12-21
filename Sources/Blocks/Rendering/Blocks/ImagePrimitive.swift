@@ -44,7 +44,7 @@ extension Image: BlocksPrimitive {
       case .section  : return try renderIntoSection (in: context)
       case .context  : return try renderIntoContext (in: context)
 
-      case .image, .actions, .input:
+      case .image, .actions, .input, .header:
         context.closeBlock()
         return try render(in: context)
     }

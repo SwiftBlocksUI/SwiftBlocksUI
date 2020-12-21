@@ -31,6 +31,7 @@ protocol MarkdownTextPrimitive : Blocks, BlocksPrimitive {
   func renderIntoContext   (in context: BlocksContext) throws
   func renderIntoSection   (in context: BlocksContext) throws
   func renderIntoRichText  (in context: BlocksContext) throws
+  func renderIntoHeader    (in context: BlocksContext) throws
 
   func renderAsOption      (in context: BlocksContext) throws
   func renderAsCheckbox    (in context: BlocksContext) throws
@@ -76,12 +77,28 @@ extension MarkdownTextPrimitive {
       case .image    : return try renderIntoImageBlock(in: context)
       case .context  : return try renderIntoContext   (in: context)
       case .input    : return try renderIntoInput     (in: context)
+      case .header   : return try renderIntoHeader    (in: context)
     }
   }
 }
 
 extension MarkdownTextPrimitive {
 
+  func renderIntoHeader(in context: BlocksContext) throws {
+    guard case .header(var header) = context.currentBlock else {
+      assertionFailure("expected header block, got \(context)")
+      throw MarkdownTextPrimitiveRenderingError.internalInconsistency
+    }
+
+    if self is Link {
+      context.log.warning("rendering Link into Header: \(context) \(self)")
+    }
+    
+    context.currentBlock = nil
+    header.text += contentString
+    context.currentBlock = .header(header)
+  }
+  
   func renderIntoInput(in context: BlocksContext) throws {
     guard case .input(let input) = context.currentBlock else {
       assertionFailure("expected input block, got \(context)")

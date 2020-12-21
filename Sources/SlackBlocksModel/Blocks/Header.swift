@@ -8,17 +8,25 @@
 
 public extension Block {
   
+  /**
+   * A header is a simple HTML `H1` tag like block. It can only contain
+   * text.
+   *
+   * The `Header` block only supports a plaintext value!
+   */
   struct Header: Encodable {
     
     public static let validInSurfaces : [ BlockSurfaceSet ]
                                       = [ .modals, .messages, .homeTabs ]
 
-    public var id   : BlockID
-    public var text : Text
+    public var id          : BlockID
+    public var text        : String
+    public var encodeEmoji : Bool
     
-    public init(id: BlockID, text: Text) {
+    public init(id: BlockID, text: String, encodeEmoji: Bool = true) {
       self.id   = id
       self.text = text
+      self.encodeEmoji = encodeEmoji
     }
     
     // MARK: - Encoding
@@ -29,6 +37,8 @@ public extension Block {
     }
     
     public func encode(to encoder: Encoder) throws {
+      let text = Block.Text(self.text, type: .plain(encodeEmoji: encodeEmoji))
+      
       var container = encoder.container(keyedBy: CodingKeys.self)
       try container.encode("header", forKey: .type)
       try container.encode(id,       forKey: .id)
@@ -43,9 +53,7 @@ public extension Block {
 public extension Block.Header {
   
   @inlinable
-  var blocksMarkdownString : String {
-    return "#\(text.blocksMarkdownString)\n"
-  }
+  var blocksMarkdownString : String { return "# \(text)\n" }
 }
 
 
@@ -56,8 +64,9 @@ extension Block.Header: CustomStringConvertible {
   @inlinable
   public var description : String {
     var ms = "<Header[\(id.id)]:"
-    if text.isEmpty { ms += " EMPTY"   }
-    else            { ms += " \(text)" }
+    if text.isEmpty { ms += " EMPTY"    }
+    else            { ms += " \(text)"  }
+    if !encodeEmoji { ms += " no-emoji" }
     ms += ">"
     return ms
   }

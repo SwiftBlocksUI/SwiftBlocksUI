@@ -33,7 +33,7 @@ extension Picker: BlocksPrimitive where Content: Blocks {
     }
     
     switch block {
-      case .richText, .image, .context:
+      case .richText, .image, .context, .header:
         context.log
           .warning("Attempt to use Picker in a unsupported block: \(block)")
         context.closeBlock()
@@ -46,9 +46,11 @@ extension Picker: BlocksPrimitive where Content: Blocks {
     }
 
     switch block {
-      case .richText, .image, .context, .divider:
-        fatalError("unexpected state")
-      
+      case .richText, .image, .context, .divider, .header:
+        print("unexpected block in Picker render \(block)")
+        assertionFailure("unexpected state: block in Picker render")
+        return
+
       case .section : try renderIntoSection(in: context)
       case .actions : try renderIntoActions(in: context)
       case .input   : try renderIntoInput  (in: context)
@@ -225,7 +227,7 @@ extension Picker: BlocksPrimitive where Content: Blocks {
     guard !values.isEmpty else { return }
     
     switch block {
-      case .richText, .image, .context, .divider:
+      case .richText, .image, .context, .divider, .header:
         assertionFailure("unexpected block")
         return
         
