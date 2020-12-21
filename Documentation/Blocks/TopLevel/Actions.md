@@ -25,7 +25,7 @@ Note that `Actions` cannot contain [TextField](../Elements/TextField.md)s
 
 ![Block Types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
 
-Docs: https://api.slack.com/reference/block-kit/blocks#actions
+- [Slack Documentation](https://api.slack.com/reference/block-kit/blocks#actions)
 
 
 ### Blocks API Representation

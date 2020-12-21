@@ -25,7 +25,7 @@ View {
 }
 ```
 
-Docs: https://api.slack.com/reference/block-kit/blocks#input
+- [Slack Documentation](https://api.slack.com/reference/block-kit/blocks#input)
 
 
 ### Blocks API Representation

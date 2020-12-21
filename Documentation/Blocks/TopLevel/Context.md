@@ -20,7 +20,7 @@ Context {
 
 ![Block Types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
 
-Docs: https://api.slack.com/reference/block-kit/blocks#context
+- [Slack Documentation](https://api.slack.com/reference/block-kit/blocks#context)
 
 
 ### Blocks API Representation

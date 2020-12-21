@@ -42,7 +42,7 @@ Section {
 
 ![Block Types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
 
-Docs: https://api.slack.com/reference/block-kit/blocks#section
+- [Slack Documentation](https://api.slack.com/reference/block-kit/blocks#section)
 
 
 
