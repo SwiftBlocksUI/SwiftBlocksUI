@@ -75,6 +75,8 @@ Examples:
 - `SLACK_VERIFICATION_TOKEN` (shared secret with Slack to verify requests)
 - `PORT` (the port the app is going to start on, defaults to 1337)
 - `LOG_SLACK_CLIENT_POSTS` (set to `1` to log the JSON sent to Slack using SlackClient)
+- `blocks.log.blocks` (`yes` to log the structure of outgoing API blocks)
+- `blocks.log.blocks.json` (`yes` to log the raw JSON of outgoing blocks)
 - `macro.core.numthreads`
 - `macro.core.iothreads`
 - `macro.core.retain.debug`
