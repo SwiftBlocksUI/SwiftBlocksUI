@@ -115,7 +115,9 @@ public func interactiveBlocks<B: Blocks>(@BlocksBuilder blocks: () -> B)
 
 import enum SlackBlocksModel.InteractiveRequest
 
-extension Collection where Element == InteractiveRequest.BlockAction {
+extension Collection
+  where Element == SlackBlocksModel.InteractiveRequest.BlockAction
+{
   
   @usableFromInline
   var asFormState: BlocksContext.FormState {

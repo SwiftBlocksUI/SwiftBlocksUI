@@ -9,6 +9,10 @@
 import struct Foundation.URL
 import enum   SlackBlocksModel.Block
 
+extension Link: MarkdownTextPrimitive {
+  var contentString : String { return title }
+}
+
 extension Link: BlocksPrimitive {
   
   // TODO: Check whether we can reduce the duping w/ `Text`. It is a little
@@ -17,58 +21,27 @@ extension Link: BlocksPrimitive {
   enum LinkRenderingError: Swift.Error {
     case internalInconsistency
   }
-  
-  public func render(in context: BlocksContext) throws {
-    guard let block = context.currentBlock else {
-      return try RichText { Paragraph(content: { self }) }
-                   .render(in: context)
-    }
-    
-    // All this is a little messy, but we want to render Text differently
-    // depending on the target container.
-    // Also: Presumably lot's of CoW
-    switch block {
-      case .divider:
-        assertionFailure("open divider block, should never happen")
-        context.closeBlock()
-        return try render(in: context)
-        
-      case .richText : return try renderIntoRichText(in: context)
-      case .section  : return try renderIntoSection (in: context)
-      case .actions  : return try renderIntoActions (in: context)
-      case .context  : return try renderIntoContext (in: context)
-      case .input    : return try renderIntoInput   (in: context)
 
-      case .image:
-        // A Link doesn't make sense in an image, right? There is the URL,
-        // but that is non-optional?
-        context.closeBlock()
-        return try render(in: context)
+  func renderIntoHeader(in context: BlocksContext) throws {
+    // This has special URL behaviour
+    guard case .header(var header) = context.currentBlock else {
+      assertionFailure("expected header block, got \(context)")
+      throw MarkdownTextPrimitiveRenderingError.internalInconsistency
     }
+
+    context.currentBlock = nil
+    if title.isEmpty {
+      header.text += destination.absoluteString
+    }
+    else {
+      header.text += "[\(title)](\(destination.absoluteString))"
+    }
+    context.currentBlock = .header(header)
   }
   
-  private func renderIntoInput(in context: BlocksContext) throws {
-    guard case .input(let input) = context.currentBlock else {
-      assertionFailure("expected input block, got \(context)")
-      throw LinkRenderingError.internalInconsistency
-    }
+  func renderIntoActions(in context: BlocksContext) throws {
+    // This has special URL behaviour
     
-    guard !input.containsDummyElement else {
-      // I guess we could use a leading Text as the Input hint?
-      assertionFailure("unexpected Input nesting: \(context)")
-      return context.log.error("attempt to embed Link in Input: \(context)")
-    }
-    
-    guard case .staticSelect = input.element else {
-      assertionFailure("unexpected Input nesting: \(context)")
-      return context.log.error(
-        "attempt to embed \(self) in \(input.element): \(context)")
-    }
-
-    try renderAsOption(in: context)
-  }
-
-  private func renderIntoActions(in context: BlocksContext) throws {
     guard case .actions(var actions) = context.currentBlock else {
       assertionFailure("expected actions block, got \(context)")
       throw LinkRenderingError.internalInconsistency
@@ -115,20 +88,9 @@ extension Link: BlocksPrimitive {
     }
   }
 
-  private func renderIntoContext(in context: BlocksContext) throws {
-    guard case .context(var ctxBlock) = context.currentBlock else {
-      assertionFailure("expected context block, got \(context)")
-      throw LinkRenderingError.internalInconsistency
-    }
-
-    context.currentBlock = nil
-    ctxBlock.elements.append(
-      .text(.init(slackMarkdownString, type: .markdown(verbatim: false)))
-    )
-    context.currentBlock = .context(ctxBlock)
-  }
-  
-  private func renderIntoSection(in context: BlocksContext) throws {
+  func renderIntoSection(in context: BlocksContext) throws {
+    // Special button behaviour
+    
     guard case .section(var section) = context.currentBlock else {
       assertionFailure("expected section block, got \(context)")
       throw LinkRenderingError.internalInconsistency
@@ -188,7 +150,14 @@ extension Link: BlocksPrimitive {
     }
   }
 
-  private func renderIntoRichText(in context: BlocksContext) throws {
+  func renderIntoImageBlock(in context: BlocksContext) throws {
+    // A Link doesn't make sense in an image, right? There is the URL,
+    // but that is non-optional?
+    context.closeBlock()
+    return try render(in: context)
+  }
+  
+  func renderIntoRichText(in context: BlocksContext) throws {
     guard case .richText(var richText) = context.currentBlock else {
       assertionFailure("expected richtext block, got \(context)")
       throw LinkRenderingError.internalInconsistency
@@ -205,14 +174,14 @@ extension Link: BlocksPrimitive {
     context.currentBlock = .richText(richText)
   }
 
-  private var asBlockText: Block.Text {
+  var asBlockText: Block.Text {
     var text  = Block.Text("")
     if isStyled { text.appendMarkdown(style.markdownStyle(title)) }
     else        { text.append        (title)  }
     return text
   }
 
-  private func renderAsOption(in context: BlocksContext) throws {
+  func renderAsOption(in context: BlocksContext) throws {
     let option = Option(title: asBlockText, url: destination)
     if context.pendingTag == nil {
       // TBD: use URL as value? Probably makes sense.
@@ -223,7 +192,7 @@ extension Link: BlocksPrimitive {
       try option.render(in: context)
     }
   }
-  private func renderAsCheckbox(in context: BlocksContext) throws {
+  func renderAsCheckbox(in context: BlocksContext) throws {
     let checkbox = Checkbox(title: asBlockText, url: destination)
     if context.pendingTag == nil {
       // TBD: use URL as value? Probably makes sense.

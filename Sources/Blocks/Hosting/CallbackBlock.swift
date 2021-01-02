@@ -18,6 +18,30 @@ import struct SlackBlocksModel.CallbackID
  *
  * If the View has no CallbackID assigned, we generate one based on the type
  * signature.
+ *
+ * Careful w/ ordering. This:
+ *
+ *     struct MyForm: Blocks {
+ *       var body: some Blocks {
+ *         View {
+ *           Text("Hello World!")
+ *         }
+ *         .id("xyz")
+ *       }
+ *     }
+ *
+ * is NOT the same like
+ *
+ *     MyForm().id("xyz")
+ *
+ * Only the latter wraps the form in the `IDModifier`.
+ *
+ * User level root Blocks can also implement that for convenience, e.g.
+ *
+ *     struct MyForm: Blocks, CallbackBlock {
+ *        var callbackBlockID : CallbackID? { "xyz" }
+ *     }
+ * 
  */
 public protocol CallbackBlock {
   
@@ -36,6 +60,20 @@ extension IDModifier: CallbackBlock {
   }
 }
 
+
+/**
+ * This exists to avoid issues when system modifiers wrap Blocks. Which would
+ * turn this:
+ *
+ *     MyForm().id("xyz")
+ *
+ * into say this:
+ *
+ *     MyForm().id("xyz").slashEnvironment(....)
+ *
+ * which would normally hide the id. By implementing
+ * `CallbackIDTransparentModifier` the id is forwarded.
+ */
 public protocol CallbackIDTransparentModifier: CallbackBlock {
   associatedtype Content : Blocks
   var content : Content { get }

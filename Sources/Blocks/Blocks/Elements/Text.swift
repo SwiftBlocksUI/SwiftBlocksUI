@@ -133,12 +133,12 @@ public struct Text: Equatable {
   // TODO: +(lhs,rhs): smart addition of Text w/ runs
   
   @inlinable
-  static func +(lhs: Text, rhs: Text) -> Text {
+  public static func +(lhs: Text, rhs: Text) -> Text {
     // FIXME: Make smarter, combine runs
     return Text(runs: lhs.runs + rhs.runs)
   }
   @inlinable
-  static func +(lhs: Text, rhs: String) -> Text {
+  public static func +(lhs: Text, rhs: String) -> Text {
     return Text(runs: lhs.runs + [ .verbatim(rhs) ])
   }
 }

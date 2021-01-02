@@ -42,4 +42,24 @@ Section {
 
 ![Block Types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
 
-Docs: https://api.slack.com/reference/block-kit/blocks#section
+- [Slack Documentation](https://api.slack.com/reference/block-kit/blocks#section)
+
+
+
+### Blocks API Representation
+
+```json
+{
+  "type"      : "section",
+  "text"      : {
+    "type" : "mrkdwn",
+    "text" : "This is a section block with a button."
+  },
+  "accessory" : {
+    "type"      : "button",
+    "value"     : "click_me_123",
+    "action_id" : "button-action",
+    "text"      : { "type": "plain_text", "text": "Click Me", "emoji": true }
+  }
+}
+```

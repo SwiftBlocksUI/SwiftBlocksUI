@@ -47,7 +47,8 @@ import BlocksExpress
 public struct MessageAction<Content: Blocks>: Endpoints {
   
   public typealias Handler =
-    ( InteractiveRequest.MessageAction, ServerResponse ) throws -> Void
+    ( SlackBlocksModel.InteractiveRequest.MessageAction, ServerResponse )
+    throws -> Void
   
   public let id         : String?
   public let callbackID : CallbackID?
@@ -117,7 +118,7 @@ public extension MessageAction {
     
     self.handler = { action, res in
       let blocks = content().messageActionEnvironment(action)
-
+      
       let response = BlocksEndpointResponse(
         requestContainer: action.container, responseURL: action.responseURL,
         triggerID: action.triggerID, userID: action.user.id,

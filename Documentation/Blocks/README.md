@@ -50,6 +50,7 @@ in some other block (e.g. in `Section` `Accessory`s or `Context`s).
 - [Divider](TopLevel/Divider.md)
 - [Input](TopLevel/Input.md)
 - [View](TopLevel/View.md)
+- [Header](TopLevel/Header.md)
 - [RichText](TopLevel/RichText.md)
 
 #### Element Blocks

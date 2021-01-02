@@ -15,7 +15,8 @@ import BlocksExpress
 public struct ViewSubmission: Endpoints {
   
   public typealias Handler =
-    ( InteractiveRequest.ViewSubmission, ServerResponse ) throws -> Void
+    ( SlackBlocksModel.InteractiveRequest.ViewSubmission, ServerResponse )
+    throws -> Void
   
   public let id      : String?
   public let handler : Handler

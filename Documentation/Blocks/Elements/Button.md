@@ -60,3 +60,16 @@ This contains a `Button` in an [`Actions`](../TopLevel/Actions.md) block:
 ![block types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
 
 Docs: https://api.slack.com/reference/block-kit/block-elements#button
+
+
+### Blocks API Representation
+
+```json
+{
+  "type"      : "button",
+  "value"     : "click_me_123",
+  "action_id" : "actionId-2",
+  "text"      : { "type": "plain_text", "text": "Click Me", "emoji": true }
+}
+```
+

@@ -21,3 +21,16 @@ and as an [`Accessory`](Accessory.md) in a
 ![block types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
 
 Docs: https://api.slack.com/reference/block-kit/block-elements#datepicker
+
+### Blocks API Representation
+
+```json
+{
+  "type"         : "datepicker",
+  "initial_date" : "1990-04-28",
+  "action_id"    : "actionId-1"
+  "placeholder"  : {
+    "type": "plain_text", "text": "Select a date", "emoji": true
+  },
+}
+```

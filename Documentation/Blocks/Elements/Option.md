@@ -25,3 +25,34 @@ Picker("Importance", selection: $importance,
 ```
 
 Docs: https://api.slack.com/reference/block-kit/block-elements#multi_select
+
+
+### Blocks API Representation
+
+In a static Picker:
+```json
+{
+  "type"        : "static_select",
+  "action_id"   : "actionId-3",
+  "placeholder" : {
+    "type": "plain_text", "text": "Select an item", "emoji": true
+  },
+  "options"     : [
+    { "text": {
+        "type": "plain_text", "text": "*this is plain_text text*", "emoji": true
+      },
+      "value": "value-0"
+    },
+    { "text": {
+        "type": "plain_text", "text": "*this is plain_text text*", "emoji": true
+      },
+      "value": "value-1"
+    },
+    { "text": {
+        "type": "plain_text", "text": "*this is plain_text text*", "emoji": true
+      },
+      "value": "value-2"
+    }
+  ]
+}
+```

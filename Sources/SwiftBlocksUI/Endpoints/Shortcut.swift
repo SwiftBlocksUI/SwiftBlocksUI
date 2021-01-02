@@ -33,7 +33,8 @@ import struct   SlackBlocksModel.MessageResponse
 public struct Shortcut<Content: Blocks>: Endpoints {
   
   public typealias Handler =
-    ( InteractiveRequest.Shortcut, ServerResponse ) throws -> Void
+    ( SlackBlocksModel.InteractiveRequest.Shortcut, ServerResponse )
+    throws -> Void
   
   public let id         : String?
   public let callbackID : CallbackID?

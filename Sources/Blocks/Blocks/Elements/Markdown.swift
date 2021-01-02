@@ -1,6 +1,6 @@
 //
 //  Markdown.swift
-//  Markdown
+//  Blocks
 //
 //  Created by Helge Heß.
 //  Copyright © 2020 ZeeZide GmbH. All rights reserved.
@@ -31,6 +31,10 @@ import enum  SlackBlocksModel.Block
  *
  *     *Price:* 100 €
  *
+ * The block also supports generating Slack specific runs, e.g. dates:
+ *
+ *     Markdown(Date(), format: .date)
+ *
  */
 public struct Markdown: Equatable {
   
@@ -44,13 +48,17 @@ public struct Markdown: Equatable {
   }
   
   @inlinable
-  static func +(lhs: Markdown, rhs: Markdown) -> Markdown {
+  public static func +(lhs: Markdown, rhs: Markdown) -> Markdown {
     // FIXME: Make smarter, combine runs
     return Markdown(lhs.markdown + rhs.markdown)
   }
   @inlinable
-  static func +(lhs: Markdown, rhs: String) -> Markdown {
+  public static func +(lhs: Markdown, rhs: String) -> Markdown {
     return Markdown(lhs.markdown + rhs)
+  }
+  @inlinable
+  public static func +(lhs: Text, rhs: Markdown) -> Markdown {
+    return Markdown(lhs.slackMarkdownString) + rhs
   }
 }
 
@@ -70,6 +78,27 @@ public extension Markdown {
   @inlinable func strike() -> Markdown { return adding(.strike) }
 }
 
+ extension String {
+  
+  @usableFromInline
+  func stringByRemovingMarkdown() -> String {
+    return self // TODO :-)
+  }
+  @usableFromInline
+  func stringByEscapingMarkdown() -> String {
+    // Note how the Slash is escaped here:
+    //   <!date^1608205500^{time}|12\/17\/20>
+    return self
+      .replacingOccurrences(of: "\\", with: "\\\\")
+      .replacingOccurrences(of: "/", with: "\\/")
+      .replacingOccurrences(of: ">", with: "\\>")
+  }
+  @usableFromInline
+  func stringByEscapingFallbackMarkdown() -> String {
+    return stringByEscapingMarkdown()
+  }
+}
+
 public extension Markdown {
   
   var slackMarkdownString: String {
@@ -77,6 +106,15 @@ public extension Markdown {
   }
   
   var contentString: String {
-    return markdown // FIXME: remove markdown
+    return markdown.stringByRemovingMarkdown()
+  }
+}
+
+public extension Markdown {
+  
+  @inlinable
+  init(emoji named: String) {
+    assert(!named.contains(":"))
+    self.init(":\(named):")
   }
 }

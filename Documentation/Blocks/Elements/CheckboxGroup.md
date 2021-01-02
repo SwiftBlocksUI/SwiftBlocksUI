@@ -25,3 +25,24 @@ CheckboxGroup("Please select desirable restaurants:") {
 ```
 
 Docs: https://api.slack.com/reference/block-kit/block-elements#checkboxes
+
+
+### Blocks API Representation
+
+```json
+{
+  "type"      : "checkboxes",
+  "action_id" : "actionId-1",
+  "options": [
+    { "value": "value-0",
+      "text"        : { "type": "mrkdwn", "text": "*this is mrkdwn text*" },
+      "description" : { "type": "mrkdwn", "text": "*this is mrkdwn text*" }
+    },
+    {
+      "value": "value-2",
+      "text"        : { "type": "mrkdwn", "text": "*this is mrkdwn text*" },
+      "description" : { "type": "mrkdwn", "text": "*this is mrkdwn text*" }
+    }
+  ]
+}
+```

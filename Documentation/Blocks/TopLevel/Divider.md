@@ -18,3 +18,13 @@ Section {
 ```
 
 ![Block Types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
+
+- [Slack Documentation](https://api.slack.com/reference/block-kit/blocks#divider)
+
+### Blocks API Representation
+
+```json
+{
+  "type": "divider"
+}
+```

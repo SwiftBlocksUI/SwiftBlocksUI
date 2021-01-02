@@ -43,3 +43,13 @@ TextField("Password", text: $person.lastName)
 ```
 
 Docs: https://api.slack.com/reference/block-kit/block-elements#input
+
+
+### Blocks API Representation
+
+```json
+{
+  "type"      : "plain_text_input",
+  "action_id" : "plain_text_input-action"
+}
+```

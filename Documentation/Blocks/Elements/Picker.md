@@ -51,3 +51,67 @@ Docs:
 
 A `Picker` ("Select an item") in an [`Actions`](../TopLevel/Actions.md) block:
 ![block types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
+
+
+### Blocks API Representation
+
+User Picker:
+```json
+{ "type"        : "users_select",
+  "action_id"   : "actionId-2",
+  "placeholder" : {
+    "type": "plain_text", "text": "Select a user", "emoji": true
+  }
+}
+```
+
+Channel Picker:
+```json
+{
+  "type"        : "channels_select",
+  "action_id"   : "actionId-1",
+  "placeholder" : {
+    "type": "plain_text", "text": "Select a channel", "emoji": true
+  }
+}
+```
+
+Conversation Picker:
+```json
+{
+  "type"        : "conversations_select",
+  "action_id"   : "actionId-0"
+  "placeholder" : {
+    "type": "plain_text", "text": "Select a conversation", "emoji": true
+  }
+}
+```
+
+Static Picker:
+```json
+{
+  "type"        : "static_select",
+  "action_id"   : "actionId-3",
+  "placeholder" : {
+    "type": "plain_text", "text": "Select an item", "emoji": true
+  },
+  "options"     : [
+    { "text": {
+        "type": "plain_text", "text": "*this is plain_text text*", "emoji": true
+      },
+      "value": "value-0"
+    },
+    { "text": {
+        "type": "plain_text", "text": "*this is plain_text text*", "emoji": true
+      },
+      "value": "value-1"
+    },
+    { "text": {
+        "type": "plain_text", "text": "*this is plain_text text*", "emoji": true
+      },
+      "value": "value-2"
+    }
+  ]
+}
+```
+

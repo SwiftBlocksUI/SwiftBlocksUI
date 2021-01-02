@@ -9,7 +9,7 @@
 import struct Logging.Logger
 import enum   SlackBlocksModel.Block
 
-extension Text {
+extension Text: MarkdownTextPrimitive {
   
   var blocksMarkdown : String {
     if isStyled { return runs.lazy.map { $0.asTargetRun }.blocksMarkdownString }
@@ -22,94 +22,11 @@ extension Text: BlocksPrimitive {
   enum TextRenderingError: Swift.Error {
     case internalInconsistency
   }
-  
-  public func render(in context: BlocksContext) throws {
-    guard let block = context.currentBlock else {
-      return try RichText { Paragraph(content: { self }) }
-                   .render(in: context)
-    }
-    
-    // All this is a little messy, but we want to render Text differently
-    // depending on the target container.
-    // Also: Presumably lot's of CoW
-    switch block {
-      case .divider:
-        assertionFailure("open divider block, should never happen")
-        context.closeBlock()
-        return try render(in: context)
-        
-      case .richText : return try renderIntoRichText  (in: context)
-      case .section  : return try renderIntoSection   (in: context)
-      case .actions  : return try renderIntoActions   (in: context)
-      case .image    : return try renderIntoImageBlock(in: context)
-      case .context  : return try renderIntoContext   (in: context)
-      case .input    : return try renderIntoInput   (in: context)
-    }
-  }
 
-  private func renderIntoInput(in context: BlocksContext) throws {
-    guard case .input(let input) = context.currentBlock else {
-      assertionFailure("expected input block, got \(context)")
-      throw TextRenderingError.internalInconsistency
-    }
-    
-    guard !input.containsDummyElement else {
-      // I guess we could use a leading Text as the Input hint?
-      assertionFailure("unexpected Input nesting: \(context)")
-      context.log.error("attempt to embed Text in Input: \(context)")
-      return
-    }
-    
-    guard case .staticSelect = input.element else {
-      assertionFailure("unexpected Input nesting: \(context)")
-      return context.log.error(
-        "attempt to embed \(self) in \(input.element): \(context)")
-    }
-    
-    try renderAsOption(in: context)
-  }
-
-  private func renderIntoActions(in context: BlocksContext) throws {
-    guard case .actions(var actions) = context.currentBlock else {
-      assertionFailure("expected actions block, got \(context)")
-      throw TextRenderingError.internalInconsistency
-    }
-    
-    switch context.level2Nesting {
-      case .none: // Link in Actions becomes a Button
-        context.log.error("attempt to render text into top-level Actions")
-        return
-      case .field, .accessory, .level2:
-        assertionFailure("unexpected Actions nesting: \(context)")
-        context.log.error("unexpected Actions nesting: \(context)")
-        return
-
-      case .picker:
-        guard case .staticSelect = actions.elements.last else {
-          context.log.error(
-            "unexpected Actions nesting (expected static select Picker)")
-          return
-        }
-        try renderAsOption(in: context)
-
-      case .button:
-        guard case .button(var button) = actions.elements.last else {
-          assertionFailure("button nesting, but no button available?!")
-          context.log.error("unexpected Actions nesting: \(context)")
-          return
-        }
-        actions.elements.removeLast()
-        
-        button.text += contentString
-        actions.elements.append(.button(button))
-        context.currentBlock = .actions(actions)
-    }
-  }
-
-  private func renderIntoContext(in context: BlocksContext) throws {
+  func renderIntoContext(in context: BlocksContext) throws {
     guard case .context(var ctxBlock) = context.currentBlock else {
       assertionFailure("expected context block, got \(context)")
-      throw TextRenderingError.internalInconsistency
+      throw MarkdownTextPrimitiveRenderingError.internalInconsistency
     }
     
     context.currentBlock = nil
@@ -120,24 +37,9 @@ extension Text: BlocksPrimitive {
     context.currentBlock = .context(ctxBlock)
   }
 
-  private func renderIntoImageBlock(in context: BlocksContext) throws {
-    guard case .image(var image) = context.currentBlock else {
-      assertionFailure("expected section block, got \(context)")
-      throw TextRenderingError.internalInconsistency
-    }
+  func renderIntoSection(in context: BlocksContext) throws {
+    // This has different styling generation
     
-    context.currentBlock = nil
-    if image.alt.isEmpty { // first Text goes into `alt` if that is empty
-      image.alt = contentString
-    }
-    else { // alt is not empty, add to title
-      if let title = image.title { image.title = title + contentString }
-      else                       { image.title = contentString }
-    }
-    context.currentBlock = .image(image)
-  }
-
-  private func renderIntoSection(in context: BlocksContext) throws {
     guard case .section(var section) = context.currentBlock else {
       assertionFailure("expected section block, got \(context)")
       throw TextRenderingError.internalInconsistency
@@ -200,7 +102,7 @@ extension Text: BlocksPrimitive {
     }
   }
 
-  private func renderIntoRichText(in context: BlocksContext) throws {
+  func renderIntoRichText(in context: BlocksContext) throws {
     guard case .richText(var richText) = context.currentBlock else {
       assertionFailure("expected richtext block, got \(context)")
       throw TextRenderingError.internalInconsistency
@@ -217,36 +119,10 @@ extension Text: BlocksPrimitive {
     context.currentBlock = .richText(richText)
   }
   
-  private var asBlockText: Block.Text {
+  var asBlockText: Block.Text {
     var text  = Block.Text("")
     if isStyled { text.appendMarkdown(blocksMarkdown) }
     else        { text.append        (contentString)  }
     return text
-  }
-
-  private func renderAsOption(in context: BlocksContext) throws {
-    let text   = asBlockText
-    let option = Option(title: text)
-    
-    if context.pendingTag == nil {
-      context.pendingTag = text.value; defer { context.pendingTag = nil }
-      return try option.render(in: context)
-    }
-    else {
-      return try option.render(in: context)
-    }
-  }
-
-  private func renderAsCheckbox(in context: BlocksContext) throws {
-    let text     = asBlockText
-    let checkbox = Checkbox(title: text)
-    
-    if context.pendingTag == nil {
-      context.pendingTag = text.value; defer { context.pendingTag = nil }
-      return try checkbox.render(in: context)
-    }
-    else {
-      return try checkbox.render(in: context)
-    }
   }
 }

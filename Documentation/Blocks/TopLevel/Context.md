@@ -20,4 +20,26 @@ Context {
 
 ![Block Types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
 
-Docs: https://api.slack.com/reference/block-kit/blocks#context
+- [Slack Documentation](https://api.slack.com/reference/block-kit/blocks#context)
+
+
+### Blocks API Representation
+
+```json
+{
+  "type": "context",
+  "elements": [
+    { "type" : "mrkdwn",
+      "text" : "*This* is :smile: markdown"
+    },
+    { "type"      : "image",
+      "alt_text"  : "cute cat"
+      "image_url" : "https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg"
+    },
+    { "type": "plain_text",
+      "text": "Author: K A Applegate",
+      "emoji": true
+    }
+  ]
+}
+```

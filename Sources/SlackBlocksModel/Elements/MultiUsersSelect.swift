@@ -9,7 +9,8 @@
 public extension Block {
   
   /**
-   * Docs: https://api.slack.com/reference/block-kit/block-elements#users_multi_select
+   * Docs:
+   * https://api.slack.com/reference/block-kit/block-elements#users_multi_select
    */
   struct MultiUsersSelect: SelectElement {
     

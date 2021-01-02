@@ -53,8 +53,10 @@ public enum Block: Encodable {
   
   case context(Context)
   
-  // TODO: file
+  case header(Header)
   
+  // TODO: file
+  // TODO: event
   
   // MARK: - Encoding
   
@@ -72,6 +74,9 @@ public enum Block: Encodable {
       case .image   (let v): try v.encode(to: encoder)
       case .input   (let v): try v.encode(to: encoder)
       case .context (let v): try v.encode(to: encoder)
+      case .header  (let v): try v.encode(to: encoder)
+        
+      // TODO: file, event
 
       case .divider:
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -93,6 +98,7 @@ public extension Block {
     public static let context  = BlockTypeSet(rawValue: 1 << 5)
     public static let input    = BlockTypeSet(rawValue: 1 << 6)
     public static let image    = BlockTypeSet(rawValue: 1 << 7)
+    public static let header   = BlockTypeSet(rawValue: 1 << 8)
   }
   
   var blockTypeSet : BlockTypeSet {
@@ -104,6 +110,7 @@ public extension Block {
       case .image    : return [ .image    ]
       case .input    : return [ .input    ]
       case .context  : return [ .context  ]
+      case .header   : return [ .header   ]
     }
   }
 }
@@ -160,6 +167,7 @@ extension Block {
       case .image   (let v) : return v.id
       case .input   (let v) : return v.id
       case .context (let v) : return v.id
+      case .header  (let v) : return v.id
       case .divider         : return "$divider"
     }
   }
@@ -169,12 +177,13 @@ extension Block: CustomStringConvertible {
   
   public var description: String {
     switch self {
-      case .richText(let v) : return "\(v)"
-      case .section (let v) : return "\(v)"
-      case .actions (let v) : return "\(v)"
+      case .richText(let v) : return v.description
+      case .section (let v) : return v.description
+      case .actions (let v) : return v.description
       case .image   (let v) : return "\(v)"
       case .input   (let v) : return v.description
-      case .context (let v) : return "\(v)"
+      case .context (let v) : return v.description
+      case .header  (let v) : return v.description
       case .divider         : return "<DividerBlock>"
     }
   }
@@ -192,6 +201,7 @@ public extension Block {
       case .image   (let v) : return v.blocksMarkdownString
       case .input   (let v) : return v.blocksMarkdownString
       case .context (let v) : return v.blocksMarkdownString
+      case .header  (let v) : return v.blocksMarkdownString
       case .divider         : return "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"
     }
   }

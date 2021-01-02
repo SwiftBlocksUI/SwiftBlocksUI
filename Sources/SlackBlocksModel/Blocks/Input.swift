@@ -8,6 +8,17 @@
 
 public extension Block {
   
+  /**
+   * An Input block.
+   * 
+   * Input blocks are only valid in modals. Unlike you might expect, an
+   * Input only holds a *single* element (e.g. a `TextField`, a `DatePicker`
+   * or one of the menus)!
+   * It annotates that `TextField` with required extra information like a label
+   * and a hint.
+   *
+   * Docs: https://api.slack.com/reference/block-kit/blocks#input
+   */
   struct Input: Encodable {
     public static let validInSurfaces = BlockSurfaceSet.modals
     

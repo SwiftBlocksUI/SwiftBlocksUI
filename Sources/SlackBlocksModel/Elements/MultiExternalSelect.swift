@@ -12,7 +12,8 @@ public extension Block {
    * Select driven by an external datasource (needs to be configured in the app
    * config).
    *
-   * Docs: https://api.slack.com/reference/block-kit/block-elements#external_select
+   * Docs:
+   * https://api.slack.com/reference/block-kit/block-elements#external_select
    */
   struct MultiExternalSelect: SelectElement {
     

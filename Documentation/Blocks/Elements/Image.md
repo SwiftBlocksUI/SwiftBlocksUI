@@ -21,3 +21,21 @@ Two `Image`s in a [`Contexts`](../TopLevel/`Contexts`.md) block:
 ![block types](https://zeezide.de/img/blocksui/BlockTypes-Annotated.png)
 
 Docs: https://api.slack.com/reference/block-kit/block-elements#image
+
+
+### Blocks API Representation
+
+When used as a block:
+
+```json
+{
+  "type"      : "image",
+  "image_url" : "http://placekitten.com/500/500",
+  "alt_text"  : "A cute kitten",
+  "title"     : {
+    "type"  : "plain_text",
+    "text"  : "A cute kitten",
+    "emoji" : true
+  }
+}
+```

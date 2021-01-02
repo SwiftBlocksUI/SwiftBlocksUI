@@ -53,7 +53,7 @@ extension Option: BlocksPrimitive {
     
     switch block {
     
-      case .richText, .image, .context, .divider:
+      case .richText, .image, .context, .divider, .header:
         return context.log
           .error("Attempt to use Option in a unsupported block: \(block)")
 
