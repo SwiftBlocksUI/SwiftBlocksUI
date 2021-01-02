@@ -49,7 +49,7 @@ public enum EnterpriseEnvironmentKey: EnvironmentKey {
 }
 
 public enum SlashCommandEnvironmentKey: EnvironmentKey {
-  public static var defaultValue : String { "" }
+  public static var defaultValue = ""
 }
 public enum CallbackIDEnvironmentKey: EnvironmentKey {
   public static var defaultValue : CallbackID { .none }

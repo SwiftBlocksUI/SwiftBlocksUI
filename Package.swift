@@ -20,15 +20,15 @@ let package = Package(
   
   dependencies: [
     .package(url: "https://github.com/Macro-swift/Macro.git",
-             from: "0.5.8"),
+             from: "0.6.2"),
     .package(url: "https://github.com/Macro-swift/MacroExpress.git",
-             from: "0.5.7"),
+             from: "0.6.1"),
     .package(url: "https://github.com/Macro-swift/MacroApp.git",
              from: "0.5.7"),
     .package(url: "https://github.com/apple/swift-nio.git",
-             from: "2.25.0"),
+             from: "2.25.1"),
     .package(url: "https://github.com/wickwirew/Runtime.git",
-             from: "2.1.1"),
+             from: "2.2.2"),
     .package(url: "https://github.com/apple/swift-log.git",
              from: "1.4.0")
   ],
@@ -48,8 +48,7 @@ let package = Package(
     .target(name: "SwiftBlocksUI",    
             dependencies: [ "SlackBlocksModel", "SlackClient",
                             "Blocks", "BlocksExpress",
-                            "Macro",  "Runtime",
-                            "MacroExpress", "MacroApp" ] ),
+                            "Macro",  "Runtime", "MacroExpress", "MacroApp" ] ),
 
     .testTarget(name: "SwiftBlocksUITests",
                 dependencies: [ "SwiftBlocksUI", "MacroTestUtilities" ])
