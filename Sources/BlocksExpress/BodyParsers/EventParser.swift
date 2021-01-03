@@ -6,6 +6,7 @@
 //  Copyright © 2020 ZeeZide GmbH. All rights reserved.
 //
 
+import struct    Logging.Logger
 import struct    Foundation.Date
 import struct    Foundation.TimeInterval
 import typealias MacroExpress.Middleware
@@ -16,6 +17,7 @@ import enum      MacroExpress.bodyParser
 import class     MacroExpress.Route
 import func      MacroExpress.typeIs
 import class     SlackBlocksModel.SlackEvent
+import protocol  SlackBlocksModel.StringID
 import protocol  MacroCore.EnvironmentKey
 
 
@@ -47,7 +49,7 @@ public extension bodyParser {
           return next() // parsed already
         }
         
-        guard typeIs(req, [ "json" ]) != nil,
+        guard req.is("json"),
               let json  = req.body.json as? [ String : Any ],
               let type  = json["type"]  as? String,
               let token = json["token"] as? String else
@@ -55,7 +57,8 @@ public extension bodyParser {
           req.slackEventError = SlackEventError.notASlackEvent
           return next()
         }
-        
+        req.log[metadataKey: "slack-event-type"] = .string(type)
+
         // MARK: - Handle URL verification event in here
         
         if type == "url_verification" {
@@ -69,6 +72,7 @@ public extension bodyParser {
           return next()
         }
 
+        event.addInfoToLogger(&req.log)
         req.log.debug("successfully parsed Slack event")
         req.slackEvent = event
         next()
@@ -81,6 +85,23 @@ public extension bodyParser {
   internal enum SlackEventError: Swift.Error {
     case notASlackEvent
     case couldNotParseEvent
+  }
+}
+
+extension SlackEvent {
+  
+  @usableFromInline
+  func addInfoToLogger(_ logger: inout Logger) {
+    func add<V: StringID>(_ key: String, _ value: V?) {
+      guard let value = value else { return }
+      logger[metadataKey: key] = .string(value.id)
+    }
+    
+    add("slack-user-id" , userID)
+    add("slack-team-id" , teamID)
+    add("slack-app-id"  , applicationID)
+    logger[metadataKey: "slack-event-type"] = .string(type.rawValue)
+    logger[metadataKey: "slack-event-id"]   = .string(eventID)
   }
 }
 

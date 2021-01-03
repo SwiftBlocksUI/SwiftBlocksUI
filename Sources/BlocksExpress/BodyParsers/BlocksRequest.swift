@@ -102,7 +102,7 @@ public extension bodyParser {
         }
         // Detect Slash request
         else if !req.body[string: "command"].isEmpty,
-                typeIs(req, [ "application/x-www-form-urlencoded" ]) != nil,
+                req.is("application/x-www-form-urlencoded"),
                 let request = SlashRequest(req.body)
         {
           req.blocksEnvironment = .init(
