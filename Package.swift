@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.3
 
 import PackageDescription
 
@@ -34,23 +34,30 @@ let package = Package(
   ],
   
   targets: [
-    .target(name: "SlackBlocksModel", dependencies: [] ),
-    .target(name: "SlackClient",
-            dependencies: [ "SlackBlocksModel", "Macro" ] ),
-    .target(name: "Blocks",
-            dependencies: [ "SlackBlocksModel", "Runtime", 
-                            "NIO", // a hack to get access to CNIOSHA1
-                            "Logging" ] ),
+    .target(name: "SlackBlocksModel",
+            exclude: [ "README.md", "Elements/README.md" ]),
+    .target(name: "SlackClient", dependencies: [ "SlackBlocksModel", "Macro" ],
+            exclude: [ "README.md" ]),
+    .target(name: "Blocks", dependencies: [
+      "SlackBlocksModel", "Runtime",
+      // a hack to get access to CNIOSHA1:
+      .product(name: "NIO",     package: "swift-nio"), 
+      .product(name: "Logging", package: "swift-log")
+    ], exclude: [ "README.md", "Rendering/README.md", "Blocks/README.md" ]),
     
-    .target(name: "BlocksExpress",    
-            dependencies: [ "Blocks", "MacroExpress" ] ),
+    .target(name         : "BlocksExpress", 
+            dependencies : [ "Blocks", "MacroExpress" ],
+            exclude      : [ "README.md" ]),
 
-    .target(name: "SwiftBlocksUI",    
-            dependencies: [ "SlackBlocksModel", "SlackClient",
-                            "Blocks", "BlocksExpress",
-                            "Macro",  "Runtime", "MacroExpress", "MacroApp" ] ),
+    .target(name: "SwiftBlocksUI", dependencies: [ 
+      "SlackBlocksModel", "SlackClient",
+      "Blocks", "BlocksExpress",
+      "Macro",  "Runtime", "MacroExpress", "MacroApp"
+    ], exclude: [ "README.md", "EndpointActionResponse/README.md" ]),
 
-    .testTarget(name: "SwiftBlocksUITests",
-                dependencies: [ "SwiftBlocksUI", "MacroTestUtilities" ])
+    .testTarget(name: "SwiftBlocksUITests", dependencies: [
+      "SwiftBlocksUI", 
+      .product(name: "MacroTestUtilities", package: "Macro")
+    ])
   ]
 )
