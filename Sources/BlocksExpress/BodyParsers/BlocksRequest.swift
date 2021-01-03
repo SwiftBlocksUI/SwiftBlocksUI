@@ -6,7 +6,8 @@
 //  Copyright © 2020 ZeeZide GmbH. All rights reserved.
 //
 
-import class http.IncomingMessage
+import protocol MacroCore.EnvironmentKey
+import class    http.IncomingMessage
 import SlackBlocksModel
 import express
 
@@ -27,7 +28,6 @@ public extension bodyParser {
    *     }
    *
    */
-  @inlinable
   static func parseBlocksEnvironment() -> Middleware {
     // This is the middleware equivalent to the Blocks `InteractiveEnvironment`
     // environment keys.
@@ -39,8 +39,10 @@ public extension bodyParser {
       slackEvent(),
       
       { req, res, next in
-        if req.extra[didParseBlocksEnvironmentKey] != nil { return }
-        req.extra[didParseBlocksEnvironmentKey] = true
+        guard !req.environment[BlocksEnvironmentParsedKey.self] else {
+          return next()
+        }
+        req.environment[BlocksEnvironmentParsedKey.self] = true
               
         if let request = req.interactiveRequest {
           switch request {
@@ -120,10 +122,14 @@ public extension bodyParser {
   }
 }
 
-@usableFromInline
-let blocksEnvironmentKey = "macro.slick.blocks-environment"
-@usableFromInline
-let didParseBlocksEnvironmentKey = "macro.slick.blocks-environment.parsed"
+enum BlocksEnvironmentRequestKey: EnvironmentKey {
+  static let defaultValue = IncomingMessage.BlocksEnvironment.empty
+  static let loggingKey   = "slick-blocks-env"
+}
+enum BlocksEnvironmentParsedKey: EnvironmentKey {
+  static let defaultValue = false
+  static let loggingKey   = "slick-blocks-env-parsed"
+}
 
 public extension IncomingMessage {
   
@@ -151,17 +157,8 @@ public extension IncomingMessage {
                  BlocksEnvironment(user: nil, team: nil, conversation: nil)
   }
 
-  @inlinable
   var blocksEnvironment: BlocksEnvironment {
-    set { extra[blocksEnvironmentKey] = newValue }
-    get {
-      guard let value = extra[blocksEnvironmentKey] else { return .empty }
-      guard let env   = value as? BlocksEnvironment else {
-        log.error("blocksEnvironment extra contains a foreign value: \(value)")
-        assertionFailure("incorrect value in blocksEnvironment extra")
-        return .empty
-      }
-      return env
-    }
+    set { environment[BlocksEnvironmentRequestKey.self] = newValue }
+    get { return environment[BlocksEnvironmentRequestKey.self]     }
   }
 }

@@ -14,6 +14,7 @@ import enum      MacroExpress.bodyParser
 import class     MacroExpress.Route
 import func      MacroExpress.typeIs
 import enum      SlackBlocksModel.InteractiveRequest
+import protocol  MacroCore.EnvironmentKey
 
 public extension bodyParser {
 
@@ -79,33 +80,27 @@ public extension bodyParser {
   }
 }
 
-@usableFromInline
-let irRequestKey = "macro.slick.interactive-request"
-@usableFromInline
-let irErrorKey   = "macro.slick.interactive-request-error"
+enum SlackInteractiveRequestKey: EnvironmentKey {
+  static let defaultValue : InteractiveRequest? = nil
+  static let loggingKey   = "slack-ir"
+}
+enum SlackInteractiveRequestErrorKey: EnvironmentKey {
+  static let defaultValue : Swift.Error? = nil
+  static let loggingKey   = "slack-ir-error"
+}
 
 public extension IncomingMessage {
 
-  @inlinable
   var interactiveRequestError: Swift.Error? {
-    set { extra[irErrorKey] = newValue }
-    get { return extra[irErrorKey] as? Swift.Error }
+    set { environment[SlackInteractiveRequestErrorKey.self] = newValue }
+    get { return environment[SlackInteractiveRequestErrorKey.self]     }
   }
 }
 
 public extension IncomingMessage {
   
-  @inlinable
   var interactiveRequest: InteractiveRequest? {
-    set { extra[irRequestKey] = newValue }
-    get {
-      guard let value   = extra[irRequestKey] else { return nil }
-      guard let request = value as? InteractiveRequest else {
-        log.error("interactiveRequest extra contains a foreign value: \(value)")
-        assertionFailure("incorrect value in interactiveRequest extra")
-        return nil
-      }
-      return request
-    }
+    set { environment[SlackInteractiveRequestKey.self] = newValue }
+    get { return environment[SlackInteractiveRequestKey.self]     }
   }
 }

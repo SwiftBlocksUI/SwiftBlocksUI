@@ -16,6 +16,7 @@ import enum      MacroExpress.bodyParser
 import class     MacroExpress.Route
 import func      MacroExpress.typeIs
 import class     SlackBlocksModel.SlackEvent
+import protocol  MacroCore.EnvironmentKey
 
 
 public extension bodyParser {
@@ -83,30 +84,25 @@ public extension bodyParser {
   }
 }
 
-@usableFromInline
-let seRequestKey = "macro.slick.slack-event"
-@usableFromInline
-let seErrorKey   = "macro.slick.slack-event-error"
+
+enum SlackEventKey: EnvironmentKey {
+  static let defaultValue : SlackEvent? = nil
+  static let loggingKey   = "slack-event"
+}
+enum SlackEventErrorKey: EnvironmentKey {
+  static let defaultValue : Swift.Error? = nil
+  static let loggingKey   = "slack-event-error"
+}
 
 public extension IncomingMessage {
   
-  @inlinable
   var slackEvent: SlackEvent? {
-    set { extra[seRequestKey] = newValue }
-    get {
-      guard let value   = extra[seRequestKey] else { return nil }
-      guard let request = value as? SlackEvent else {
-        log.error("slackEvent extra contains a foreign value: \(value)")
-        assertionFailure("incorrect value in slackEvent extra")
-        return nil
-      }
-      return request
-    }
+    set { environment[SlackEventKey.self] = newValue }
+    get { return environment[SlackEventKey.self]     }
   }
   
-  @inlinable
   var slackEventError: Swift.Error? {
-    set { extra[seErrorKey] = newValue }
-    get { return extra[seErrorKey] as? Swift.Error }
+    set { environment[SlackEventErrorKey.self] = newValue }
+    get { return environment[SlackEventErrorKey.self]     }
   }
 }
