@@ -6,11 +6,15 @@
 //  Copyright © 2020 ZeeZide GmbH. All rights reserved.
 //
 
-import class     Foundation.ProcessInfo
-import class     MacroExpress.IncomingMessage
-import struct    SlackBlocksModel.Token
+import class    Foundation.ProcessInfo
+import class    MacroExpress.IncomingMessage
+import struct   SlackBlocksModel.Token
+import protocol MacroCore.EnvironmentKey
 
-fileprivate let tokenKey = "macro.slick.slack.access-token"
+enum TokenKey: EnvironmentKey {
+  static var defaultValue : Token { return environmentToken }
+  static let loggingKey   = "slack-access-token"
+}
 
 fileprivate let environmentToken : Token = {
   let pi = ProcessInfo.processInfo
@@ -28,7 +32,7 @@ public extension IncomingMessage {
    * environment variable (consider `dotenv.config()` to configure it).
    */
   var slackAccessToken: Token {
-    set { extra[tokenKey] = newValue }
-    get { return (extra[tokenKey] as? Token) ?? environmentToken }
+    set { environment[TokenKey.self] = newValue }
+    get { return environment[TokenKey.self] }
   }
 }

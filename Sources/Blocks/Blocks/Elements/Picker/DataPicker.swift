@@ -206,7 +206,7 @@ extension Picker where Content == AnyBlocks { // sigh
     // Halp, fix my generics.
     // This is crazy "Any", but does work surprisingly ;-)
     let wrappedSelection = Binding<Selection>(
-      getValue: { return Set(selection.getter().map(\.id)) },
+      getValue: { return Set(selection.getter().map { $0.id }) },
       setValue: { ids in
         var objectSet = Set<Data.Element>()
         for element in data { // TODO: speedz ;-) but lists will be small here

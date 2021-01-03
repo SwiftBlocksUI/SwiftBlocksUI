@@ -6,10 +6,13 @@
 //  Copyright © 2020 ZeeZide GmbH. All rights reserved.
 //
 
-import http
-import connect
-import express
-import struct SlackBlocksModel.SlashRequest
+import struct   Logging.Logger
+import class    http.ServerResponse
+import enum     connect.bodyParser
+import class    express.Route
+import protocol express.RouteKeeper
+import struct   SlackBlocksModel.SlashRequest
+import protocol SlackBlocksModel.StringID
 
 public extension RouteKeeper {
 
@@ -40,7 +43,7 @@ public extension RouteKeeper {
       
       { req, res, next in
         
-        guard typeIs(req, [ "application/x-www-form-urlencoded" ]) != nil else {
+        guard req.is("application/x-www-form-urlencoded") else {
           return next()
         }
         
@@ -48,7 +51,8 @@ public extension RouteKeeper {
         // slash commands.
         let actualCommand = req.body[string: "command"]
         guard !actualCommand.isEmpty else { return next() }
-        
+        req.log[metadataKey: "slash-command"] = .string(actualCommand)
+
         // If the user specified a command name, make sure it is the same
         if let cleanCommand = cleanCommand,
            actualCommand.dropPrefix("/") != cleanCommand
@@ -61,11 +65,30 @@ public extension RouteKeeper {
           req.log.error("failed to parse Slash request: \(req.body)")
           return res.sendStatus(400)
         }
-
+        
+        slashRequest.addInfoToLogger(&req.log)
         try execute(slashRequest, res)
       }
     ]))
     return self
+  }
+}
+
+extension SlashRequest {
+  
+  @usableFromInline
+  func addInfoToLogger(_ logger: inout Logger) {
+    func add<V: StringID>(_ key: String, _ value: V?) {
+      guard let value = value else { return }
+      logger[metadataKey: key] = .string(value.id)
+    }
+    
+    add("slack-user-id"       , user.id)
+    add("slack-team-id"       , team.id)
+    add("slack-enterprise-id" , enterprise?.id)
+    add("slack-channel-id"    , conversation.id)
+    add("slack-trigger-id"    , triggerID)
+    logger[metadataKey: "slash-command"] = .string(command)
   }
 }
 

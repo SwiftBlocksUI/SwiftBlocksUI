@@ -6,6 +6,7 @@
 //  Copyright © 2020 ZeeZide GmbH. All rights reserved.
 //
 
+import struct    Logging.Logger
 import struct    Foundation.Date
 import struct    Foundation.TimeInterval
 import typealias MacroExpress.Middleware
@@ -16,6 +17,8 @@ import enum      MacroExpress.bodyParser
 import class     MacroExpress.Route
 import func      MacroExpress.typeIs
 import class     SlackBlocksModel.SlackEvent
+import protocol  SlackBlocksModel.StringID
+import protocol  MacroCore.EnvironmentKey
 
 
 public extension bodyParser {
@@ -46,7 +49,7 @@ public extension bodyParser {
           return next() // parsed already
         }
         
-        guard typeIs(req, [ "json" ]) != nil,
+        guard req.is("json"),
               let json  = req.body.json as? [ String : Any ],
               let type  = json["type"]  as? String,
               let token = json["token"] as? String else
@@ -54,7 +57,8 @@ public extension bodyParser {
           req.slackEventError = SlackEventError.notASlackEvent
           return next()
         }
-        
+        req.log[metadataKey: "slack-event-type"] = .string(type)
+
         // MARK: - Handle URL verification event in here
         
         if type == "url_verification" {
@@ -68,6 +72,7 @@ public extension bodyParser {
           return next()
         }
 
+        event.addInfoToLogger(&req.log)
         req.log.debug("successfully parsed Slack event")
         req.slackEvent = event
         next()
@@ -83,30 +88,42 @@ public extension bodyParser {
   }
 }
 
-@usableFromInline
-let seRequestKey = "macro.slick.slack-event"
-@usableFromInline
-let seErrorKey   = "macro.slick.slack-event-error"
+extension SlackEvent {
+  
+  @usableFromInline
+  func addInfoToLogger(_ logger: inout Logger) {
+    func add<V: StringID>(_ key: String, _ value: V?) {
+      guard let value = value else { return }
+      logger[metadataKey: key] = .string(value.id)
+    }
+    
+    add("slack-user-id" , userID)
+    add("slack-team-id" , teamID)
+    add("slack-app-id"  , applicationID)
+    logger[metadataKey: "slack-event-type"] = .string(type.rawValue)
+    logger[metadataKey: "slack-event-id"]   = .string(eventID)
+  }
+}
+
+
+enum SlackEventKey: EnvironmentKey {
+  static let defaultValue : SlackEvent? = nil
+  static let loggingKey   = "slack-event"
+}
+enum SlackEventErrorKey: EnvironmentKey {
+  static let defaultValue : Swift.Error? = nil
+  static let loggingKey   = "slack-event-error"
+}
 
 public extension IncomingMessage {
   
-  @inlinable
   var slackEvent: SlackEvent? {
-    set { extra[seRequestKey] = newValue }
-    get {
-      guard let value   = extra[seRequestKey] else { return nil }
-      guard let request = value as? SlackEvent else {
-        log.error("slackEvent extra contains a foreign value: \(value)")
-        assertionFailure("incorrect value in slackEvent extra")
-        return nil
-      }
-      return request
-    }
+    set { environment[SlackEventKey.self] = newValue }
+    get { return environment[SlackEventKey.self]     }
   }
   
-  @inlinable
   var slackEventError: Swift.Error? {
-    set { extra[seErrorKey] = newValue }
-    get { return extra[seErrorKey] as? Swift.Error }
+    set { environment[SlackEventErrorKey.self] = newValue }
+    get { return environment[SlackEventErrorKey.self]     }
   }
 }

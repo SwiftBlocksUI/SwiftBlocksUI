@@ -92,4 +92,10 @@ final class PickerTests: XCTestCase {
       XCTAssertNil(error)
     }
   }
+
+  // MARK: - Registry
+
+  static var allTests = [
+    ( "testModalPickerGeneration" , testModalPickerGeneration )
+  ]
 }
