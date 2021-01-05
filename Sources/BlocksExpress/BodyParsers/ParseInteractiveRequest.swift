@@ -97,9 +97,11 @@ extension InteractiveRequest {
     add("slack-team-id"    , teamID)
     add("slack-app-id"     , applicationID)
     add("slack-cb-id"      , callbackID)
-    add("slack-trigger-id" , triggerID)
     add("slack-view-id"    , viewInfo?.id)
-    
+    #if false // long and not that interesting
+    add("slack-trigger-id" , triggerID)
+    #endif
+
     switch container {
       case .none, .some(.view): break
       case .some(.message(let mid, let cid, let isEphemeral)):

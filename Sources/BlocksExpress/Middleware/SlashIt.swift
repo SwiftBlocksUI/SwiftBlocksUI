@@ -115,7 +115,9 @@ extension SlashRequest {
     add("slack-team-id"       , team.id)
     add("slack-enterprise-id" , enterprise?.id)
     add("slack-channel-id"    , conversation.id)
+    #if false // long and not that interesting
     add("slack-trigger-id"    , triggerID)
+    #endif
     logger[metadataKey: "slash-command"] = .string(command)
   }
 }
