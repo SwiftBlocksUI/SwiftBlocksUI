@@ -7,6 +7,7 @@
 //
 
 import struct   Logging.Logger
+import class    http.IncomingMessage
 import class    http.ServerResponse
 import enum     connect.bodyParser
 import class    express.Route
@@ -32,8 +33,9 @@ public extension RouteKeeper {
   @discardableResult
   func slash(id        : String? = nil,
              _ command : String? = nil,
-             _ execute : @escaping
-                         ( SlashRequest, ServerResponse ) throws -> Void)
+             execute   : @escaping
+                         ( SlashRequest, IncomingMessage, ServerResponse )
+                           throws -> Void)
        -> Self
   {
     let cleanCommand = command?.dropPrefix("/")
@@ -67,10 +69,35 @@ public extension RouteKeeper {
         }
         
         slashRequest.addInfoToLogger(&req.log)
-        try execute(slashRequest, res)
+        try execute(slashRequest, req, res)
       }
     ]))
     return self
+  }
+
+  /**
+   * Add a handler for a Slash command.
+   *
+   * Note that those are not middleware handlers, i.e. they do not receive a
+   * `next` closure. Instead they MUST end in finishing the server response
+   * (i.e. eventually call `end` on it).
+   *
+   * Slash handlers have 3 seconds to respond to the request, afterwards the
+   * client will timeout.
+   * What they can do is send a 200 immediately, and more content later on.
+   *
+   * Docs: https://api.slack.com/interactivity/slash-commands
+   */
+  @discardableResult
+  func slash(id        : String? = nil,
+             _ command : String? = nil,
+             execute   : @escaping
+                         ( SlashRequest, ServerResponse ) throws -> Void)
+       -> Self
+  {
+    return slash(id: id, command, execute: { slash, _, res in
+      try execute(slash, res)
+    })
   }
 }
 
