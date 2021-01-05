@@ -37,7 +37,7 @@ public extension ServerResponse {
       apiBlocks = ctx.blocks
     }
     catch {
-      errorLog.error("Failed to render blocks: \(blocks)\n  error: \(error)")
+      log.error("Failed to render blocks: \(blocks)\n  error: \(error)")
       return sendStatus(500)
     }
 
@@ -89,11 +89,11 @@ extension ServerResponse {
         log.warn("JSON: empty body")
       }
       else {
-        errorLog.error("Could not grab JSON data as String?", data)
+        log.error("Could not grab JSON data as String?", data)
       }
     }
     catch {
-      errorLog.error("Could not render object as JSON:", object, error)
+      log.error("Could not render object as JSON:", object, error)
       assertionFailure("invalid JSON blocks: \(error)")
     }
   }
