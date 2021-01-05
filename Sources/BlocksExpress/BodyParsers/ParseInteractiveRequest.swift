@@ -72,6 +72,7 @@ public extension bodyParser {
     do {
       request = try InteractiveRequest.from(json: payload)
       request.addInfoToLogger(&req.log)
+      request.addInfoToLogger(&res.log)
       req.interactiveRequest = request
     }
     catch {

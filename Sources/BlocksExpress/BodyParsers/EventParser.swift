@@ -73,6 +73,7 @@ public extension bodyParser {
         }
 
         event.addInfoToLogger(&req.log)
+        event.addInfoToLogger(&res.log)
         req.log.debug("successfully parsed Slack event")
         req.slackEvent = event
         next()

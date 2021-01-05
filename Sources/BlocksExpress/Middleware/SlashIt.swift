@@ -69,6 +69,7 @@ public extension RouteKeeper {
         }
         
         slashRequest.addInfoToLogger(&req.log)
+        slashRequest.addInfoToLogger(&res.log)
         try execute(slashRequest, req, res)
       }
     ]))
