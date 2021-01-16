@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 import struct Logging.Logger
 import class  Macro.IncomingMessage
 import class  Macro.ServerResponse
