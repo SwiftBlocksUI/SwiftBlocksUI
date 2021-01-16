@@ -6,12 +6,12 @@
 //  Copyright © 2020 ZeeZide GmbH. All rights reserved.
 //
 
+import Foundation
 import struct Logging.Logger
 import class  Macro.IncomingMessage
 import class  Macro.ServerResponse
 
 #if canImport(Network)
-import Foundation
 import enum   MacroCore.EventListenerSet
 import enum   Macro.process
 import func   Macro.nextTick
