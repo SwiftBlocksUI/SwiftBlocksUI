@@ -16,7 +16,7 @@ extension String {
   }
 }
 
-#if canImport(CNIOSHA1)
+#if false && canImport(CNIOSHA1) // not available anymore since NIO 2.26.0
   // NIO does not export this as a product, but we can still use it :->
   import CNIOSHA1
   #if canImport(Glibc)
