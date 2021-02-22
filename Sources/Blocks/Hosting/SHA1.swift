@@ -62,7 +62,7 @@ extension String {
   // I don't really want to pull in BoringSSL unless required. We usually will
   // use NIO anyways.
   // Would be: "https://github.com/apple/swift-crypto.git", from: "1.0.2"
-  import CryptoKit
+  import Crypto
 
   extension String {
     @usableFromInline
