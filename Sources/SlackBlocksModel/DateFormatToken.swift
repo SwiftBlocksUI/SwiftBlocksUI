@@ -68,7 +68,25 @@ public extension Block {
     
     @inlinable
     public var tokenString: String {
+      #if os(Linux) // this is the proper version
       switch self {
+        case .isoDate:  return "{date_num}"
+          
+        case .date(.long,   false), .date(.none,  false): return "{date}"
+        case .date(.long,   true ), .date(.none,  true ): return "{date_pretty}"
+        case .date(.medium, false), .date(.short, false): return "{date_short}"
+        case .date(.medium, true ), .date(.short, true ):
+          return "{date_pretty_short}"
+        case .date(.full, false): return "{date_long}"
+        case .date(.full, true ): return "{date_pretty_long}"
+          
+        case .time(.none), .time(.short): return "{time}"
+        case .time(.medium), .time(.long), .time(.full): return "{time_secs}"
+          
+        case .text(let value) : return value
+      }
+      #else // Darwin
+      switch self { // this has two extra cases
         case .isoDate:  return "{date_num}"
           
         case .date(.long,   false), .date(.none,  false): return "{date}"
@@ -91,6 +109,7 @@ public extension Block {
           assertionFailure("unexpected time style: \(style)")
           return "{time}"
       }
+      #endif
     }
     
     @inlinable

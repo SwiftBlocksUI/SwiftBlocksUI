@@ -6,6 +6,7 @@
 //  Copyright © 2020 ZeeZide GmbH. All rights reserved.
 //
 
+import class    MacroApp.IncomingMessage
 import class    MacroApp.ServerResponse
 import protocol MacroApp.Endpoints
 import protocol MacroApp.RouteKeeper
@@ -19,7 +20,8 @@ import struct   Blocks.BlocksBuilder
  */
 public struct Slash<Content: Blocks>: Endpoints {
 
-  public typealias Handler = ( SlashRequest, ServerResponse ) throws -> Void
+  public typealias Handler =
+    ( SlashRequest, IncomingMessage, ServerResponse ) throws -> Void
 
   public let id      : String?
   public let command : String?
@@ -30,7 +32,7 @@ public struct Slash<Content: Blocks>: Endpoints {
 
   @inlinable
   public func attachToRouter(_ router: RouteKeeper) throws {
-    router.slash(id: id, command, handler)
+    router.slash(id: id, command, execute: handler)
     
     if let content = content?() { // to handle events coming back to this!
       router.use(interactiveBlocks { content })
@@ -76,10 +78,10 @@ extension Slash {
     self.command = command
     self.scope   = scope
     self.content = handleBlockActions ? content : nil
-    self.handler = { req, res in
+    self.handler = { slash, req, res in
       res.sendMessage(scope: scope) {
         content()
-          .slashEnvironment(req)
+          .slashEnvironment(slash)
       }
     }
   }
@@ -94,6 +96,36 @@ extension Slash where Content == Never {
    * Example:
    *
    *     Slash("/vaca") { req, res in
+   *       res.sendMessage(scope: scope) {
+   *         Text(cows.vaca())
+   *       }
+   *     }
+   *
+   * - Parameter id: ID of the route in the middleware stack (debugging).
+   * - Parameter command:
+   *     The name of the slash command as registered in the Slack admin panel.
+   * - Parameter execute: The handler to call when the command is triggered.
+   */
+  @inlinable
+  public init(id        : String? = nil,
+              _ command : String? = nil,
+              execute   : @escaping
+                          ( SlashRequest, ServerResponse ) throws -> Void)
+  {
+    self.id      = id
+    self.command = command
+    self.handler = { slash, _, res in try execute(slash, res) }
+    self.scope   = nil
+    self.content = nil
+  }
+  
+  /**
+   * A Slash endpoint backed by a simple `SlashRequest` / `ServerResponse`
+   * closure.
+   *
+   * Example:
+   *
+   *     Slash("/vaca") { slash, req, res in
    *       res.sendMessage(scope: scope) {
    *         Text(cows.vaca())
    *       }

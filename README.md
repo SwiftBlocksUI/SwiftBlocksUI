@@ -13,7 +13,7 @@ A blog article containing SwiftBlocksUI tutorials:
 This is what a full application looks like:
 ```swift
 #!/usr/bin/swift sh
-import SwiftBlocksUI // @SwiftBlocksUI ~> 0.8.0
+import SwiftBlocksUI // @SwiftBlocksUI
 
 dotenv.config()
 

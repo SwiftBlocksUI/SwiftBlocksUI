@@ -73,6 +73,7 @@ public extension bodyParser {
         }
 
         event.addInfoToLogger(&req.log)
+        event.addInfoToLogger(&res.log)
         req.log.debug("successfully parsed Slack event")
         req.slackEvent = event
         next()
@@ -82,9 +83,18 @@ public extension bodyParser {
   }
   
   @usableFromInline
-  internal enum SlackEventError: Swift.Error {
+  internal enum SlackEventError: Swift.Error, CustomStringConvertible {
+    
     case notASlackEvent
     case couldNotParseEvent
+    
+    @inlinable
+    public var description: String {
+      switch self {
+        case .notASlackEvent     : return "<Error: notASlackEvent>"
+        case .couldNotParseEvent : return "<Error: couldNotParseEvent>"
+      }
+    }
   }
 }
 
