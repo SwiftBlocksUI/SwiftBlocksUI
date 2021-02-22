@@ -20,17 +20,17 @@ let package = Package(
   
   dependencies: [
     .package(url: "https://github.com/Macro-swift/Macro.git",
-             from: "0.8.0"),
+             from: "0.8.7"),
     .package(url: "https://github.com/Macro-swift/MacroExpress.git",
-             from: "0.6.1"),
+             from: "0.8.4"),
     .package(url: "https://github.com/Macro-swift/MacroApp.git",
-             from: "0.5.7"),
-    .package(url: "https://github.com/apple/swift-nio.git",
-             from: "2.25.1"),
+             from: "0.5.8"),
     .package(url: "https://github.com/wickwirew/Runtime.git",
              from: "2.2.2"),
     .package(url: "https://github.com/apple/swift-log.git",
-             from: "1.4.0")
+             from: "1.4.1"),
+    .package(url: "https://github.com/apple/swift-crypto.git",
+             from: "1.1.4")
   ],
   
   targets: [
@@ -40,8 +40,7 @@ let package = Package(
             exclude: [ "README.md" ]),
     .target(name: "Blocks", dependencies: [
       "SlackBlocksModel", "Runtime",
-      // a hack to get access to CNIOSHA1:
-      .product(name: "NIO",     package: "swift-nio"), 
+      .product(name: "Crypto",  package: "swift-crypto"),
       .product(name: "Logging", package: "swift-log")
     ], exclude: [ "README.md", "Rendering/README.md", "Blocks/README.md" ]),
     

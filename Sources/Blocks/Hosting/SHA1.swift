@@ -3,7 +3,7 @@
 //  Blocks
 //
 //  Created by Helge Heß.
-//  Copyright © 2020 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2020-2021 ZeeZide GmbH. All rights reserved.
 //
 
 import struct Foundation.Data
@@ -48,7 +48,6 @@ extension String {
     }
   }
 #elseif canImport(CryptoKit)
-  #error("should use CNIOSHA1")
   import CryptoKit
 
   extension String {
@@ -60,7 +59,6 @@ extension String {
     }
   }
 #elseif canImport(Crypto)
-  #error("should use CNIOSHA1")
   // I don't really want to pull in BoringSSL unless required. We usually will
   // use NIO anyways.
   // Would be: "https://github.com/apple/swift-crypto.git", from: "1.0.2"
