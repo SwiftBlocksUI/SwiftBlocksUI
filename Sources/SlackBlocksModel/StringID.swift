@@ -9,8 +9,8 @@
 /**
  * A String based ID
  *
- * A mixin protocol to make having tons of ID types (`CallbackID`, `ActionID`, etc)
- * reasonable.
+ * A mixin protocol to easily make string wrapped ID types (`CallbackID`,
+ * `ActionID`, etc).
  *
  * Features:
  * - initialization from String literals, e.g.: `Button(actionID: "Wow")`
@@ -29,11 +29,19 @@
  *       .actionID(.approve)
  *
  */
-public protocol StringID: Hashable, Codable, ExpressibleByStringLiteral {
+public protocol StringID: Hashable, Codable, ExpressibleByStringLiteral,
+                          CustomStringConvertible
+{
   
   var id : String { get }
   
   init(_ id: String)
+}
+
+public extension StringID {
+  
+  @inlinable
+  var description: String { return "<\(type(of: self)): \(rawValue)>" }
 }
 
 public extension StringID { // Literals
