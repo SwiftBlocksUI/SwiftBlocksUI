@@ -30,7 +30,7 @@
  *
  */
 public protocol StringID: Hashable, Codable, ExpressibleByStringLiteral,
-                          CustomStringConvertible
+                          CustomStringConvertible, RawRepresentable
 {
   
   var id : String { get }
@@ -39,9 +39,18 @@ public protocol StringID: Hashable, Codable, ExpressibleByStringLiteral,
 }
 
 public extension StringID {
+
+  @inlinable
+  init(rawValue id: String) { self.init(id) }
   
   @inlinable
-  var description: String { return "<\(type(of: self)): \(rawValue)>" }
+  var rawValue : String { return id }
+}
+
+public extension StringID {
+  
+  @inlinable
+  var description: String { return "<\(type(of: self)): \(id)>" }
 }
 
 public extension StringID { // Literals
