@@ -54,6 +54,9 @@ struct ClipIt: App {
 try ClipIt.main()
 ```
 
+Looks like this:
+![Slack modal](https://www.alwaysrightinstitute.com/images/blocksui/clipit-electron-dialog-only.png)
+
 
 ## Documentation
 
