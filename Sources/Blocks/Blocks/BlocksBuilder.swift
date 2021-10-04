@@ -3,13 +3,20 @@
 //  Blocks
 //
 //  Created by Helge Heß.
-//  Copyright © 2020 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2020-2021 ZeeZide GmbH. All rights reserved.
 //
 
-/**
- * The function builder to trigger building of `Blocks` elements.
- */
-@_functionBuilder public struct BlocksBuilder {}
+#if swift(>=5.5)
+  /**
+   * The function builder to trigger building of `Blocks` elements.
+   */
+  @resultBuilder public struct BlocksBuilder {}
+#else
+  /**
+   * The function builder to trigger building of `Blocks` elements.
+   */
+  @_functionBuilder public struct BlocksBuilder {}
+#endif
 
 public extension BlocksBuilder {
 
