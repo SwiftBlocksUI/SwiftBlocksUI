@@ -180,13 +180,12 @@ public extension Picker where Content: Blocks {
   /**
    * Initialize a Picker w/ an arbitrary selection value
    */
-  @inlinable
-  init<S: StringProtocol, H: Hashable>(_     title : S,
-                                       selection   : Binding<H>,
-                                       placeholder : String? = nil,
-                                       action      : Action? = nil,
-                                       @BlocksBuilder content: () -> Content)
-    where Selection == Optional<H> // halp
+  @inlinable init<S, H>(_     title : S,
+                        selection   : Binding<H>,
+                        placeholder : String? = nil,
+                        action      : Action? = nil,
+                        @BlocksBuilder content: () -> Content)
+    where S: StringProtocol, Selection == Optional<H> // halp
   {
     // This is abusing the Optional as a SelectionManager, which is not great
     let binding = Binding<Optional<H>>(
