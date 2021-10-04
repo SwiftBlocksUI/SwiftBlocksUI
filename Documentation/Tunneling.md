@@ -5,6 +5,10 @@
 
 [Instant “SwiftUI” Flavoured Slack Apps](https://www.alwaysrightinstitute.com/swiftblocksui/),
 
+<b>Update 2021-03-18</b>: Slack now supports the ["Socket Mode"](https://api.slack.com/apis/connections/socket),
+which SwiftBlocksUI supports on macOS. It avoids the requirement for a public HTTP endpoint,
+making it much easier to get started.
+
 Slack "apps" are just HTTP endpoints, i.e. web apps.
 The next hurdle is finding a way to let Slack connect to your local
 development machine, which very likely isn't reachable on the public

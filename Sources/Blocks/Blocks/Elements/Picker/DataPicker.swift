@@ -38,7 +38,6 @@ extension Picker where Content == AnyBlocks { // sigh
     @BlocksBuilder content : @escaping ( Data.Element ) -> ElementContent
   )
     where Data           : RandomAccessCollection,
-          ID             : Hashable,
           Selection     == Optional<ID>,
           ElementContent : Blocks
   {

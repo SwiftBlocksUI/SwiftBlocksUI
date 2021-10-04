@@ -8,7 +8,11 @@ SwiftBlocksUI is a way to write interactive Slack messages and modal dialogs
 using a SwiftUI like declarative style.
 
 A blog article containing SwiftBlocksUI tutorials: 
-[Instant “SwiftUI” Flavoured Slack Apps](https://www.alwaysrightinstitute.com/swiftblocksui/).
+[Instant “SwiftUI” Flavoured Slack Apps](https://www.alwaysrightinstitute.com/swiftblocksui/).<br>
+[Documentation](Documentation/README.md), examples:
+[SlashCows](https://github.com/SwiftBlocksUI/SlashCows),
+[AvocadoToast](https://github.com/SwiftBlocksUI/AvocadoToast),
+[ClipIt!](https://github.com/SwiftBlocksUI/ClipIt).
 
 This is what a full application looks like:
 ```swift
@@ -54,13 +58,16 @@ struct ClipIt: App {
 try ClipIt.main()
 ```
 
+Looks like this:<br>
+<img src="https://www.alwaysrightinstitute.com/images/blocksui/clipit-electron-dialog-only.png" width="50%" style="border: 1;" />
+
 
 ## Documentation
 
 There is a related blog entry going over SwiftBlocksUI:
 [Instant “SwiftUI” Flavoured Slack Apps](https://www.alwaysrightinstitute.com/swiftblocksui/).
 
-Additional documentation is going to arrive within this repository:
+Block documentation and a lot more can be found within this repository:
 [Documentation](Documentation/README.md).
 
 Examples:
