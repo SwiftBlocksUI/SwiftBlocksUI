@@ -61,8 +61,8 @@ public extension Block {
     
     @inlinable
     public var stringValue: String {
-      let h = leftpad(String(hour), 2)
-      let m = leftpad(String(minute),   2)
+      let h = leftpad(String(hour),   2)
+      let m = leftpad(String(minute), 2)
       return "\(h):\(m)"
     }
   }
