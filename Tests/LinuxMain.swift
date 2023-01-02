@@ -1,6 +1,3 @@
 import XCTest
-import SwiftBlocksUITests
 
-var tests = [ XCTestCaseEntry ]()
-tests += SwiftBlocksUITests.allTests()
-XCTMain(tests)
+#error("Swift 5.5 requires --enable-test-discovery")

@@ -46,9 +46,9 @@ extension Binding {
 }
 
 enum FormatterError: Swift.Error {
-  case formatterCannotConvertFromString(Formatter)
+  case formatterCannotConvertFromString
   /// https://bugs.swift.org/browse/SR-12411
-  case unsupportedFormatterBlameSwift52Foundation(Formatter)
+  case unsupportedFormatterBlameSwift52Foundation
   
   case formatError(String?)
   case cannotConvertToFinalType(Any, Any.Type)
@@ -72,20 +72,22 @@ extension Formatter {
         case is ByteCountFormatter,
              is DateIntervalFormatter, is EnergyFormatter,
              is LengthFormatter,       is MassFormatter:
-          throw FormatterError.formatterCannotConvertFromString(self)
+          throw FormatterError.formatterCannotConvertFromString
         
         // unavailable on Linux 5.2
         #if false
         case let formatter as PersonNameComponentsFormatter:
-          return FormatterError.formatterCannotConvertFromString(formatter)
+          return FormatterError
+                   .formatterCannotConvertFromString
         case is DateComponentsFormatter,
              is MeasurementFormatter:
-          throw FormatterError.formatterCannotConvertFromString(formatter)
+          throw FormatterError
+                  .formatterCannotConvertFromString
         #endif
 
         default:
           throw FormatterError
-            .unsupportedFormatterBlameSwift52Foundation(self)
+            .unsupportedFormatterBlameSwift52Foundation
       }
     #elseif os(Linux) // getObjectValue is internal on Linux
       var obj : AnyObject?

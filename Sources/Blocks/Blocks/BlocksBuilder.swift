@@ -6,12 +6,12 @@
 //  Copyright © 2020-2021 ZeeZide GmbH. All rights reserved.
 //
 
-#if swift(>=5.5)
+#if swift(>=5.4)
   /**
    * The function builder to trigger building of `Blocks` elements.
    */
   @resultBuilder public struct BlocksBuilder {}
-#else
+#elseif swift(>=5.1)
   /**
    * The function builder to trigger building of `Blocks` elements.
    */

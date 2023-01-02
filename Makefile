@@ -10,9 +10,12 @@ DOCKER=/usr/local/bin/docker
 #DOCKER=docker
 
 # docker config
-SWIFT_BUILD_IMAGE="swift:5.3.1"
-DOCKER_BUILD_DIR=".docker$(SWIFT_BUILD_DIR)"
-SWIFT_DOCKER_BUILD_DIR="$(DOCKER_BUILD_DIR)/x86_64-unknown-linux/$(CONFIGURATION)"
+#SWIFT_BUILD_IMAGE="swift:5.7.2"
+SWIFT_BUILD_IMAGE="helje5/arm64v8-swift-dev:5.5.3"
+DOCKER_BUILD_DIR=".docker.build"
+DOCKER_PLATFORM=aarch64
+#DOCKER_PLATFORM="x86_64"
+SWIFT_DOCKER_BUILD_DIR="$(DOCKER_BUILD_DIR)/$(DOCKER_PLATFORM)-unknown-linux/$(CONFIGURATION)"
 DOCKER_BUILD_PRODUCT="$(DOCKER_BUILD_DIR)/$(TOOL_NAME)"
 
 
@@ -51,7 +54,7 @@ docker-test: docker-all
           -v "$(PWD):/src" \
           -v "$(PWD)/$(DOCKER_BUILD_DIR):/src/.build" \
           "$(SWIFT_BUILD_IMAGE)" \
-          bash -c 'cd /src && swift test -c $(CONFIGURATION)'
+          bash -c 'cd /src && swift test --enable-test-discovery -c $(CONFIGURATION)'
 
 docker-clean:
 	rm $(DOCKER_BUILD_PRODUCT)	
