@@ -6,4 +6,6 @@ Package.resolved
 .docker.build
 **/.env
 
+#hh
+.vscode
 

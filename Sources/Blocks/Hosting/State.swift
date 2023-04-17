@@ -3,8 +3,10 @@
 //  Blocks
 //
 //  Created by Helge Heß.
-//  Copyright © 2020 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2020-2023 ZeeZide GmbH. All rights reserved.
 //
+
+import Logging
 
 /**
  * Persist Blocks values in the context.

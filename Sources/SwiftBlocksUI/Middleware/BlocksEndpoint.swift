@@ -3,7 +3,7 @@
 //  SwiftBlocksUI
 //
 //  Created by Helge Heß.
-//  Copyright © 2020 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2020-2023 ZeeZide GmbH. All rights reserved.
 //
 
 import protocol  Blocks.Blocks
@@ -13,6 +13,7 @@ import typealias MacroExpress.Middleware
 import enum      MacroExpress.bodyParser
 import struct    SlackBlocksModel.CallbackID
 import enum      SlackBlocksModel.InteractiveRequest
+import Logging
 
 // This is in SwiftBlocksUI because otherwise BlocksExpress would need a
 // dependency on SlackClient.

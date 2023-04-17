@@ -109,9 +109,6 @@ though 5.3 has some additional conveniences.
 ### Who
 
 **SwiftBlocksUI** is brought to you by
-the
-[Always Right Institute](https://www.alwaysrightinstitute.com)
-and
 [ZeeZide](http://zeezide.de).
 We like 
 [feedback](https://twitter.com/ar_institute), 
