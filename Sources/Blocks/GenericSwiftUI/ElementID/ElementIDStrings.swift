@@ -3,9 +3,10 @@
 //  Blocks
 //
 //  Created by Helge Heß.
-//  Copyright © 2019-2020 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2019-2023 ZeeZide GmbH. All rights reserved.
 //
 
+import Logging
 import struct Foundation.UUID
 
 public extension ElementID {

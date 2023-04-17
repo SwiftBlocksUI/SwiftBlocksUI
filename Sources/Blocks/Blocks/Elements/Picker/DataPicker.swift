@@ -3,8 +3,10 @@
 //  Blocks
 //
 //  Created by Helge Heß.
-//  Copyright © 2020 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2020-2023 ZeeZide GmbH. All rights reserved.
 //
+
+import Logging
 
 // I don't like the SelectionManager variant. The selection should be
 // able to carry Identifiable objects, not just the IDs.

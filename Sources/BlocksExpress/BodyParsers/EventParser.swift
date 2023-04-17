@@ -3,7 +3,7 @@
 //  BlocksExpress
 //
 //  Created by Helge Heß.
-//  Copyright © 2020 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2020-2023 ZeeZide GmbH. All rights reserved.
 //
 
 import struct    Logging.Logger
@@ -19,7 +19,7 @@ import func      MacroExpress.typeIs
 import class     SlackBlocksModel.SlackEvent
 import protocol  SlackBlocksModel.StringID
 import protocol  MacroCore.EnvironmentKey
-
+import NIOHTTP1
 
 public extension bodyParser {
 
