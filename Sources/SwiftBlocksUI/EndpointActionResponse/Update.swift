@@ -3,7 +3,7 @@
 //  Blocks
 //
 //  Created by Helge Heß.
-//  Copyright © 2020 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2020-2024 ZeeZide GmbH. All rights reserved.
 //
 
 import struct Foundation.URL
@@ -38,7 +38,7 @@ extension BlocksEndpointResponse {
   /**
    * Replace the originating view or message with the given blocks.
    */
-  public func replace<B: Blocks>(@BlocksBuilder with blocks: () -> B) {
+  public func replace<T: Blocks>(@BlocksBuilder with blocks: () -> T) {
     if sendErrorsInErrorView()      { return } // may still need ACK
     if !context.blockErrors.isEmpty { return endWithSimpleACK() }
     
@@ -62,11 +62,11 @@ extension BlocksEndpointResponse {
    * container.
    */
   @inlinable
-  public func push<B: Blocks>(@BlocksBuilder _ blocks: () -> B) {
+  public func push<T: Blocks>(@BlocksBuilder _ blocks: () -> T) {
     push(blocks())
   }
   
-  public func push<B: Blocks>(_ blocks: B) {
+  public func push<T: Blocks>(_ blocks: T) {
     if sendErrorsInErrorView()      { return } // may still need ACK
     if !context.blockErrors.isEmpty { return endWithSimpleACK() }
     
@@ -101,7 +101,7 @@ extension BlocksEndpointResponse {
   /**
    * Re-render the same root view / message again.
    */
-  fileprivate func update<B: Blocks>(_ blocks: B, mode: UpdateMode,
+  fileprivate func update<T: Blocks>(_ blocks: T, mode: UpdateMode,
                                      using context: BlocksContext)
   {
     // FIXME: split up this huuuuge method :-)

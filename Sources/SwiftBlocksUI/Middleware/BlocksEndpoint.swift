@@ -3,7 +3,7 @@
 //  SwiftBlocksUI
 //
 //  Created by Helge Heß.
-//  Copyright © 2020-2023 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2020-2024 ZeeZide GmbH. All rights reserved.
 //
 
 import protocol  Blocks.Blocks
