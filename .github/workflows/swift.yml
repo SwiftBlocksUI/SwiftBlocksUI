@@ -13,14 +13,13 @@ jobs:
       fail-fast: false
       matrix:
         image:
-          - swift:5.5.3-xenial
-          - swift:5.6.1-bionic
-          - swift:5.8-jammy
           - swift:5.9.2-focal
+          - swift:5.10-jammy
+          - swift:6.0-noble
     container: ${{ matrix.image }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build Swift Debug Package
         run: swift build -c debug
       - name: Build Swift Release Package
@@ -31,11 +30,11 @@ jobs:
     runs-on: macos-13
     steps:
       - name: Select latest available Xcode
-        uses: maxim-lobanov/setup-xcode@v1
+        uses: maxim-lobanov/setup-xcode@v1.5.1
         with:
-          xcode-version: '~15.0'
+          xcode-version: latest
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build Swift Debug Package
         run: swift build -c debug
       - name: Build Swift Release Package
